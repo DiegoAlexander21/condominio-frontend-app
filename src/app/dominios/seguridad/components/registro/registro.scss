@@ -1,0 +1,157 @@
+.contenedor-registro-minimalista {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--fondo);
+  color: var(--primario);
+  padding: 4rem;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  .encabezado-superior {
+    width: 100%;
+    margin-bottom: 3rem;
+
+    .titulo-gigante {
+      font-size: 4rem;
+      font-weight: 500;
+      margin: 0;
+      color: var(--primario);
+      letter-spacing: -2px;
+    }
+  }
+
+  .cuerpo-formulario {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .formulario-minimalista {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      width: 100%;
+
+      .fila {
+        display: flex;
+        gap: 3rem;
+        width: 100%;
+        
+        .grupo-control {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          label {
+            font-size: 0.84rem;
+            color: var(--primario);
+          }
+
+          input, select {
+            border: none;
+            box-shadow: 0 1px 0 0 var(--secundario);
+            background-color: transparent;
+            padding: 0.5rem 0;
+            font-size: 0.84rem;
+            color: var(--primario);
+            font-family: var(--fuente-principal);
+            outline: none;
+            transition: box-shadow 0.3s ease;
+            width: 100%;
+
+            &:focus {
+              box-shadow: 0 2px 0 0 var(--primario);
+            }
+          }
+
+          .mensaje-error {
+            color: var(--error);
+            font-size: 0.70rem;
+            height: 1rem;
+            margin-top: 0.2rem;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          flex-wrap: wrap;
+          gap: 2rem;
+          
+          .grupo-control {
+            flex: 1 1 calc(50% - 2rem);
+          }
+        }
+
+        @media (max-width: 600px) {
+          flex-direction: column;
+          
+          .grupo-control {
+            flex: 1 1 100%;
+          }
+        }
+      }
+
+      .acciones-formulario {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 1rem;
+
+        .alerta-servidor {
+          color: var(--error);
+          font-size: 0.9rem;
+          margin-bottom: 1rem;
+          font-family: var(--fuente-principal);
+        }
+
+        .boton-registro {
+          background-color: #2b2b2b;
+          color: var(--blanco);
+          border: none;
+          padding: 1rem 3rem;
+          font-size: 1rem;
+          border-radius: 30px;
+          cursor: pointer;
+          transition: opacity 0.3s ease;
+          font-family: var(--fuente-principal);
+          font-weight: 600;
+
+          &:hover:not(:disabled) {
+            opacity: 0.9;
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+
+        .enlace-login {
+          margin-top: 1.5rem;
+
+          a {
+            color: var(--primario);
+            text-decoration: none;
+            font-size: 0.9rem;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+    overflow-y: auto;
+
+    .encabezado-superior {
+      .titulo-gigante {
+        font-size: 3rem;
+      }
+    }
+  }
+}
