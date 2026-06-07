@@ -1,0 +1,23 @@
+<div class="contenedor-condominios">
+  <header style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--secundario); padding-bottom: 0.5rem; margin-bottom: 2rem;">
+    <h2 class="titulo-principal" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">Gestión de Condominios</h2>
+    <button class="boton-primario" routerLink="/condominios/nuevo" style="padding: 0.75rem 1.5rem; border: none; border-radius: 4px; background-color: var(--primario); color: var(--blanco); font-weight: bold; cursor: pointer;">Nuevo Condominio</button>
+  </header>
+  
+  <div class="tarjetas-grid" *ngIf="listaCondominios$ | async as condominios; else cargando">
+    <div class="tarjeta" *ngFor="let condominio of condominios">
+      <h3 class="tarjeta-titulo">{{ condominio.nombre }}</h3>
+      <div class="tarjeta-detalle">
+        <p><strong>Torres:</strong> {{ condominio.torres }}</p>
+        <p><strong>Pisos por Torre:</strong> {{ condominio.pisosPorTorre }}</p>
+      </div>
+      <div class="tarjeta-acciones">
+        <button class="boton-primario" [routerLink]="['/condominios/editar', condominio.id]">Gestionar</button>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #cargando>
+    <p class="texto-cargando">Cargando la información de los condominios...</p>
+  </ng-template>
+</div>

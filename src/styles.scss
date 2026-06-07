@@ -1,3 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+    --fondo: #F7F4EB;
+    --secundario: #a9b0c0;
+    --primario: #313852;
+    --blanco: #ffffff;
+    --exito: #2e7d32;
+    --error: #c62828;
+    --fuente-principal: 'Lora', Georgia, serif;
+}
+
+body {
+    background-color: var(--fondo);
+    color: var(--primario);
+    font-family: var(--fuente-principal);
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,76 @@
+.contenedor-condominios {
+  padding: 2rem;
+  
+  .titulo-principal {
+    color: var(--primario);
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    border-bottom: 2px solid var(--secundario);
+    padding-bottom: 0.5rem;
+  }
+
+  .texto-cargando {
+    color: var(--secundario);
+    font-style: italic;
+  }
+
+  .tarjetas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+
+    .tarjeta {
+      background-color: var(--blanco);
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .tarjeta-titulo {
+        color: var(--primario);
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+      }
+
+      .tarjeta-detalle {
+        margin-bottom: 1.5rem;
+        
+        p {
+          margin: 0.5rem 0;
+          color: var(--primario);
+          
+          strong {
+            color: var(--secundario);
+          }
+        }
+      }
+
+      .tarjeta-acciones {
+        display: flex;
+        justify-content: flex-end;
+
+        .boton-primario {
+          background-color: var(--primario);
+          color: var(--blanco);
+          border: none;
+          border-radius: 4px;
+          padding: 0.5rem 1rem;
+          font-family: var(--fuente-principal);
+          font-weight: bold;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background-color: var(--secundario);
+          }
+        }
+      }
+    }
+  }
+}

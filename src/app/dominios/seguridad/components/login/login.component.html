@@ -1,0 +1,61 @@
+<div class="contenedor-login-dividido">
+  <div class="panel-formulario">
+    <div class="encabezado-marca">
+      <h2 class="titulo-bienvenida">Bienvenido de nuevo</h2>
+      <p class="subtitulo">Por favor ingresa tus datos</p>
+    </div>
+
+    <div class="alerta-exito" *ngIf="mensajeExito">
+      {{ mensajeExito }}
+    </div>
+
+    <div class="alerta-error" *ngIf="mensajeError">
+      {{ mensajeError }}
+    </div>
+
+    <form [formGroup]="formularioLogin" (ngSubmit)="procesarLogin()" class="formulario">
+      <div class="grupo-control">
+        <label for="identificador">Correo electrónico</label>
+        <input type="email" id="identificador" formControlName="identificador" placeholder="Ej. usuario@ejemplo.com">
+        <div class="mensaje-error" [style.visibility]="(formularioLogin.get('identificador')?.invalid && formularioLogin.get('identificador')?.touched) ? 'visible' : 'hidden'">
+          <span *ngIf="formularioLogin.get('identificador')?.errors?.['required']">Ingresa tu correo.</span>
+          <span *ngIf="formularioLogin.get('identificador')?.errors?.['email'] && !formularioLogin.get('identificador')?.errors?.['required']">Ingresa un correo válido.</span>
+          <span *ngIf="formularioLogin.get('identificador')?.errors?.['noEncontrado']">Este correo no está registrado.</span>
+        </div>
+      </div>
+
+      <div class="grupo-control">
+        <label for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" formControlName="contrasena" placeholder="Tu contraseña">
+        <div class="mensaje-error" [style.visibility]="(formularioLogin.get('contrasena')?.invalid && formularioLogin.get('contrasena')?.touched) ? 'visible' : 'hidden'">
+          <span *ngIf="formularioLogin.get('contrasena')?.errors?.['required']">La contraseña es requerida.</span>
+          <span *ngIf="formularioLogin.get('contrasena')?.errors?.['minlength'] && !formularioLogin.get('contrasena')?.errors?.['required']">Mínimo 6 caracteres.</span>
+          <span *ngIf="formularioLogin.get('contrasena')?.errors?.['incorrecta']">La contraseña es incorrecta.</span>
+        </div>
+      </div>
+
+      <div class="opciones-extras">
+        <label class="recordarme">
+          <input type="checkbox" formControlName="recordarme">
+          <span>Recordarme por 30 días</span>
+        </label>
+        <a href="#" class="enlace-olvido">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button type="submit" class="boton-primario" [disabled]="formularioLogin.invalid">Iniciar Sesión</button>
+      
+      <button type="button" class="boton-secundario boton-google" (click)="iniciarConGoogle()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Icono de Google" class="icono-google">
+        Iniciar con Google
+      </button>
+
+      <div class="pie-formulario">
+        <span>¿No tienes una cuenta? <a routerLink="/registro" class="enlace-registro">Regístrate</a></span>
+      </div>
+    </form>
+  </div>
+  
+  <div class="panel-imagen">
+    <img src="card-login.jpg" alt="Ilustración de soporte y conexión">
+  </div>
+</div>

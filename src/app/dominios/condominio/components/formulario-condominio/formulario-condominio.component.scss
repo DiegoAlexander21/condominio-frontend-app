@@ -1,0 +1,101 @@
+.contenedor-formulario {
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+
+  .titulo-principal {
+    color: var(--primario);
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    border-bottom: 2px solid var(--secundario);
+    padding-bottom: 0.5rem;
+  }
+
+  .formulario {
+    background-color: var(--blanco);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .fila-controles {
+      display: flex;
+      gap: 1rem;
+      
+      .grupo-control {
+        flex: 1;
+      }
+    }
+
+    .grupo-control {
+      margin-bottom: 1.5rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--primario);
+        font-weight: bold;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--secundario);
+        border-radius: 4px;
+        font-family: var(--fuente-principal);
+        box-sizing: border-box;
+
+        &:focus {
+          outline: none;
+          border-color: var(--primario);
+        }
+      }
+
+      .mensaje-error {
+        color: var(--error);
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+      }
+    }
+
+    .acciones-formulario {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+
+      button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        font-family: var(--fuente-principal);
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s ease, opacity 0.2s ease;
+        border: none;
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+
+      .boton-primario {
+        background-color: var(--primario);
+        color: var(--blanco);
+
+        &:hover:not(:disabled) {
+          background-color: #1a1e2d;
+        }
+      }
+
+      .boton-secundario {
+        background-color: transparent;
+        color: var(--primario);
+        border: 1px solid var(--primario);
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+      }
+    }
+  }
+}
