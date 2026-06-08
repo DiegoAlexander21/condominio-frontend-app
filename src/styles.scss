@@ -15,3 +15,92 @@ body {
     margin: 0;
     padding: 0;
 }
+
+.grupo-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.84rem;
+    color: var(--primario);
+  }
+}
+
+input:not([type="checkbox"]):not([type="radio"]), select {
+  border: none;
+  box-shadow: 0 1px 0 0 var(--secundario);
+  background-color: transparent;
+  padding: 0.5rem 0;
+  font-size: 0.84rem;
+  color: var(--primario);
+  font-family: var(--fuente-principal);
+  outline: none;
+  transition: box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:focus {
+    box-shadow: 0 2px 0 0 var(--primario);
+  }
+}
+
+.boton-primario {
+  background-color: #2b2b2b;
+  color: var(--blanco);
+  border: none;
+  padding: 1rem 3rem;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-family: var(--fuente-principal);
+  font-weight: 600;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.boton-secundario {
+  background-color: transparent;
+  color: var(--primario);
+  border: 1px solid var(--secundario);
+  padding: 1rem 3rem;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--fuente-principal);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+
+.boton-peligro {
+  background-color: var(--error);
+  color: var(--blanco);
+  border: none;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-family: var(--fuente-principal);
+  font-weight: 600;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}

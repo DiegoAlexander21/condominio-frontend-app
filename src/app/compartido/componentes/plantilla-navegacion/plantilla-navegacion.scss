@@ -1,0 +1,56 @@
+.contenedor-principal {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--fondo);
+}
+
+.area-contenido {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  .contenido-dinamico {
+    flex: 1;
+    padding: 0.40rem;
+    overflow-y: auto;
+    background-color: var(--fondo);
+  }
+}
+
+.fondo-oscurecido {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  &.activo {
+    display: block;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .area-contenido {
+    .contenido-dinamico {
+      padding: 1rem;
+    }
+  }
+
+  .fondo-oscurecido {
+    display: block;
+    pointer-events: none;
+
+    &.activo {
+      pointer-events: auto;
+    }
+  }
+}

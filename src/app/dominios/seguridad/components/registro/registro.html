@@ -10,12 +10,12 @@
         <div class="grupo-control">
           <label for="nombres">Nombres *</label>
           <input type="text" id="nombres" formControlName="nombres">
-          <div class="mensaje-error" [style.visibility]="(formularioRegistro.get('nombres')?.invalid && formularioRegistro.get('nombres')?.touched) ? 'visible' : 'hidden'">Requerido</div>
+          <app-mensaje-error [control]="formularioRegistro.get('nombres')" nombreCampo="El nombre"></app-mensaje-error>
         </div>
         <div class="grupo-control">
           <label for="apellidos">Apellidos *</label>
           <input type="text" id="apellidos" formControlName="apellidos">
-          <div class="mensaje-error" [style.visibility]="(formularioRegistro.get('apellidos')?.invalid && formularioRegistro.get('apellidos')?.touched) ? 'visible' : 'hidden'">Requerido</div>
+          <app-mensaje-error [control]="formularioRegistro.get('apellidos')" nombreCampo="El apellido"></app-mensaje-error>
         </div>
         <div class="grupo-control">
           <label for="tipoDocumento">Tipo Doc. *</label>
@@ -23,12 +23,12 @@
             <option value="" disabled selected></option>
             <option *ngFor="let tipo of tiposDocumento" [value]="tipo">{{tipo}}</option>
           </select>
-          <div class="mensaje-error" [style.visibility]="(formularioRegistro.get('tipoDocumento')?.invalid && formularioRegistro.get('tipoDocumento')?.touched) ? 'visible' : 'hidden'">Requerido</div>
+          <app-mensaje-error [control]="formularioRegistro.get('tipoDocumento')" nombreCampo="El tipo de documento"></app-mensaje-error>
         </div>
         <div class="grupo-control">
           <label for="numeroDocumento">Núm. Doc. *</label>
           <input type="text" id="numeroDocumento" formControlName="numeroDocumento">
-          <div class="mensaje-error" [style.visibility]="(formularioRegistro.get('numeroDocumento')?.invalid && formularioRegistro.get('numeroDocumento')?.touched) ? 'visible' : 'hidden'">Requerido</div>
+          <app-mensaje-error [control]="formularioRegistro.get('numeroDocumento')" nombreCampo="El número"></app-mensaje-error>
         </div>
       </div>
 
@@ -36,7 +36,7 @@
         <div class="grupo-control">
           <label for="telefono">Teléfono</label>
           <input type="tel" id="telefono" formControlName="telefono">
-          <div class="mensaje-error" [style.visibility]="(formularioRegistro.get('telefono')?.invalid && formularioRegistro.get('telefono')?.touched) ? 'visible' : 'hidden'">Inválido</div>
+          <app-mensaje-error [control]="formularioRegistro.get('telefono')" nombreCampo="El teléfono"></app-mensaje-error>
         </div>
         <div class="grupo-control">
           <label for="rol">Rol *</label>
@@ -44,17 +44,17 @@
             <option value="" disabled selected></option>
             <option *ngFor="let rol of nombresRoles" [value]="rol">{{rol}}</option>
           </select>
-          <div class="mensaje-error" [style.visibility]="(formularioRegistro.get('rol')?.invalid && formularioRegistro.get('rol')?.touched) ? 'visible' : 'hidden'">Requerido</div>
+          <app-mensaje-error [control]="formularioRegistro.get('rol')" nombreCampo="El rol"></app-mensaje-error>
         </div>
         <div class="grupo-control">
           <label for="correo">Email *</label>
           <input type="email" id="correo" formControlName="correo">
-          <div class="mensaje-error" [style.visibility]="(formularioRegistro.get('correo')?.invalid && formularioRegistro.get('correo')?.touched) ? 'visible' : 'hidden'">Inválido</div>
+          <app-mensaje-error [control]="formularioRegistro.get('correo')" nombreCampo="El correo"></app-mensaje-error>
         </div>
         <div class="grupo-control">
           <label for="contrasena">Contraseña *</label>
           <input type="password" id="contrasena" formControlName="contrasena">
-          <div class="mensaje-error" [style.visibility]="(formularioRegistro.get('contrasena')?.invalid && formularioRegistro.get('contrasena')?.touched) ? 'visible' : 'hidden'">Mínimo 6 caracteres</div>
+          <app-mensaje-error [control]="formularioRegistro.get('contrasena')" nombreCampo="La contraseña"></app-mensaje-error>
         </div>
       </div>
 
@@ -62,7 +62,7 @@
         <div class="alerta-servidor" *ngIf="mensajeServidor">
           {{ mensajeServidor }}
         </div>
-        <button type="submit" class="boton-registro" [disabled]="formularioRegistro.invalid">Registrarse</button>
+        <button type="submit" class="boton-primario" [disabled]="formularioRegistro.invalid">Registrarse</button>
         <div class="enlace-login">
           <a routerLink="/login">¿Ya tienes cuenta? Inicia sesión</a>
         </div>

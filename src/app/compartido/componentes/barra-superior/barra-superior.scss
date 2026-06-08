@@ -1,0 +1,62 @@
+.barra-superior {
+  height: 70px;
+  background-color: var(--blanco);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+
+  .boton-hamburguesa {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--primario);
+    cursor: pointer;
+    padding: 0;
+
+    svg {
+      width: 28px;
+      height: 28px;
+      display: block;
+    }
+  }
+
+  .perfil-usuario {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-left: auto;
+
+    .boton-salir {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: none;
+      color: var(--secundario);
+      font-family: var(--fuente-principal);
+      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.2s ease;
+
+      .icono-salir {
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover {
+        color: var(--error);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .barra-superior {
+    .boton-hamburguesa {
+      display: block;
+    }
+  }
+}

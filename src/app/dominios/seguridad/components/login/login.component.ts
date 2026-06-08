@@ -2,12 +2,13 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AutenticacionService } from '../../services/autenticacion.service';
+import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
+import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, MensajeErrorComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -39,8 +40,7 @@ export class LoginComponent {
     if (this.formularioLogin.valid) {
       this.servicioAutenticacion.iniciarSesion(this.formularioLogin.value).subscribe({
         next: (respuesta) => {
-          this.mensajeError = null;
-          console.log('Token recibido:', respuesta.tokenAcceso);
+          localStorage.setItem('token', respuesta.tokenAcceso);
           this.enrutador.navigate(['/condominios']);
         },
         error: (error) => {

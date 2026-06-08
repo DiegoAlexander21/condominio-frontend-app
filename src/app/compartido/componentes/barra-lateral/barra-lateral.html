@@ -1,0 +1,16 @@
+<aside class="barra-lateral" [class.abierta]="menuAbierto">
+  <div class="cabecera-lateral">
+    <h2 class="titulo-marca">AypateCond.</h2>
+  </div>
+
+  <nav class="navegacion-principal">
+    <ul class="lista-enlaces">
+      <li>
+        <a routerLink="/condominios" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <svg lucideBuilding2 class="icono"></svg>
+          <span class="texto">Condominios</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>

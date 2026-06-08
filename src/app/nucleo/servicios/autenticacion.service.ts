@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Credenciales, RespuestaAutenticacion, RegistroUsuario } from '../models/credenciales.model';
+import { Credenciales, RespuestaAutenticacion, RegistroUsuario } from '../modelos/credenciales.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,14 @@ export class AutenticacionService {
 
   registrar(datosRegistro: RegistroUsuario): Observable<any> {
     return this.clienteHttp.post(`${this.urlBase}/registro`, datosRegistro);
+  }
+
+  cerrarSesion(): void {
+    localStorage.removeItem('token');
+  }
+
+  estaAutenticado(): boolean {
+    return !!localStorage.getItem('token');
   }
 }
 

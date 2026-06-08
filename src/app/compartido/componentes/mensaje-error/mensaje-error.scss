@@ -1,0 +1,24 @@
+.mensaje-error-contenedor {
+  min-height: 1.2rem;
+  margin-top: 0.2rem;
+  display: flex;
+  align-items: flex-start;
+
+  .mensaje-error-texto {
+    color: var(--error);
+    font-size: 0.75rem;
+    font-family: var(--fuente-principal);
+    animation: aparecer 0.2s ease-in-out;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

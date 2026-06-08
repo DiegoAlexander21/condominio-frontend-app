@@ -61,33 +61,6 @@
       max-width: 450px;
 
       .grupo-control {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-
-        label {
-          font-size: 0.84rem;
-          color: var(--primario);
-          font-family: var(--fuente-principal);
-        }
-
-        input {
-          border: none;
-          box-shadow: 0 1px 0 0 var(--secundario);
-          background-color: transparent;
-          padding: 0.5rem 0;
-          font-size: 0.84rem;
-          color: var(--primario);
-          font-family: var(--fuente-principal);
-          outline: none;
-          transition: box-shadow 0.3s ease;
-          width: 100%;
-
-          &:focus {
-            box-shadow: 0 2px 0 0 var(--primario);
-          }
-        }
-
         .mensaje-error {
           color: var(--error);
           font-size: 0.70rem;
@@ -131,48 +104,7 @@
         }
       }
 
-      button {
-        padding: 0.9rem;
-        border-radius: 6px;
-        font-family: var(--fuente-principal);
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        border: none;
-      }
-
-      .boton-primario {
-        background-color: var(--primario);
-        color: var(--blanco);
-        margin-top: 0.5rem;
-        font-family: var(--fuente-principal);
-
-        &:hover:not(:disabled) {
-          background-color: #1f2436; 
-          transform: translateY(-1px);
-        }
-
-        &:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-      }
-
-      .boton-secundario {
-        background-color: transparent;
-        color: var(--primario);
-        border: 1px solid var(--secundario);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        font-family: var(--fuente-principal);
-
-        &:hover {
-          background-color: var(--fondo);
-        }
-
+      .boton-google {
         .icono-google {
           width: 1.25rem;
           height: 1.25rem;

@@ -17,21 +17,21 @@
       <div class="grupo-control">
         <label for="identificador">Correo electrónico</label>
         <input type="email" id="identificador" formControlName="identificador" placeholder="Ej. usuario@ejemplo.com">
-        <div class="mensaje-error" [style.visibility]="(formularioLogin.get('identificador')?.invalid && formularioLogin.get('identificador')?.touched) ? 'visible' : 'hidden'">
-          <span *ngIf="formularioLogin.get('identificador')?.errors?.['required']">Ingresa tu correo.</span>
-          <span *ngIf="formularioLogin.get('identificador')?.errors?.['email'] && !formularioLogin.get('identificador')?.errors?.['required']">Ingresa un correo válido.</span>
-          <span *ngIf="formularioLogin.get('identificador')?.errors?.['noEncontrado']">Este correo no está registrado.</span>
-        </div>
+        <app-mensaje-error 
+          [control]="formularioLogin.get('identificador')" 
+          nombreCampo="El correo electrónico"
+          [mensajesPersonalizados]="{ noEncontrado: 'Este correo no está registrado.' }">
+        </app-mensaje-error>
       </div>
 
       <div class="grupo-control">
         <label for="contrasena">Contraseña</label>
         <input type="password" id="contrasena" formControlName="contrasena" placeholder="Tu contraseña">
-        <div class="mensaje-error" [style.visibility]="(formularioLogin.get('contrasena')?.invalid && formularioLogin.get('contrasena')?.touched) ? 'visible' : 'hidden'">
-          <span *ngIf="formularioLogin.get('contrasena')?.errors?.['required']">La contraseña es requerida.</span>
-          <span *ngIf="formularioLogin.get('contrasena')?.errors?.['minlength'] && !formularioLogin.get('contrasena')?.errors?.['required']">Mínimo 6 caracteres.</span>
-          <span *ngIf="formularioLogin.get('contrasena')?.errors?.['incorrecta']">La contraseña es incorrecta.</span>
-        </div>
+        <app-mensaje-error 
+          [control]="formularioLogin.get('contrasena')" 
+          nombreCampo="La contraseña"
+          [mensajesPersonalizados]="{ incorrecta: 'La contraseña es incorrecta.' }">
+        </app-mensaje-error>
       </div>
 
       <div class="opciones-extras">

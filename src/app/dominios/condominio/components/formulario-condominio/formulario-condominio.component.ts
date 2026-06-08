@@ -2,12 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
 import { CondominioService } from '../../services/condominio.service';
 
 @Component({
   selector: 'app-formulario-condominio',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MensajeErrorComponent],
   templateUrl: './formulario-condominio.component.html',
   styleUrls: ['./formulario-condominio.component.scss']
 })
