@@ -10,6 +10,10 @@ import { CommonModule } from '@angular/common';
 })
 export class ModalConfirmacionComponent {
   @Input() visible: boolean = false;
+  @Input() titulo: string = 'Confirmar Acción';
+  @Input() mensaje: string = '¿Estás seguro de realizar esta acción?';
+  @Input() textoConfirmar: string = 'Confirmar';
+  
   @Output() alCancelar = new EventEmitter<void>();
   @Output() alConfirmar = new EventEmitter<void>();
 

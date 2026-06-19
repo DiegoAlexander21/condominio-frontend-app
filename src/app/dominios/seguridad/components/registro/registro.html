@@ -6,7 +6,7 @@
   <div class="cuerpo-formulario">
     <form [formGroup]="formularioRegistro" (ngSubmit)="procesarRegistro()" class="formulario-minimalista">
       
-      <div class="fila">
+      <div class="contenedor-campos">
         <div class="grupo-control">
           <label for="nombres">Nombres *</label>
           <input type="text" id="nombres" formControlName="nombres">
@@ -30,9 +30,6 @@
           <input type="text" id="numeroDocumento" formControlName="numeroDocumento">
           <app-mensaje-error [control]="formularioRegistro.get('numeroDocumento')" nombreCampo="El número"></app-mensaje-error>
         </div>
-      </div>
-
-      <div class="fila">
         <div class="grupo-control">
           <label for="telefono">Teléfono</label>
           <input type="tel" id="telefono" formControlName="telefono">

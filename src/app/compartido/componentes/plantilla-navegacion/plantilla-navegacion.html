@@ -1,22 +1,20 @@
 <div class="contenedor-principal">
   
   <div class="fondo-oscurecido" [class.activo]="menuAbierto" (click)="alternarMenu()"></div>
-
-  <!-- Componente Barra Lateral -->
   <app-barra-lateral [menuAbierto]="menuAbierto" (alCerrar)="cerrarMenuMovil()"></app-barra-lateral>
 
   <div class="area-contenido">
-    <!-- Componente Barra Superior -->
     <app-barra-superior (alAlternarMenu)="alternarMenu()" (alSalir)="abrirModalSalir()"></app-barra-superior>
 
     <main class="contenido-dinamico">
       <router-outlet></router-outlet>
     </main>
   </div>
-
-  <!-- Componente Modal de Confirmación -->
   <app-modal-confirmacion 
     [visible]="mostrarModalSalir" 
+    titulo="Cerrar Sesión"
+    mensaje="¿Estás seguro que deseas salir del sistema?"
+    textoConfirmar="Sí, salir"
     (alCancelar)="cancelarCierreSesion()" 
     (alConfirmar)="confirmarCierreSesion()">
   </app-modal-confirmacion>

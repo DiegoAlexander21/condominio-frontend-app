@@ -33,13 +33,15 @@
       gap: 3rem;
       width: 100%;
 
-      .fila {
+      .contenedor-campos {
         display: flex;
-        gap: 3rem;
+        flex-wrap: wrap;
+        gap: 2rem;
         width: 100%;
         
         .grupo-control {
-          flex: 1;
+          flex: 1 1 calc(25% - 2rem);
+          min-width: 200px;
 
           .mensaje-error {
             color: var(--error);
@@ -49,18 +51,13 @@
           }
         }
 
-        @media (max-width: 1024px) {
-          flex-wrap: wrap;
-          gap: 2rem;
-          
+        @media (max-width: 900px) {
           .grupo-control {
-            flex: 1 1 calc(50% - 2rem);
+            flex: 1 1 calc(33.333% - 2rem);
           }
         }
 
         @media (max-width: 600px) {
-          flex-direction: column;
-          
           .grupo-control {
             flex: 1 1 100%;
           }

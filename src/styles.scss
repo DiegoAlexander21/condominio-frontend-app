@@ -3,8 +3,9 @@
     --secundario: #a9b0c0;
     --primario: #313852;
     --blanco: #ffffff;
-    --exito: #2e7d32;
-    --error: #c62828;
+    --exito: #28b53d;
+    --error: #de4b4b;
+    --terciario: #4b5578;
     --fuente-principal: 'Lora', Georgia, serif;
 }
 
@@ -24,6 +25,13 @@ body {
   label {
     font-size: 0.84rem;
     color: var(--primario);
+  }
+
+  .texto-ayuda {
+    font-size: 0.8rem;
+    color: var(--secundario);
+    font-style: italic;
+    margin-top: -0.2rem;
   }
 }
 
@@ -102,5 +110,54 @@ input:not([type="checkbox"]):not([type="radio"]), select {
 
   &:hover {
     opacity: 0.85;
+  }
+}
+
+.grilla-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+.formulario-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .fila-controles {
+    display: flex;
+    gap: 1.5rem;
+
+    .grupo-control {
+      flex: 1;
+    }
+  }
+
+  .acciones-formulario {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .formulario-flex {
+    .fila-controles {
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .formulario-flex {
+    .acciones-formulario {
+      flex-direction: column;
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+    }
   }
 }

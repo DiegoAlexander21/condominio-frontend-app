@@ -1,0 +1,9 @@
+<div class="contenedor-toast" [class.visible]="visible" *ngIf="mensajeActual">
+  <div class="toast" [ngClass]="'toast-' + mensajeActual.tipo">
+    <span class="icono">
+      <ng-container *ngIf="mensajeActual.tipo === 'exito'"></ng-container>
+      <ng-container *ngIf="mensajeActual.tipo === 'error'"></ng-container>
+    </span>
+    <span class="texto">{{ mensajeActual.texto }}</span>
+  </div>
+</div>

@@ -10,7 +10,6 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./dominios/seguridad/components/login/login.component').then(m => m.LoginComponent)
   },
-  // Rutas privadas (envueltas en la plantilla de navegación y protegidas por guard)
   {
     path: '',
     canActivate: [autenticacionGuard],
@@ -27,6 +26,22 @@ export const routes: Routes = [
       {
         path: 'condominios/editar/:id',
         loadComponent: () => import('./dominios/condominio/components/formulario-condominio/formulario-condominio.component').then(m => m.FormularioCondominioComponent)
+      },
+      {
+        path: 'unidades',
+        loadComponent: () => import('./dominios/unidades/components/lista-unidades/lista-unidades').then(m => m.ListaUnidadesComponent)
+      },
+      {
+        path: 'unidades/nuevo',
+        loadComponent: () => import('./dominios/unidades/components/formulario-unidad/formulario-unidad').then(m => m.FormularioUnidadComponent)
+      },
+      {
+        path: 'unidades/editar/:id',
+        loadComponent: () => import('./dominios/unidades/components/formulario-unidad/formulario-unidad').then(m => m.FormularioUnidadComponent)
+      },
+      {
+        path: 'unidades/asignar-ocupantes/:id',
+        loadComponent: () => import('./dominios/unidades/components/asignar-ocupantes/asignar-ocupantes').then(m => m.AsignarOcupantesComponent)
       },
       {
         path: '',

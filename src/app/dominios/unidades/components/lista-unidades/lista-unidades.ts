@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { CondominioService } from '../../services/condominio.service';
-import { CondominioResponse } from '../../modelos/condominio-response.interface';
+import { UnidadService } from '../../services/unidad';
+import { UnidadResponse } from '../../modelos/unidad-response.interface';
 import { RespuestaPaginada } from '../../../../compartido/modelos/respuesta-paginada.interface';
 import { MenuContextualComponent } from '../../../../compartido/componentes/menu-contextual/menu-contextual';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
@@ -11,30 +11,30 @@ import { ToastService } from '../../../../compartido/componentes/toast/toast.ser
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-lista-condominios',
+  selector: 'app-lista-unidades',
   standalone: true,
   imports: [CommonModule, RouterModule, MenuContextualComponent, PaginacionComponent, ModalConfirmacionComponent],
-  templateUrl: './lista-condominios.component.html',
-  styleUrls: ['./lista-condominios.component.scss']
+  templateUrl: './lista-unidades.html',
+  styleUrls: ['./lista-unidades.scss']
 })
-export class ListaCondominiosComponent implements OnInit {
-  private condominioServicio = inject(CondominioService);
+export class ListaUnidadesComponent implements OnInit {
+  private unidadServicio = inject(UnidadService);
   private enrutador = inject(Router);
   private toastServicio = inject(ToastService);
   
-  respuestaPaginada$: Observable<RespuestaPaginada<CondominioResponse>> | undefined;
+  respuestaPaginada$: Observable<RespuestaPaginada<UnidadResponse>> | undefined;
   paginaActual = 0;
   tamanoPagina = 9;
 
   mostrarModalEliminar = false;
-  idCondominioAEliminar: number | null = null;
+  idUnidadAEliminar: number | null = null;
 
   ngOnInit(): void {
     this.obtenerDatos();
   }
 
   obtenerDatos(): void {
-    this.respuestaPaginada$ = this.condominioServicio.obtenerListaCondominios(this.paginaActual, this.tamanoPagina);
+    this.respuestaPaginada$ = this.unidadServicio.obtenerListaUnidades(this.paginaActual, this.tamanoPagina);
   }
 
   cambiarPagina(nuevaPagina: number): void {
@@ -42,33 +42,37 @@ export class ListaCondominiosComponent implements OnInit {
     this.obtenerDatos();
   }
 
-  editarCondominio(id: number): void {
-    this.enrutador.navigate(['/condominios/editar', id]);
+  editarUnidad(id: number): void {
+    this.enrutador.navigate(['/unidades/editar', id]);
   }
 
-  eliminarCondominio(id: number): void {
-    this.idCondominioAEliminar = id;
+  asignarOcupantes(id: number): void {
+    this.enrutador.navigate(['/unidades/asignar-ocupantes', id]);
+  }
+
+  eliminarUnidad(id: number): void {
+    this.idUnidadAEliminar = id;
     this.mostrarModalEliminar = true;
   }
 
   cancelarEliminacion(): void {
     this.mostrarModalEliminar = false;
-    this.idCondominioAEliminar = null;
+    this.idUnidadAEliminar = null;
   }
 
   confirmarEliminacion(): void {
-    if (this.idCondominioAEliminar !== null) {
-      this.condominioServicio.eliminarCondominio(this.idCondominioAEliminar).subscribe({
+    if (this.idUnidadAEliminar !== null) {
+      this.unidadServicio.eliminarUnidad(this.idUnidadAEliminar).subscribe({
         next: () => {
-          this.toastServicio.mostrarExito('Condominio eliminado exitosamente.');
+          this.toastServicio.mostrarExito('Unidad eliminada exitosamente.');
           this.mostrarModalEliminar = false;
-          this.idCondominioAEliminar = null;
+          this.idUnidadAEliminar = null;
           this.obtenerDatos();
         },
         error: (error) => {
-          this.toastServicio.mostrarError('Error al eliminar el condominio.');
+          this.toastServicio.mostrarError('Error al eliminar la unidad.');
           this.mostrarModalEliminar = false;
-          this.idCondominioAEliminar = null;
+          this.idUnidadAEliminar = null;
         }
       });
     }

@@ -1,4 +1,4 @@
-.contenedor-condominios {
+.contenedor-unidades {
   padding: 2rem;
   
   .cabecera-lista {
@@ -69,6 +69,26 @@
         strong {
           color: var(--primario);
           font-weight: 500;
+        }
+
+        .etiqueta-estado {
+          display: inline-block;
+          padding: 0.2rem 0.5rem;
+          border-radius: 4px;
+          background-color: var(--terciario);
+          color: white;
+          font-size: 0.85rem;
+          margin-left: 0.5rem;
+
+          &.ocupado {
+            background-color: var(--primario);
+            color: white;
+          }
+
+          &.asignado {
+            background-color: var(--secundario);
+            color: white;
+          }
         }
       }
     }

@@ -1,23 +1,47 @@
 <div class="contenedor-condominios">
-  <header style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--secundario); padding-bottom: 0.5rem; margin-bottom: 2rem;">
-    <h2 class="titulo-principal" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">Gestión de Condominios</h2>
+  <header class="cabecera-lista">
+    <h2 class="titulo-principal">Gestión de Condominios</h2>
     <button class="boton-primario" routerLink="/condominios/nuevo">Nuevo Condominio</button>
   </header>
   
-  <div class="tarjetas-grid" *ngIf="listaCondominios$ | async as condominios; else cargando">
-    <div class="tarjeta" *ngFor="let condominio of condominios">
-      <h3 class="tarjeta-titulo">{{ condominio.nombre }}</h3>
-      <div class="tarjeta-detalle">
-        <p><strong>Torres:</strong> {{ condominio.torres }}</p>
-        <p><strong>Pisos por Torre:</strong> {{ condominio.pisosPorTorre }}</p>
-      </div>
-      <div class="tarjeta-acciones">
-        <button class="boton-primario" [routerLink]="['/condominios/editar', condominio.id]">Gestionar</button>
+  <ng-container *ngIf="respuestaPaginada$ | async as respuesta; else cargando">
+    <div class="grilla-tarjetas">
+      <div class="tarjeta" *ngFor="let condominio of respuesta.contenido">
+        
+        <div class="tarjeta-encabezado">
+          <h3 class="tarjeta-titulo">{{ condominio.nombre }}</h3>
+          <app-menu-contextual 
+            [identificador]="condominio.id" 
+            (alEditar)="editarCondominio($event)" 
+            (alEliminar)="eliminarCondominio($event)">
+          </app-menu-contextual>
+        </div>
+
+        <div class="tarjeta-detalle">
+          <p><strong>Torres:</strong> {{ condominio.torres }}</p>
+          <p><strong>Pisos por Torre:</strong> {{ condominio.pisosPorTorre }}</p>
+        </div>
+
       </div>
     </div>
-  </div>
+    
+    <app-paginacion 
+      [paginaActual]="respuesta.paginaActual" 
+      [totalPaginas]="respuesta.totalPaginas" 
+      (cambioPagina)="cambiarPagina($event)">
+    </app-paginacion>
+  </ng-container>
   
   <ng-template #cargando>
     <p class="texto-cargando">Cargando la información de los condominios...</p>
   </ng-template>
+
+  <app-modal-confirmacion 
+    [visible]="mostrarModalEliminar" 
+    titulo="Eliminar Condominio"
+    mensaje="¿Estás seguro que deseas eliminar este condominio de forma permanente?"
+    textoConfirmar="Eliminar"
+    (alCancelar)="cancelarEliminacion()" 
+    (alConfirmar)="confirmarEliminacion()">
+  </app-modal-confirmacion>
 </div>
