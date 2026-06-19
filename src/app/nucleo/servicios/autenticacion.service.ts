@@ -18,12 +18,56 @@ export class AutenticacionService {
     return this.clienteHttp.post(`${this.urlBase}/registro`, datosRegistro);
   }
 
+  guardarToken(token: string, recordarme: boolean): void {
+    if (recordarme) {
+      localStorage.setItem('token', token);
+      sessionStorage.removeItem('token');
+    } else {
+      sessionStorage.setItem('token', token);
+      localStorage.removeItem('token');
+    }
+  }
+
+  obtenerToken(): string | null {
+    return localStorage.getItem('token') || sessionStorage.getItem('token');
+  }
+
   cerrarSesion(): void {
     localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
   }
 
   estaAutenticado(): boolean {
-    return !!localStorage.getItem('token');
+    const token = this.obtenerToken();
+    if (!token) return false;
+    
+    const payload = this.decodificarToken(token);
+    if (!payload || !payload.exp) return false;
+    
+    if (payload.exp * 1000 < Date.now()) {
+      this.cerrarSesion();
+      return false;
+    }
+    return true;
+  }
+
+  obtenerRoles(): string[] {
+    const token = this.obtenerToken();
+    if (!token) return [];
+    const payload = this.decodificarToken(token);
+    return payload?.roles || [];
+  }
+
+  private decodificarToken(token: string): any {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
   }
 }
-

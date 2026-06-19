@@ -39,15 +39,9 @@
           <input type="checkbox" formControlName="recordarme">
           <span>Recordarme por 30 días</span>
         </label>
-        <a href="#" class="enlace-olvido">¿Olvidaste tu contraseña?</a>
       </div>
 
       <button type="submit" class="boton-primario" [disabled]="formularioLogin.invalid">Iniciar Sesión</button>
-      
-      <button type="button" class="boton-secundario boton-google" (click)="iniciarConGoogle()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Icono de Google" class="icono-google">
-        Iniciar con Google
-      </button>
 
       <div class="pie-formulario">
         <span>¿No tienes una cuenta? <a routerLink="/registro" class="enlace-registro">Regístrate</a></span>

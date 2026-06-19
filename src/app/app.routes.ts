@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { autenticacionGuard } from './nucleo/guardianes/autenticacion.guard';
+import { rolGuard } from './nucleo/guardianes/rol.guard';
 
 export const routes: Routes = [
   {
@@ -17,30 +18,44 @@ export const routes: Routes = [
     children: [
       {
         path: 'condominios',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'PROPIETARIO', 'RESIDENTE', 'CONSERJERIA_MANTENIMIENTO'] },
         loadComponent: () => import('./dominios/condominio/components/lista-condominios/lista-condominios.component').then(m => m.ListaCondominiosComponent)
       },
       {
         path: 'condominios/nuevo',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR'] },
         loadComponent: () => import('./dominios/condominio/components/formulario-condominio/formulario-condominio.component').then(m => m.FormularioCondominioComponent)
       },
       {
         path: 'condominios/editar/:id',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR'] },
         loadComponent: () => import('./dominios/condominio/components/formulario-condominio/formulario-condominio.component').then(m => m.FormularioCondominioComponent)
       },
       {
         path: 'unidades',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'CONSERJERIA_MANTENIMIENTO'] },
         loadComponent: () => import('./dominios/unidades/components/lista-unidades/lista-unidades').then(m => m.ListaUnidadesComponent)
       },
       {
         path: 'unidades/nuevo',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR'] },
         loadComponent: () => import('./dominios/unidades/components/formulario-unidad/formulario-unidad').then(m => m.FormularioUnidadComponent)
       },
       {
         path: 'unidades/editar/:id',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR'] },
         loadComponent: () => import('./dominios/unidades/components/formulario-unidad/formulario-unidad').then(m => m.FormularioUnidadComponent)
       },
       {
         path: 'unidades/asignar-ocupantes/:id',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR'] },
         loadComponent: () => import('./dominios/unidades/components/asignar-ocupantes/asignar-ocupantes').then(m => m.AsignarOcupantesComponent)
       },
       {

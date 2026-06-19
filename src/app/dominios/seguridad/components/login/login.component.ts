@@ -38,9 +38,12 @@ export class LoginComponent {
 
   procesarLogin(): void {
     if (this.formularioLogin.valid) {
-      this.servicioAutenticacion.iniciarSesion(this.formularioLogin.value).subscribe({
+      const { identificador, contrasena, recordarme } = this.formularioLogin.value;
+      const credenciales = { identificador, contrasena };
+
+      this.servicioAutenticacion.iniciarSesion(credenciales).subscribe({
         next: (respuesta) => {
-          localStorage.setItem('token', respuesta.tokenAcceso);
+          this.servicioAutenticacion.guardarToken(respuesta.tokenAcceso, recordarme);
           this.enrutador.navigate(['/condominios']);
         },
         error: (error) => {
@@ -58,9 +61,5 @@ export class LoginComponent {
     } else {
       this.formularioLogin.markAllAsTouched();
     }
-  }
-
-  iniciarConGoogle(): void {
-    console.log('Iniciar sesión con Google');
   }
 }
