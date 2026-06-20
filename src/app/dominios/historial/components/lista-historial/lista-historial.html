@@ -1,0 +1,50 @@
+<div class="contenedor-historial">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Historial de Titularidad</h2>
+
+    <form [formGroup]="formularioBusqueda" class="contenedor-busqueda">
+      <div class="grupo-busqueda">
+        <svg lucideSearch class="icono-busqueda"></svg>
+        <input 
+          type="text" 
+          formControlName="termino" 
+          placeholder="Buscar por unidad o propietario..."
+          class="input-busqueda">
+      </div>
+    </form>
+  </div>
+
+  <ng-container *ngIf="respuestaPaginada$ | async as respuesta">
+    
+    <div class="grilla-tarjetas" *ngIf="respuesta.contenido.length > 0; else sinResultados">
+      <div class="tarjeta" *ngFor="let historial of respuesta.contenido">
+        <div class="tarjeta-encabezado">
+          <h3 class="tarjeta-titulo">
+            <svg lucideHome class="icono-tarjeta"></svg>
+            Unidad {{ historial.numeroUnidad || 'N/A' }}
+          </h3>
+        </div>
+
+        <div class="tarjeta-detalle">
+          <div class="detalle-cambio">
+            <span class="propietario-antiguo">{{ historial.propietarioAnterior }}</span>
+            <svg lucideArrowRightLeft class="icono-flecha"></svg>
+            <span class="propietario-nuevo">{{ historial.nuevoPropietario }}</span>
+          </div>
+          <p class="fecha-cambio">{{ historial.fechaCambio | date:'dd/MM/yyyy, HH:mm' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #sinResultados>
+      <p class="texto-cargando">No se encontraron registros de titularidad.</p>
+    </ng-template>
+
+    <app-paginacion
+      [paginaActual]="respuesta.paginaActual"
+      [totalPaginas]="respuesta.totalPaginas"
+      (cambioPagina)="cambiarPagina($event)">
+    </app-paginacion>
+
+  </ng-container>
+</div>

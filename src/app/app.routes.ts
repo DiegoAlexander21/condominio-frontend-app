@@ -59,6 +59,12 @@ export const routes: Routes = [
         loadComponent: () => import('./dominios/unidades/components/asignar-ocupantes/asignar-ocupantes').then(m => m.AsignarOcupantesComponent)
       },
       {
+        path: 'historial',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR'] },
+        loadComponent: () => import('./dominios/historial/components/lista-historial/lista-historial').then(m => m.ListaHistorialComponent)
+      },
+      {
         path: '',
         redirectTo: 'condominios',
         pathMatch: 'full'

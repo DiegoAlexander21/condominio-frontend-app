@@ -67,7 +67,8 @@ export class AsignarOcupantesComponent implements OnInit {
     const parentesco = (valores.parentesco || '').trim();
 
     const tieneDatosPropietario = !!(nombreP || dniP || emailP || telP);
-    const tieneDatosResidente = !!(nombreR || dniR || emailR || parentesco);
+    const residenteActivo = this.formularioOcupantes.get('residenteActivo')?.value === true;
+    const tieneDatosResidente = residenteActivo && !!(nombreR || dniR || emailR || parentesco);
 
     const controlNombreP = this.formularioOcupantes.get('nombrePropietario');
     const controlDniP = this.formularioOcupantes.get('dniPropietario');
@@ -85,8 +86,6 @@ export class AsignarOcupantesComponent implements OnInit {
       this.formularioOcupantes.get('emailPropietario')?.setValidators([Validators.email, Validators.maxLength(20)]);
       this.formularioOcupantes.get('telefonoPropietario')?.setValidators([Validators.pattern('^([0-9]{9})?$')]);
     }
-
-    const residenteActivo = this.formularioOcupantes.get('residenteActivo')?.value === true;
 
     if (residenteActivo) {
       controlNombreR?.enable({ emitEvent: false });
@@ -119,6 +118,9 @@ export class AsignarOcupantesComponent implements OnInit {
     controlDniR?.updateValueAndValidity({ emitEvent: false });
     this.formularioOcupantes.get('emailResidente')?.updateValueAndValidity({ emitEvent: false });
     this.formularioOcupantes.get('parentesco')?.updateValueAndValidity({ emitEvent: false });
+
+    // Forzar actualización del estado global del formulario
+    this.formularioOcupantes.updateValueAndValidity({ emitEvent: false });
   }
 
   private cargarOcupantes(): void {
@@ -156,12 +158,6 @@ export class AsignarOcupantesComponent implements OnInit {
     if (this.idUnidad) {
       const datosOcupantes = this.formularioOcupantes.getRawValue();
       
-      if (!datosOcupantes.residenteActivo) {
-         datosOcupantes.nombreResidente = '';
-         datosOcupantes.dniResidente = '';
-         datosOcupantes.emailResidente = '';
-         datosOcupantes.parentesco = '';
-      }
       this.unidadServicio.asignarOcupantes(this.idUnidad, datosOcupantes).subscribe({
         next: () => {
           this.toastServicio.mostrarExito('Ocupantes asignados exitosamente.');
@@ -177,7 +173,18 @@ export class AsignarOcupantesComponent implements OnInit {
 
   formularioHaCambiado(): boolean {
     if (!this.estadoInicial) return true;
-    return JSON.stringify(this.estadoInicial) !== JSON.stringify(this.formularioOcupantes.getRawValue());
+    const actual = this.formularioOcupantes.getRawValue();
+    
+    if (this.estadoInicial.residenteActivo !== actual.residenteActivo) return true;
+    
+    if (!actual.residenteActivo) {
+      return this.estadoInicial.nombrePropietario !== actual.nombrePropietario ||
+             this.estadoInicial.dniPropietario !== actual.dniPropietario ||
+             this.estadoInicial.emailPropietario !== actual.emailPropietario ||
+             this.estadoInicial.telefonoPropietario !== actual.telefonoPropietario;
+    }
+    
+    return JSON.stringify(this.estadoInicial) !== JSON.stringify(actual);
   }
 
   volver(): void {

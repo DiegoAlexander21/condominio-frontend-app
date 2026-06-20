@@ -1,0 +1,142 @@
+.contenedor-historial {
+  padding: 2rem;
+  
+  .cabecera-lista {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--secundario);
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .titulo-principal {
+      color: var(--primario);
+      margin: 0;
+      font-size: 2rem;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .contenedor-busqueda {
+      .grupo-busqueda {
+        display: flex;
+        align-items: center;
+        background-color: var(--blanco);
+        border: 1px solid var(--secundario);
+        border-radius: 30px;
+        padding: 0.5rem 1rem;
+        gap: 0.5rem;
+
+        .icono-busqueda {
+          color: var(--secundario);
+          width: 18px;
+          height: 18px;
+        }
+
+        .input-busqueda {
+          border: none;
+          box-shadow: none;
+          padding: 0;
+          outline: none;
+          background: transparent;
+          font-size: 0.9rem;
+          color: var(--primario);
+          font-family: var(--fuente-principal);
+          min-width: 250px;
+        }
+      }
+    }
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      align-items: flex-start;
+      
+      .contenedor-busqueda {
+        width: 100%;
+        .grupo-busqueda {
+          width: 100%;
+          .input-busqueda {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .texto-cargando {
+    color: var(--secundario);
+    font-style: italic;
+  }
+
+  .tarjeta {
+    background-color: var(--blanco);
+    border: none;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+
+    .tarjeta-encabezado {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .tarjeta-titulo {
+      color: var(--primario);
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.3;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .icono-tarjeta {
+        width: 20px;
+        height: 20px;
+        color: var(--terciario);
+      }
+    }
+
+    .tarjeta-detalle {
+      flex-grow: 1;
+
+      .detalle-cambio {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding-top: 0.5rem;
+        flex-wrap: wrap;
+
+        .propietario-antiguo {
+          color: var(--secundario);
+          font-size: 0.95rem;
+          text-decoration: line-through;
+        }
+
+        .icono-flecha {
+          width: 16px;
+          height: 16px;
+          color: var(--terciario);
+        }
+
+        .propietario-nuevo {
+          color: var(--primario);
+          font-weight: 500;
+          font-size: 1rem;
+        }
+      }
+
+      .fecha-cambio {
+        margin-top: 1.5rem;
+        color: var(--secundario);
+        font-size: 0.85rem;
+        text-align: right;
+      }
+    }
+  }
+}
