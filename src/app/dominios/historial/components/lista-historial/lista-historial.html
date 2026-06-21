@@ -4,7 +4,7 @@
 
     <form [formGroup]="formularioBusqueda" class="contenedor-busqueda">
       <div class="grupo-busqueda">
-        <svg lucideSearch class="icono-busqueda"></svg>
+        <span class="material-symbols-outlined icono-busqueda">search</span>
         <input 
           type="text" 
           formControlName="termino" 
@@ -20,7 +20,7 @@
       <div class="tarjeta" *ngFor="let historial of respuesta.contenido">
         <div class="tarjeta-encabezado">
           <h3 class="tarjeta-titulo">
-            <svg lucideHome class="icono-tarjeta"></svg>
+            <span class="material-symbols-outlined icono-tarjeta">home</span>
             Unidad {{ historial.numeroUnidad || 'N/A' }}
           </h3>
         </div>
@@ -28,7 +28,7 @@
         <div class="tarjeta-detalle">
           <div class="detalle-cambio">
             <span class="propietario-antiguo">{{ historial.propietarioAnterior }}</span>
-            <svg lucideArrowRightLeft class="icono-flecha"></svg>
+            <span class="material-symbols-outlined icono-flecha">sync_alt</span>
             <span class="propietario-nuevo">{{ historial.nuevoPropietario }}</span>
           </div>
           <p class="fecha-cambio">{{ historial.fechaCambio | date:'dd/MM/yyyy, HH:mm' }}</p>

@@ -1,0 +1,68 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">{{ areaId ? 'Editar Área Común' : 'Nueva Área Común' }}</h2>
+
+  <div *ngIf="errorMensaje" class="alerta-error">
+    {{ errorMensaje }}
+  </div>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+    
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="condominioId">Condominio *</label>
+        <select id="condominioId" formControlName="condominioId" class="control-formulario">
+          <option value="">Seleccione un condominio...</option>
+          <option *ngFor="let c of listaCondominios" [value]="c.id">
+            {{ c.nombre }}
+          </option>
+        </select>
+        <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="(formulario.get('condominioId')?.touched && formulario.get('condominioId')?.invalid) ? 'visible' : 'hidden'">
+          El condominio es obligatorio.
+        </div>
+      </div>
+
+      <div class="grupo-control">
+        <label for="nombre">Nombre del Área *</label>
+        <input type="text" id="nombre" formControlName="nombre" class="control-formulario" placeholder="Ej. Piscina Central, SUM Principal">
+        <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="(formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid) ? 'visible' : 'hidden'">
+          El nombre es obligatorio y debe tener máximo 150 caracteres.
+        </div>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="capacidad">Aforo Máximo *</label>
+        <input type="number" id="capacidad" formControlName="capacidad" class="control-formulario" placeholder="Ej. 50">
+        <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="(formulario.get('capacidad')?.touched && formulario.get('capacidad')?.invalid) ? 'visible' : 'hidden'">
+          La capacidad es obligatoria y debe ser mayor a 0.
+        </div>
+      </div>
+
+      <div class="grupo-control">
+        <label>Horario Disponible *</label>
+        <div class="horario-contenedor">
+          <input type="time" formControlName="horaInicio" class="control-formulario" title="Hora de inicio">
+          <span class="separador-horario">hasta</span>
+          <input type="time" formControlName="horaFin" class="control-formulario" title="Hora de fin">
+        </div>
+        <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="((formulario.get('horaInicio')?.touched || formulario.get('horaFin')?.touched) && (formulario.get('horaInicio')?.invalid || formulario.get('horaFin')?.invalid)) ? 'visible' : 'hidden'">
+          Ambas horas son obligatorias.
+        </div>
+      </div>
+    </div>
+
+    <div class="fila-controles fila-unica">
+      <div class="grupo-control">
+        <label for="normasUso">Normas de Uso</label>
+        <textarea id="normasUso" formControlName="normasUso" class="control-formulario textarea-control" rows="5" placeholder="Escriba aquí las reglas de uso del área..."></textarea>
+      </div>
+    </div>
+
+    <div class="acciones-formulario">
+      <button type="button" class="boton-secundario" (click)="volver()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="formulario.invalid || cargando">Guardar</button>
+    </div>
+
+  </form>
+</div>

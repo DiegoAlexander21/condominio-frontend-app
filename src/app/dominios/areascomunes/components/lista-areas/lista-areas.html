@@ -1,0 +1,120 @@
+<div class="contenedor-areas">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Áreas Comunes</h2>
+    
+    <div class="acciones-cabecera">
+      <form [formGroup]="formularioFiltro" class="contenedor-busqueda">
+        <div class="grupo-busqueda custom-select-container" (click)="toggleDesplegable()">
+          <span class="material-symbols-outlined icono-busqueda">business</span>
+          
+          <div class="custom-select">
+            <span class="select-valor">{{ opcionSeleccionada }}</span>
+            <span class="material-symbols-outlined icono-chevron">expand_more</span>
+          </div>
+
+          <div class="opciones-lista" *ngIf="desplegableAbierto">
+            <div class="opcion" (click)="seleccionarCondominio('', 'Todos los condominios', $event)">
+              Todos los condominios
+            </div>
+            <div class="opcion" *ngFor="let c of listaCondominios" (click)="seleccionarCondominio(c.id, c.nombre, $event)">
+              {{ c.nombre }}
+            </div>
+          </div>
+          
+        </div>
+      </form>
+
+      <a routerLink="nuevo" class="boton-primario">
+        Nueva Área
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="texto-cargando">
+    Cargando áreas comunes...
+  </div>
+
+  <ng-container *ngIf="!cargando">
+    <div class="grilla-tarjetas" *ngIf="listaAreas.length > 0; else sinResultados">
+      <div class="tarjeta" *ngFor="let area of listaAreas">
+        <div class="tarjeta-encabezado">
+          <h3 class="titulo-principal">{{ area.nombre }}</h3>
+          <app-menu-contextual 
+            [identificador]="area.id" 
+            [mostrarVerDetalle]="true"
+            (alEditar)="editarArea($event)" 
+            (alEliminar)="eliminarArea($event)"
+            (alVerDetalle)="verDetallesArea($event)">
+          </app-menu-contextual>
+        </div>
+
+        <div class="tarjeta-detalle">
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">group</span>
+            <span>Aforo máximo: <strong>{{ area.capacidad }} personas</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">schedule</span>
+            <span>Horario: <strong>{{ area.horaInicio | slice:0:5 }} a {{ area.horaFin | slice:0:5 }}</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-paginacion
+      *ngIf="totalElementos > 0"
+      [paginaActual]="paginaActual"
+      [totalPaginas]="totalPaginas"
+      (cambioPagina)="cambiarPagina($event)">
+    </app-paginacion>
+
+    <ng-template #sinResultados>
+      <div class="estado-vacio">
+        <p class="texto-cargando">No se encontraron áreas comunes registradas para este condominio.</p>
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <div class="modal-overlay" *ngIf="mostrarModalDetalle && areaSeleccionada" (click)="cerrarModalFondo($event)">
+    <div class="modal-contenido">
+      <div class="modal-cabecera">
+        <h3>Detalles del Área Común</h3>
+        <button class="boton-cerrar-modal" (click)="cerrarModal()">
+          <span class="material-symbols-outlined icono-cerrar">close</span>
+        </button>
+      </div>
+      <div class="modal-cuerpo">
+        <h4 class="titulo-area">{{ areaSeleccionada.nombre }}</h4>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="etiqueta">Aforo Máximo</span>
+            <span class="valor">{{ areaSeleccionada.capacidad }} personas</span>
+          </div>
+          <div class="info-item">
+            <span class="etiqueta">Horario</span>
+            <span class="valor">{{ areaSeleccionada.horaInicio | slice:0:5 }} - {{ areaSeleccionada.horaFin | slice:0:5 }}</span>
+          </div>
+        </div>
+
+        <div class="seccion-normas">
+          <h5 class="subtitulo">Normas de Uso</h5>
+          <div class="contenedor-texto">
+            <p *ngIf="areaSeleccionada.normasUso; else sinNormas">{{ areaSeleccionada.normasUso }}</p>
+            <ng-template #sinNormas>
+              <p class="texto-vacio">No hay normas registradas para esta área.</p>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-modal-confirmacion
+    [visible]="mostrarModalEliminar"
+    titulo="Eliminar Área Común"
+    mensaje="¿Está seguro de eliminar esta área común? Esta acción no se puede deshacer."
+    textoConfirmar="Eliminar"
+    (alConfirmar)="confirmarEliminacion()"
+    (alCancelar)="cancelarEliminacion()">
+  </app-modal-confirmacion>
+</div>

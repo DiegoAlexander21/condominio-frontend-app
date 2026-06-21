@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideMenu, LucideLogOut } from '@lucide/angular';
+
 
 @Component({
   selector: 'app-barra-superior',
   standalone: true,
-  imports: [CommonModule, LucideMenu, LucideLogOut],
+  imports: [CommonModule],
   templateUrl: './barra-superior.html',
   styleUrls: ['./barra-superior.scss']
 })

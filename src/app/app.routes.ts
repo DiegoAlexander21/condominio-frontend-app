@@ -65,6 +65,12 @@ export const routes: Routes = [
         loadComponent: () => import('./dominios/historial/components/lista-historial/lista-historial').then(m => m.ListaHistorialComponent)
       },
       {
+        path: 'areas-comunes',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR'] },
+        loadChildren: () => import('./dominios/areascomunes/areascomunes-module').then(m => m.AreascomunesModule)
+      },
+      {
         path: '',
         redirectTo: 'condominios',
         pathMatch: 'full'

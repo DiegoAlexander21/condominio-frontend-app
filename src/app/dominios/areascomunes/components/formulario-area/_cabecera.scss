@@ -1,0 +1,29 @@
+.cabecera-formulario {
+  margin-bottom: 2rem;
+
+  .boton-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--secundario);
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--primario);
+    }
+
+    .icono {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .titulo-principal {
+    color: var(--primario);
+    margin: 0;
+    font-size: 2rem;
+  }
+}

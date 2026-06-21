@@ -11,9 +11,11 @@ import { CommonModule } from '@angular/common';
 export class MenuContextualComponent {
   @Input() identificador!: number;
   @Input() mostrarAsignarOcupantes: boolean = false;
+  @Input() mostrarVerDetalle: boolean = false;
   @Output() alEditar = new EventEmitter<number>();
   @Output() alEliminar = new EventEmitter<number>();
   @Output() alAsignarOcupantes = new EventEmitter<number>();
+  @Output() alVerDetalle = new EventEmitter<number>();
 
   menuAbierto = false;
   private referenciaElemento = inject(ElementRef);
@@ -34,6 +36,11 @@ export class MenuContextualComponent {
 
   asignarOcupantes(): void {
     this.alAsignarOcupantes.emit(this.identificador);
+    this.menuAbierto = false;
+  }
+
+  verDetalle(): void {
+    this.alVerDetalle.emit(this.identificador);
     this.menuAbierto = false;
   }
 

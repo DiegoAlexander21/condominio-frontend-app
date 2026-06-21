@@ -8,12 +8,12 @@ import { HistorialService } from '../../services/historial';
 import { HistorialTitularidadResponse } from '../../modelos/historial-response';
 import { RespuestaPaginada } from '../../../../compartido/modelos/respuesta-paginada.interface';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
-import { LucideSearch, LucideArrowRightLeft, LucideHome } from '@lucide/angular';
+
 
 @Component({
   selector: 'app-lista-historial',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PaginacionComponent, LucideSearch, LucideArrowRightLeft, LucideHome],
+  imports: [CommonModule, ReactiveFormsModule, PaginacionComponent],
   templateUrl: './lista-historial.html',
   styleUrls: ['./lista-historial.scss']
 })

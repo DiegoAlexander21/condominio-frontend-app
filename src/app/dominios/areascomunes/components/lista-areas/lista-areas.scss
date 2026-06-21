@@ -1,0 +1,7 @@
+.contenedor-areas {
+  padding: 2rem;
+  
+  @import './cabecera';
+  @import './tarjetas';
+  @import './modal';
+}

@@ -6,13 +6,7 @@ import { AbstractControl } from '@angular/forms';
   selector: 'app-mensaje-error',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="mensaje-error-contenedor">
-      <span class="mensaje-error-texto" *ngIf="debeMostrarError()">
-        {{ obtenerMensajeError() }}
-      </span>
-    </div>
-  `,
+  templateUrl: './mensaje-error.html',
   styleUrls: ['./mensaje-error.scss']
 })
 export class MensajeErrorComponent {

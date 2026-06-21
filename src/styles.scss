@@ -30,7 +30,6 @@ body {
   .texto-ayuda {
     font-size: 0.8rem;
     color: var(--secundario);
-    font-style: italic;
     margin-top: -0.2rem;
   }
 }
@@ -160,4 +159,14 @@ input:not([type="checkbox"]):not([type="radio"]), select {
       }
     }
   }
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 300,
+  'GRAD' 0,
+  'opsz' 24;
+  vertical-align: middle;
+  font-size: 1.25em;
 }
