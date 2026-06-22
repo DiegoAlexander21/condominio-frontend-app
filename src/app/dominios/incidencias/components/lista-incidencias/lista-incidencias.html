@@ -1,0 +1,156 @@
+<div class="contenedor-incidencias">
+  <div class="cabecera-lista">
+    <h1 class="titulo-principal">Incidencias y Daños</h1>
+    <div class="acciones">
+      <div class="contenedor-busqueda">
+        <app-select-personalizado
+          [(ngModel)]="tipoFiltro"
+          (ngModelChange)="alCambiarFiltro()"
+          [opciones]="opcionesTipo"
+          placeholder="Todos los Tipos"
+          icono="category">
+        </app-select-personalizado>
+      </div>
+      <div class="contenedor-busqueda">
+        <app-select-personalizado
+          [(ngModel)]="estadoFiltro"
+          (ngModelChange)="alCambiarFiltro()"
+          [opciones]="opcionesEstado"
+          placeholder="Todos los Estados"
+          icono="filter_alt">
+        </app-select-personalizado>
+      </div>
+      <a routerLink="/incidencias/nuevo" class="boton-primario">Reportar Incidencia</a>
+    </div>
+  </div>
+
+  <p *ngIf="cargando" class="texto-cargando">Cargando incidencias...</p>
+
+  <div *ngIf="!cargando && listaIncidencias.length === 0" class="mensaje-vacio">
+    No se encontraron incidencias.
+  </div>
+
+  <div class="grilla-tarjetas" *ngIf="!cargando && listaIncidencias.length > 0">
+    <div class="tarjeta" *ngFor="let incidencia of listaIncidencias">
+      <div class="tarjeta-encabezado">
+        <h3 class="titulo-principal">
+          <span>{{incidencia.lugarAfectado}}</span>
+        </h3>
+        <app-menu-contextual 
+          [identificador]="incidencia.id" 
+          [mostrarVerDetalle]="true"
+          [mostrarEditar]="false"
+          [mostrarEliminar]="false"
+          [mostrarActualizarEstado]="esAdministrador"
+          (alActualizarEstado)="abrirModalEstado($event)"
+          (alVerDetalle)="verDetalles($event)">
+        </app-menu-contextual>
+      </div>
+
+      <div class="tarjeta-detalle">
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">info</span>
+          <span>Estado: <strong>{{incidencia.estadoFormateado}}</strong></span>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">warning</span>
+          <span>Gravedad: <strong>{{incidencia.gravedadFormateada}}</strong></span>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">schedule</span>
+          <span>Fecha: <strong>{{incidencia.fechaReporte | date:'dd/MM/yyyy, HH:mm'}}</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-paginacion
+    *ngIf="!cargando && totalPaginas > 1"
+    [paginaActual]="paginaActual"
+    [totalPaginas]="totalPaginas"
+    (cambioPagina)="cambiarPagina($event)">
+  </app-paginacion>
+
+  <div class="modal-overlay" *ngIf="mostrarModalDetalle && incidenciaSeleccionada" (click)="cerrarModalFondo($event)">
+    <div class="modal-contenido">
+      <div class="modal-cabecera">
+        <h3>Detalles de la Incidencia</h3>
+        <button class="boton-cerrar-modal" (click)="cerrarModal()">
+          <span class="material-symbols-outlined icono-cerrar">close</span>
+        </button>
+      </div>
+      <div class="modal-cuerpo">
+        <h4 class="titulo-area">
+          <span>{{incidenciaSeleccionada.lugarAfectado}}</span>
+        </h4>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="etiqueta">Gravedad</span>
+            <span class="valor">{{ incidenciaSeleccionada.gravedadFormateada }}</span>
+          </div>
+          <div class="info-item">
+            <span class="etiqueta">Causa Probable</span>
+            <span class="valor">{{ incidenciaSeleccionada.causaFormateada }}</span>
+          </div>
+          <div class="info-item">
+            <span class="etiqueta">Fecha de Reporte</span>
+            <span class="valor">{{ incidenciaSeleccionada.fechaReporte | date:'dd/MM/yyyy, HH:mm' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="etiqueta">Estado Actual</span>
+            <span class="valor">{{ incidenciaSeleccionada.estadoFormateado }}</span>
+          </div>
+          <div class="info-item" *ngIf="incidenciaSeleccionada.responsableAtencion && incidenciaSeleccionada.responsableAtencion !== 'Sin asignar'">
+            <span class="etiqueta">Responsable del Daño</span>
+            <span class="valor">{{ incidenciaSeleccionada.responsableAtencion }}</span>
+          </div>
+        </div>
+
+        <div class="seccion-normas">
+          <h5 class="subtitulo">Descripción Detallada</h5>
+          <div class="contenedor-texto">
+            <p>{{ incidenciaSeleccionada.descripcion }}</p>
+          </div>
+        </div>
+
+        <div class="seccion-normas margen-superior" *ngIf="evidenciasSeleccionadas.length > 0">
+          <h5 class="subtitulo">Evidencia Fotográfica</h5>
+          <div class="grilla-previews">
+            <div class="contenedor-imagen" *ngFor="let evUrl of evidenciasSeleccionadas">
+              <img [src]="evUrl" alt="Evidencia de la incidencia" class="imagen-evidencia cursor-pointer" (click)="abrirImagen(evUrl)">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalEstado && incidenciaSeleccionada" (click)="cerrarModalFondo($event)">
+    <div class="modal-contenido modal-pequeno">
+      <div class="modal-cabecera">
+        <h3>Actualizar Estado</h3>
+        <button class="boton-cerrar-modal" (click)="cerrarModalEstado()">
+          <span class="material-symbols-outlined icono-cerrar">close</span>
+        </button>
+      </div>
+      <div class="modal-cuerpo">
+        <p class="texto-instruccion-estado">Seleccione el nuevo estado para esta incidencia:</p>
+        <div class="contenedor-busqueda selector-estado-contenedor">
+          <select #selectorEstadoModal class="filtro-estado selector-estado-dropdown">
+            <option *ngFor="let est of estados" [value]="est" [selected]="est === incidenciaSeleccionada.estado">{{formatearEstado(est)}}</option>
+          </select>
+        </div>
+        <div class="contenedor-busqueda selector-estado-contenedor" *ngIf="esDanioProvocado()">
+          <p class="texto-instruccion-estado" style="margin-top: 15px;">Responsable del daño:</p>
+          <input type="text" [(ngModel)]="responsableModal" class="filtro-estado selector-estado-dropdown" placeholder="Nombre de quien causó el daño" />
+        </div>
+        <div class="acciones-modal-estado">
+          <button class="boton-secundario boton-modal-estado" (click)="cerrarModalEstado()">Cancelar</button>
+          <button class="boton-primario boton-modal-estado" (click)="confirmarCambioEstado(selectorEstadoModal.value)">Actualizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

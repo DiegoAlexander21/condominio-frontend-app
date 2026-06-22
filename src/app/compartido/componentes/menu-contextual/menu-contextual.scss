@@ -1,0 +1,64 @@
+.contenedor-menu-contextual {
+  position: relative;
+  display: inline-block;
+}
+
+.boton-tres-puntos {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  color: var(--secundario);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--primario);
+  }
+}
+
+.menu-desplegable {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background-color: var(--blanco);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  min-width: 150px;
+  z-index: 100;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .opcion-menu {
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-family: var(--fuente-principal);
+    font-size: 0.9rem;
+    color: var(--primario);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background-color: var(--fondo);
+    }
+  }
+
+  .opcion-eliminar {
+    color: var(--error);
+
+    &:hover {
+      background-color: rgba(198, 40, 40, 0.05);
+    }
+  }
+}

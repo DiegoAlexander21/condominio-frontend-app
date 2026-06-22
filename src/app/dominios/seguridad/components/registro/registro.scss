@@ -33,38 +33,15 @@
       gap: 3rem;
       width: 100%;
 
-      .fila {
+      .contenedor-campos {
         display: flex;
-        gap: 3rem;
+        flex-wrap: wrap;
+        gap: 2rem;
         width: 100%;
         
         .grupo-control {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-
-          label {
-            font-size: 0.84rem;
-            color: var(--primario);
-          }
-
-          input, select {
-            border: none;
-            box-shadow: 0 1px 0 0 var(--secundario);
-            background-color: transparent;
-            padding: 0.5rem 0;
-            font-size: 0.84rem;
-            color: var(--primario);
-            font-family: var(--fuente-principal);
-            outline: none;
-            transition: box-shadow 0.3s ease;
-            width: 100%;
-
-            &:focus {
-              box-shadow: 0 2px 0 0 var(--primario);
-            }
-          }
+          flex: 1 1 calc(25% - 2rem);
+          min-width: 200px;
 
           .mensaje-error {
             color: var(--error);
@@ -74,18 +51,13 @@
           }
         }
 
-        @media (max-width: 1024px) {
-          flex-wrap: wrap;
-          gap: 2rem;
-          
+        @media (max-width: 900px) {
           .grupo-control {
-            flex: 1 1 calc(50% - 2rem);
+            flex: 1 1 calc(33.333% - 2rem);
           }
         }
 
         @media (max-width: 600px) {
-          flex-direction: column;
-          
           .grupo-control {
             flex: 1 1 100%;
           }
@@ -105,27 +77,7 @@
           font-family: var(--fuente-principal);
         }
 
-        .boton-registro {
-          background-color: #2b2b2b;
-          color: var(--blanco);
-          border: none;
-          padding: 1rem 3rem;
-          font-size: 1rem;
-          border-radius: 30px;
-          cursor: pointer;
-          transition: opacity 0.3s ease;
-          font-family: var(--fuente-principal);
-          font-weight: 600;
 
-          &:hover:not(:disabled) {
-            opacity: 0.9;
-          }
-
-          &:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-          }
-        }
 
         .enlace-login {
           margin-top: 1.5rem;

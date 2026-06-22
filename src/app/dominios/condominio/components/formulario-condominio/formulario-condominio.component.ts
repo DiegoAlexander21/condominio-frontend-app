@@ -2,28 +2,34 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
 import { CondominioService } from '../../services/condominio.service';
+
+import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 
 @Component({
   selector: 'app-formulario-condominio',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MensajeErrorComponent],
   templateUrl: './formulario-condominio.component.html',
   styleUrls: ['./formulario-condominio.component.scss']
 })
 export class FormularioCondominioComponent implements OnInit {
   private constructorFormulario = inject(FormBuilder);
   private condominioServicio = inject(CondominioService);
+  private toastServicio = inject(ToastService);
   private enrutador = inject(Router);
   private rutaActiva = inject(ActivatedRoute);
 
   esEdicion = false;
   condominioId: number | null = null;
+  nombreOriginal: string = '';
+  private estadoInicial: any;
 
   formularioCondominio: FormGroup = this.constructorFormulario.group({
-    nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
-    torres: [1, [Validators.required, Validators.min(1)]],
-    pisosPorTorre: [1, [Validators.required, Validators.min(1)]]
+    nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+    torres: [1, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]],
+    pisosPorTorre: [1, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]]
   });
 
   ngOnInit(): void {
@@ -32,20 +38,32 @@ export class FormularioCondominioComponent implements OnInit {
       this.esEdicion = true;
       this.condominioId = Number(idParam);
       this.cargarDatosCondominio(this.condominioId);
+    } else {
+      this.estadoInicial = this.formularioCondominio.value;
     }
   }
 
   cargarDatosCondominio(id: number): void {
     this.condominioServicio.obtenerCondominio(id).subscribe({
       next: (condominio) => {
+        this.nombreOriginal = condominio.nombre;
         this.formularioCondominio.patchValue({
           nombre: condominio.nombre,
           torres: condominio.torres,
           pisosPorTorre: condominio.pisosPorTorre
         });
+        this.estadoInicial = this.formularioCondominio.value;
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        this.toastServicio.mostrarError('Error al cargar datos del condominio.');
+        console.error(err);
+      }
     });
+  }
+
+  get formularioHaCambiado(): boolean {
+    if (!this.estadoInicial) return true;
+    return JSON.stringify(this.formularioCondominio.value) !== JSON.stringify(this.estadoInicial);
   }
 
   guardarDatos(): void {
@@ -56,9 +74,12 @@ export class FormularioCondominioComponent implements OnInit {
 
       operacion.subscribe({
         next: () => {
+          const mensaje = this.esEdicion ? 'Condominio actualizado exitosamente' : 'Condominio registrado exitosamente';
+          this.toastServicio.mostrarExito(mensaje);
           this.enrutador.navigate(['/condominios']);
         },
         error: (error) => {
+          this.toastServicio.mostrarError(error?.error?.error || 'Error al guardar el condominio');
           console.error(error);
         }
       });

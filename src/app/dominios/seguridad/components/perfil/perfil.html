@@ -1,0 +1,88 @@
+<div class="contenedor-perfil-minimalista">
+  <div class="encabezado-superior">
+    <h1 class="titulo-gigante">Mi Perfil</h1>
+  </div>
+
+  <div *ngIf="cargando" class="texto-cargando">
+    Cargando información del perfil...
+  </div>
+
+  <div class="cuerpo-perfil" *ngIf="!cargando && perfil">
+    
+    <div class="seccion-info-minimalista">
+      <div class="fila-datos">
+        <div class="dato-grupo">
+          <label>Nombres Completos</label>
+          <span class="valor">{{ perfil.nombres }} {{ perfil.apellidos }}</span>
+        </div>
+        <div class="dato-grupo">
+          <label>Documento</label>
+          <span class="valor">{{ perfil.numeroDocumento }}</span>
+        </div>
+      </div>
+      
+      <div class="fila-datos">
+        <div class="dato-grupo">
+          <label>Correo</label>
+          <span class="valor">{{ perfil.correo }}</span>
+        </div>
+        <div class="dato-grupo">
+          <label>Rol</label>
+          <span class="valor badge-rol">{{ perfil.rol }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion-vinculacion-minimalista" *ngIf="perfil.rol === 'RESIDENTE'">
+      
+      <div class="estado-vinculado" *ngIf="perfil.unidadId">
+        <span class="material-symbols-outlined icono-exito">check_circle</span>
+        <div class="texto-estado">
+          <strong>Vinculado a una Unidad</strong>
+          <p>Tu cuenta está correctamente asociada a <b>{{ perfil.nombreCondominio }}</b>. Torre: <b>{{ perfil.torre }}</b>, Piso: <b>{{ perfil.piso }}</b>, Depto: <b>{{ perfil.numeroUnidad }}</b>. Tienes acceso completo para realizar reservas.</p>
+        </div>
+      </div>
+
+      <div class="estado-formulario" *ngIf="!perfil.unidadId">
+        <div class="cabecera-form-vincular">
+          <span class="material-symbols-outlined icono-vincular">link</span>
+          <div class="texto-estado">
+            <strong>Autovinculación de Vivienda</strong>
+            <p>Selecciona tu condominio y tu unidad para vincular tu cuenta y habilitar tus reservas.</p>
+          </div>
+        </div>
+
+        <form [formGroup]="formularioVinculacion" (ngSubmit)="vincularMe()" class="formulario-minimalista">
+          <div class="contenedor-campos">
+            <div class="grupo-control">
+              <label>Condominio</label>
+              <app-select-personalizado 
+                formControlName="condominioId"
+                [opciones]="listaCondominios"
+                placeholder="Seleccione su Condominio">
+              </app-select-personalizado>
+            </div>
+
+            <div class="grupo-control">
+              <label>Unidad (Departamento)</label>
+              <app-select-personalizado 
+                formControlName="unidadId"
+                [opciones]="listaUnidades"
+                propNombre="nombreMostrar"
+                placeholder="Seleccione su Unidad">
+              </app-select-personalizado>
+            </div>
+          </div>
+
+          <div class="acciones-formulario">
+            <button type="submit" class="boton-primario" [disabled]="formularioVinculacion.invalid || vinculando">
+              <span class="material-symbols-outlined" *ngIf="!vinculando">add_link</span>
+              {{ vinculando ? 'Vinculando...' : 'Vincularme a esta Unidad' }}
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

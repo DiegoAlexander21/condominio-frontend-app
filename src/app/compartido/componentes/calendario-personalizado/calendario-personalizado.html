@@ -1,0 +1,29 @@
+<div class="custom-calendar-container {{ claseAdicional }}" [class.disabled]="disabled" [class.invalido]="esInvalido" (click)="toggleDesplegable()">
+  <div class="custom-calendar-ui">
+    <span class="fecha-valor" [class.placeholder-text]="!valorActual">{{ textoSeleccionado }}</span>
+    <span class="material-symbols-outlined icono-calendario">calendar_today</span>
+  </div>
+
+  <div class="calendario-popup" *ngIf="desplegableAbierto" (click)="$event.stopPropagation()">
+    <div class="calendario-cabecera">
+      <button type="button" class="btn-mes" (click)="cambiarMes(-1, $event)">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      <span class="mes-actual">{{ nombresMeses[mesActual] }} {{ anioActual }}</span>
+      <button type="button" class="btn-mes" (click)="cambiarMes(1, $event)">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+    </div>
+    
+    <div class="calendario-grid">
+      <div class="dia-nombre" *ngFor="let nombre of nombresDias">{{ nombre }}</div>
+      <div class="dia-vacio" *ngFor="let vacio of espaciosVacios"></div>
+      <div class="dia-numero" 
+           *ngFor="let dia of diasMes" 
+           [class.seleccionado]="esDiaSeleccionado(dia)"
+           (click)="seleccionarDia(dia, $event)">
+        {{ dia }}
+      </div>
+    </div>
+  </div>
+</div>

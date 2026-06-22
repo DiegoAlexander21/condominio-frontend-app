@@ -1,4 +1,4 @@
-export interface Condominio {
+export interface CondominioResponse {
   id: number;
   nombre: string;
   torres: number;

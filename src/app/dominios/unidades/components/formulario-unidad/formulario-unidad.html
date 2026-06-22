@@ -1,0 +1,54 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">{{ esEdicion ? 'Editar Unidad (' + nombreOriginal + ')' : 'Nueva Unidad' }}</h2>
+
+  <form [formGroup]="formularioUnidad" (ngSubmit)="guardar()" class="formulario-flex">
+    
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="nombreCondominio">Condominio</label>
+        <select id="nombreCondominio" formControlName="nombreCondominio" class="control-formulario">
+          <option value="" disabled>Seleccione un condominio</option>
+          <option *ngFor="let condo of condominios" [value]="condo.nombre">{{ condo.nombre }}</option>
+        </select>
+        <span *ngIf="condominioSeleccionado" class="texto-ayuda">
+          Este condominio tiene {{ condominioSeleccionado.torres }} torre(s) y {{ condominioSeleccionado.pisosPorTorre }} piso(s) por torre.
+        </span>
+        <app-mensaje-error [control]="formularioUnidad.get('nombreCondominio')"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label for="torre">Torre / Bloque</label>
+        <input id="torre" type="text" formControlName="torre" class="control-formulario" placeholder="Ej. A, B, 1, 2">
+        <app-mensaje-error [control]="formularioUnidad.get('torre')"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="numeroUnidad">Número de Unidad (Dpto)</label>
+        <input id="numeroUnidad" type="text" formControlName="numeroUnidad" class="control-formulario" placeholder="Ej. 101, 202">
+        <app-mensaje-error [control]="formularioUnidad.get('numeroUnidad')"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label for="piso">Piso</label>
+        <input id="piso" type="number" formControlName="piso" class="control-formulario" placeholder="Ej. 1" min="1" step="1">
+        <app-mensaje-error [control]="formularioUnidad.get('piso')"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="area">Área (m²)</label>
+        <input id="area" type="number" formControlName="area" class="control-formulario" placeholder="Ej. 65.5" min="1.0" step="0.1">
+        <app-mensaje-error [control]="formularioUnidad.get('area')"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="acciones-formulario">
+      <button type="button" class="boton-secundario" (click)="volver()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="formularioUnidad.invalid || !formularioHaCambiado()">Guardar</button>
+    </div>
+
+  </form>
+</div>

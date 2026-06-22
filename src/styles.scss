@@ -3,8 +3,9 @@
     --secundario: #a9b0c0;
     --primario: #313852;
     --blanco: #ffffff;
-    --exito: #2e7d32;
-    --error: #c62828;
+    --exito: #28b53d;
+    --error: #de4b4b;
+    --terciario: #4b5578;
     --fuente-principal: 'Lora', Georgia, serif;
 }
 
@@ -14,4 +15,224 @@ body {
     font-family: var(--fuente-principal);
     margin: 0;
     padding: 0;
+}
+
+.grupo-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.84rem;
+    color: var(--primario);
+  }
+
+  .texto-ayuda {
+    font-size: 0.8rem;
+    color: var(--secundario);
+    margin-top: -0.2rem;
+  }
+}
+
+input:not([type="checkbox"]):not([type="radio"]), select {
+  border: none;
+  box-shadow: 0 1px 0 0 var(--secundario);
+  background-color: transparent;
+  padding: 0.5rem 0;
+  font-size: 0.84rem;
+  color: var(--primario);
+  font-family: var(--fuente-principal);
+  outline: none;
+  transition: box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:focus {
+    box-shadow: 0 2px 0 0 var(--primario);
+  }
+}
+
+.boton-primario {
+  background-color: #2b2b2b;
+  color: var(--blanco);
+  border: none;
+  padding: 1rem 3rem;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-family: var(--fuente-principal);
+  font-weight: 600;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.boton-secundario {
+  background-color: transparent;
+  color: var(--primario);
+  border: 1px solid var(--secundario);
+  padding: 1rem 3rem;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--fuente-principal);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+
+.boton-peligro {
+  background-color: var(--error);
+  color: var(--blanco);
+  border: none;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-family: var(--fuente-principal);
+  font-weight: 600;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.estado-vacio {
+  text-align: center;
+  padding: 3rem;
+  background-color: var(--blanco);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.texto-cargando, .mensaje-vacio {
+  color: var(--secundario);
+  font-style: italic;
+  text-align: center;
+  padding: 2rem;
+}
+
+.grilla-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+
+  .tarjeta {
+    background-color: var(--blanco);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+
+    .tarjeta-encabezado {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding-bottom: 1rem;
+
+      .titulo-principal {
+        color: var(--primario);
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 500;
+      }
+    }
+
+    .tarjeta-detalle {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+
+      .detalle-fila {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--primario);
+        font-size: 0.95rem;
+
+        strong {
+          font-weight: 500;
+        }
+      }
+
+      .icono-inline {
+        font-size: 1.2rem;
+        color: var(--secundario);
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+.formulario-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .fila-controles {
+    display: flex;
+    gap: 1.5rem;
+
+    .grupo-control {
+      flex: 1;
+    }
+  }
+
+  .acciones-formulario {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .formulario-flex {
+    .fila-controles {
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .formulario-flex {
+    .acciones-formulario {
+      flex-direction: column;
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 300,
+  'GRAD' 0,
+  'opsz' 24;
+  vertical-align: middle;
+  font-size: 1.25em;
 }

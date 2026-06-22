@@ -1,0 +1,55 @@
+<div class="contenedor-historial">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Historial de Titularidad</h2>
+
+    <form [formGroup]="formularioBusqueda" class="contenedor-busqueda">
+      <div class="grupo-busqueda">
+        <span class="material-symbols-outlined icono-busqueda">search</span>
+        <input 
+          type="text" 
+          formControlName="termino" 
+          placeholder="Buscar por unidad o propietario..."
+          class="input-busqueda">
+      </div>
+    </form>
+  </div>
+
+  <ng-container *ngIf="respuestaPaginada$ | async as respuesta">
+    
+    <div class="grilla-tarjetas" *ngIf="respuesta.contenido.length > 0; else sinResultados">
+      <div class="tarjeta" *ngFor="let historial of respuesta.contenido">
+        <div class="tarjeta-encabezado">
+          <h3 class="titulo-principal">
+            Unidad {{ historial.numeroUnidad || 'N/A' }}
+          </h3>
+        </div>
+
+        <div class="tarjeta-detalle">
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">person_remove</span>
+            <span>Anterior: <strong style="text-decoration: line-through; color: var(--secundario);">{{ historial.propietarioAnterior }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">person_add</span>
+            <span>Nuevo: <strong>{{ historial.nuevoPropietario }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">schedule</span>
+            <span>Fecha: <strong>{{ historial.fechaCambio | date:'dd/MM/yyyy, HH:mm' }}</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #sinResultados>
+      <p class="texto-cargando">No se encontraron registros de titularidad.</p>
+    </ng-template>
+
+    <app-paginacion
+      [paginaActual]="respuesta.paginaActual"
+      [totalPaginas]="respuesta.totalPaginas"
+      (cambioPagina)="cambiarPagina($event)">
+    </app-paginacion>
+
+  </ng-container>
+</div>

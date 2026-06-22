@@ -2,13 +2,14 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AutenticacionService } from '../../services/autenticacion.service';
-import { TipoDocumento, NombreRol } from '../../models/credenciales.model';
+import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
+import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion.service';
+import { RegistroUsuario, TipoDocumento, NombreRol } from '../../../../nucleo/modelos/credenciales.model';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, MensajeErrorComponent],
   templateUrl: './registro.html',
   styleUrls: ['./registro.scss']
 })

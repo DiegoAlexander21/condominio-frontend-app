@@ -1,0 +1,14 @@
+<div class="fondo-modal" [class.activo]="visible" (click)="cancelar()"></div>
+
+<div class="modal-confirmacion" [class.activo]="visible">
+  <div class="cabecera-modal">
+    <h3>{{ titulo }}</h3>
+  </div>
+  <div class="cuerpo-modal">
+    <p>{{ mensaje }}</p>
+  </div>
+  <div class="pie-modal">
+    <button class="boton-secundario" (click)="cancelar()">Cancelar</button>
+    <button class="boton-peligro" (click)="confirmar()">{{ textoConfirmar }}</button>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">Asignar Ocupantes</h2>
+  <p class="texto-instruccion">Si el propietario reside en la unidad, llene solo sus datos y deje los del residente en blanco.</p>
+
+  <form [formGroup]="formularioOcupantes" (ngSubmit)="guardar()" class="formulario-flex">
+    
+    <div class="grid-columnas">
+      <div class="seccion-formulario">
+      <h3 class="subtitulo-seccion">Datos del Propietario</h3>
+
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label for="nombrePropietario">Nombre</label>
+          <input id="nombrePropietario" type="text" formControlName="nombrePropietario" class="control-formulario" placeholder="Ej. Carlos Espá" maxlength="150">
+          <app-mensaje-error [control]="formularioOcupantes.get('nombrePropietario')"></app-mensaje-error>
+        </div>
+
+        <div class="grupo-control">
+          <label for="dniPropietario">DNI</label>
+          <input id="dniPropietario" type="text" formControlName="dniPropietario" class="control-formulario" placeholder="8 dígitos" maxlength="8">
+          <app-mensaje-error [control]="formularioOcupantes.get('dniPropietario')"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label for="emailPropietario">Correo</label>
+          <input id="emailPropietario" type="email" formControlName="emailPropietario" class="control-formulario" placeholder="carlos@gmail.com" maxlength="150">
+          <app-mensaje-error [control]="formularioOcupantes.get('emailPropietario')"></app-mensaje-error>
+        </div>
+
+        <div class="grupo-control">
+          <label for="telefonoPropietario">Teléfono</label>
+          <input id="telefonoPropietario" type="tel" formControlName="telefonoPropietario" class="control-formulario" placeholder="Ej. 999888777" maxlength="9">
+          <app-mensaje-error [control]="formularioOcupantes.get('telefonoPropietario')"></app-mensaje-error>
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion-formulario" [class.seccion-deshabilitada]="!formularioOcupantes.get('residenteActivo')?.value">
+      <h3 class="subtitulo-seccion">Datos del Residente</h3>
+      
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label for="nombreResidente">Nombre</label>
+          <input id="nombreResidente" type="text" formControlName="nombreResidente" class="control-formulario" placeholder="Ej. Ana Gómez" maxlength="150">
+          <app-mensaje-error [control]="formularioOcupantes.get('nombreResidente')"></app-mensaje-error>
+        </div>
+
+        <div class="grupo-control">
+          <label for="dniResidente">DNI</label>
+          <input id="dniResidente" type="text" formControlName="dniResidente" class="control-formulario" placeholder="8 dígitos" maxlength="8">
+          <app-mensaje-error [control]="formularioOcupantes.get('dniResidente')"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label for="emailResidente">Correo</label>
+          <input id="emailResidente" type="email" formControlName="emailResidente" class="control-formulario" placeholder="ana@ejemplo.com" maxlength="150">
+          <app-mensaje-error [control]="formularioOcupantes.get('emailResidente')"></app-mensaje-error>
+        </div>
+
+        <div class="grupo-control">
+          <label for="parentesco">Parentesco</label>
+          <input id="parentesco" type="text" formControlName="parentesco" class="control-formulario" placeholder="Ej. Inquilino, Hijo" maxlength="50">
+          <app-mensaje-error [control]="formularioOcupantes.get('parentesco')"></app-mensaje-error>
+        </div>
+      </div>
+      
+
+    </div>
+    </div>
+    <div class="fila-controles" style="margin-top: 1rem; margin-bottom: 2rem;">
+      <div class="grupo-control control-casilla">
+        <label class="contenedor-casilla">
+          <input type="checkbox" formControlName="residenteActivo">
+          <span class="marca-casilla"></span>
+          El residente está activo actualmente en la unidad
+        </label>
+      </div>
+    </div>
+
+    <div class="acciones-formulario">
+      <button type="button" class="boton-secundario" (click)="volver()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="formularioOcupantes.invalid || !formularioHaCambiado()">Guardar Cambios</button>
+    </div>
+
+  </form>
+</div>

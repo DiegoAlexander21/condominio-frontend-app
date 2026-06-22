@@ -2,12 +2,13 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AutenticacionService } from '../../services/autenticacion.service';
+import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
+import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, MensajeErrorComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -37,11 +38,20 @@ export class LoginComponent {
 
   procesarLogin(): void {
     if (this.formularioLogin.valid) {
-      this.servicioAutenticacion.iniciarSesion(this.formularioLogin.value).subscribe({
+      const { identificador, contrasena, recordarme } = this.formularioLogin.value;
+      const credenciales = { identificador, contrasena };
+
+      this.servicioAutenticacion.iniciarSesion(credenciales).subscribe({
         next: (respuesta) => {
-          this.mensajeError = null;
-          console.log('Token recibido:', respuesta.tokenAcceso);
-          this.enrutador.navigate(['/condominios']);
+          this.servicioAutenticacion.guardarToken(respuesta.tokenAcceso, recordarme);
+          
+          if (this.servicioAutenticacion.obtenerRoles().includes('ADMINISTRADOR')) {
+            this.enrutador.navigate(['/condominios']);
+          } else if (this.servicioAutenticacion.obtenerUnidadId()) {
+            this.enrutador.navigate(['/areas-comunes/reservas']);
+          } else {
+            this.enrutador.navigate(['/perfil']);
+          }
         },
         error: (error) => {
           const codigoError = error.error?.codigo;
@@ -58,9 +68,5 @@ export class LoginComponent {
     } else {
       this.formularioLogin.markAllAsTouched();
     }
-  }
-
-  iniciarConGoogle(): void {
-    console.log('Iniciar sesión con Google');
   }
 }

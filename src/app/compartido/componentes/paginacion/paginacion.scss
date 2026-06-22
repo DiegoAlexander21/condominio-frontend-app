@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.contenedor-paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+.boton-paginacion {
+  background: none;
+  border: none;
+  color: var(--secundario);
+  font-family: var(--fuente-principal);
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    color: var(--primario);
+    border-bottom-color: var(--primario);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.indicador-pagina {
+  font-family: var(--fuente-principal);
+  color: var(--primario);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+}

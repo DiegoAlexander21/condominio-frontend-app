@@ -1,0 +1,52 @@
+.contenedor-formulario {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: transparent;
+  overflow-y: auto;
+
+  .titulo-principal {
+    color: var(--primario);
+    font-family: var(--fuente-principal);
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--secundario);
+  }
+
+  .mensaje-error-reservado {
+    color: var(--error);
+    min-height: 1.2rem;
+  }
+
+  .horario-contenedor {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .separador-horario {
+    color: var(--primario);
+    font-size: 0.9rem;
+  }
+
+  .fila-unica {
+    flex-direction: column;
+  }
+
+  .textarea-control {
+    border: none;
+    box-shadow: 0 1px 0 0 var(--secundario);
+    background-color: transparent;
+    padding: 0.5rem 0;
+    font-size: 0.84rem;
+    color: var(--primario);
+    font-family: var(--fuente-principal);
+    outline: none;
+    transition: box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+}

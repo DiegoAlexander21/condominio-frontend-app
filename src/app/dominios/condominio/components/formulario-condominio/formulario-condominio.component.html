@@ -1,36 +1,30 @@
 <div class="contenedor-formulario">
-  <h2 class="titulo-principal">{{ esEdicion ? 'Editar Condominio' : 'Nuevo Condominio' }}</h2>
+  <h2 class="titulo-principal">{{ esEdicion ? 'Editar Condominio (' + nombreOriginal + ')' : 'Nuevo Condominio' }}</h2>
 
-  <form [formGroup]="formularioCondominio" (ngSubmit)="guardarDatos()" class="formulario">
+  <form [formGroup]="formularioCondominio" (ngSubmit)="guardarDatos()" class="formulario-flex">
     <div class="grupo-control">
       <label for="nombre">Nombre del Condominio</label>
       <input type="text" id="nombre" formControlName="nombre" placeholder="Ej. Los Portales">
-      <div class="mensaje-error" *ngIf="formularioCondominio.get('nombre')?.invalid && formularioCondominio.get('nombre')?.touched">
-        El nombre es requerido y debe tener al menos 2 caracteres.
-      </div>
+      <app-mensaje-error [control]="formularioCondominio.get('nombre')" nombreCampo="El nombre del condominio"></app-mensaje-error>
     </div>
 
     <div class="fila-controles">
       <div class="grupo-control">
         <label for="torres">Número de Torres</label>
-        <input type="number" id="torres" formControlName="torres" min="1">
-        <div class="mensaje-error" *ngIf="formularioCondominio.get('torres')?.invalid && formularioCondominio.get('torres')?.touched">
-          Debe tener al menos 1 torre.
-        </div>
+        <input type="number" id="torres" formControlName="torres" min="1" step="1">
+        <app-mensaje-error [control]="formularioCondominio.get('torres')" nombreCampo="El número de torres"></app-mensaje-error>
       </div>
 
       <div class="grupo-control">
         <label for="pisosPorTorre">Pisos por Torre</label>
-        <input type="number" id="pisosPorTorre" formControlName="pisosPorTorre" min="1">
-        <div class="mensaje-error" *ngIf="formularioCondominio.get('pisosPorTorre')?.invalid && formularioCondominio.get('pisosPorTorre')?.touched">
-          Debe tener al menos 1 piso.
-        </div>
+        <input type="number" id="pisosPorTorre" formControlName="pisosPorTorre" min="1" step="1">
+        <app-mensaje-error [control]="formularioCondominio.get('pisosPorTorre')" nombreCampo="El número de pisos"></app-mensaje-error>
       </div>
     </div>
 
     <div class="acciones-formulario">
       <button type="button" class="boton-secundario" (click)="cancelar()">Cancelar</button>
-      <button type="submit" class="boton-primario" [disabled]="formularioCondominio.invalid">Guardar</button>
+      <button type="submit" class="boton-primario" [disabled]="formularioCondominio.invalid || !formularioHaCambiado">Guardar</button>
     </div>
   </form>
 </div>
