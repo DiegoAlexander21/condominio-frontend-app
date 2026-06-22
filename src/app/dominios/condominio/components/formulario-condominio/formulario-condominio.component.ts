@@ -27,7 +27,7 @@ export class FormularioCondominioComponent implements OnInit {
   private estadoInicial: any;
 
   formularioCondominio: FormGroup = this.constructorFormulario.group({
-    nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
+    nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
     torres: [1, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]],
     pisosPorTorre: [1, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]]
   });

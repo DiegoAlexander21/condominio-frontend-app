@@ -77,6 +77,12 @@ export const routes: Routes = [
         loadChildren: () => import('./dominios/areascomunes/areascomunes-module').then(m => m.AreascomunesModule)
       },
       {
+        path: 'incidencias',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'RESIDENTE'] },
+        loadChildren: () => import('./dominios/incidencias/incidencias.routes').then(m => m.incidenciasRoutes)
+      },
+      {
         path: '',
         redirectTo: 'condominios',
         pathMatch: 'full'

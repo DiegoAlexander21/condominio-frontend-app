@@ -6,7 +6,7 @@ export const autenticacionInterceptor: HttpInterceptorFn = (peticion, siguiente)
   const autenticacionService = inject(AutenticacionService);
   const token = autenticacionService.obtenerToken();
 
-  if (token) {
+  if (token && !peticion.url.includes('api.cloudinary.com')) {
     const peticionClonada = peticion.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`

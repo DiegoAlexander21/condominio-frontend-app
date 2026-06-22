@@ -9,7 +9,7 @@
       <div class="tarjeta" *ngFor="let condominio of respuesta.contenido">
         
         <div class="tarjeta-encabezado">
-          <h3 class="tarjeta-titulo">{{ condominio.nombre }}</h3>
+          <h3 class="titulo-principal">{{ condominio.nombre }}</h3>
           <app-menu-contextual 
             [identificador]="condominio.id" 
             (alEditar)="editarCondominio($event)" 
@@ -18,8 +18,14 @@
         </div>
 
         <div class="tarjeta-detalle">
-          <p><strong>Torres:</strong> {{ condominio.torres }}</p>
-          <p><strong>Pisos por Torre:</strong> {{ condominio.pisosPorTorre }}</p>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">apartment</span>
+            <span>Torres: <strong>{{ condominio.torres }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">layers</span>
+            <span>Pisos por Torre: <strong>{{ condominio.pisosPorTorre }}</strong></span>
+          </div>
         </div>
 
       </div>

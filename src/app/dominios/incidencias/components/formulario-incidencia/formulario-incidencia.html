@@ -1,0 +1,96 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">Reportar Nueva Incidencia</h2>
+
+  <form [formGroup]="formularioIncidencia" (ngSubmit)="guardarIncidencia()" class="formulario-flex">
+    
+    <div class="fila-controles">
+      <div class="grupo-control" *ngIf="esAdministrador">
+        <label for="condominioId">Condominio</label>
+        <select id="condominioId" formControlName="condominioId">
+          <option [ngValue]="null">Seleccione un condominio</option>
+          <option *ngFor="let cond of listaCondominios" [value]="cond.id">{{cond.nombre}}</option>
+        </select>
+      </div>
+
+      <div class="grupo-control">
+        <label for="tipoIncidencia">Tipo de Lugar Afectado</label>
+        <select id="tipoIncidencia" formControlName="tipoIncidencia">
+          <option value="AREA">Área Común</option>
+          <option value="UNIDAD">Unidad / Departamento</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fila-controles" *ngIf="tipoIncidencia === 'AREA' || (tipoIncidencia === 'UNIDAD' && esAdministrador)">
+      <div class="grupo-control" *ngIf="tipoIncidencia === 'AREA'">
+        <label for="areaComunId">Área Común Afectada</label>
+        <select id="areaComunId" formControlName="areaComunId">
+          <option [ngValue]="null">Seleccione un área común</option>
+          <option *ngFor="let area of listaAreasComunes" [value]="area.id">{{area.nombre}}</option>
+        </select>
+      </div>
+
+      <div class="grupo-control" *ngIf="tipoIncidencia === 'UNIDAD' && esAdministrador">
+        <label for="unidadId">Unidad Afectada</label>
+        <select id="unidadId" formControlName="unidadId">
+          <option [ngValue]="null">Seleccione una unidad</option>
+          <option *ngFor="let unidad of listaUnidades" [value]="unidad.id">{{unidad.torre}} - {{unidad.numeroUnidad}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="gravedad">Gravedad del Daño</label>
+        <select id="gravedad" formControlName="gravedad">
+          <option [ngValue]="null">Seleccione nivel</option>
+          <option *ngFor="let grav of gravedades" [value]="grav">{{formatearTexto(grav)}}</option>
+        </select>
+      </div>
+
+      <div class="grupo-control">
+        <label for="causa">Causa Probable</label>
+        <select id="causa" formControlName="causa">
+          <option [ngValue]="null">Seleccione causa</option>
+          <option *ngFor="let cau of causas" [value]="cau">{{formatearTexto(cau)}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grupo-control">
+      <label for="descripcion">Descripción detallada</label>
+      <textarea id="descripcion" formControlName="descripcion" rows="4" class="textarea-estilizado" placeholder="Describa el problema encontrado (min 10 caracteres)"></textarea>
+    </div>
+
+    <div class="grupo-control">
+      <label>Evidencia Fotográfica (opcional)</label>
+      
+      <div class="contenedor-upload" *ngIf="imagenesPrevias.length < 3" (click)="fileInput.click()">
+        <input type="file" #fileInput (change)="alSeleccionarArchivo($event)" accept="image/*" multiple class="input-archivo-oculto">
+        <div class="upload-placeholder">
+          <span class="material-symbols-outlined icono-upload">cloud_upload</span>
+          <p>Haz clic para subir imágenes</p>
+          <small>Formatos soportados: JPG, PNG, WEBP</small>
+          <small class="texto-limites">Máximo 3 imágenes • 5 MB por imagen</small>
+        </div>
+      </div>
+
+      <div class="grilla-previews" *ngIf="imagenesPrevias.length > 0">
+        <div class="contenedor-preview" *ngFor="let preview of imagenesPrevias; let i = index">
+          <img [src]="preview" alt="Vista previa de la evidencia" class="imagen-preview cursor-pointer" (click)="abrirImagen(preview)">
+          <button type="button" class="boton-eliminar-foto" (click)="eliminarFoto(i)">
+            <span class="material-symbols-outlined icono-cerrar-preview">close</span>
+          </button>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="acciones-formulario">
+      <a routerLink="/incidencias" class="boton-secundario enlace-cancelar">Cancelar</a>
+      <button type="submit" class="boton-primario" [disabled]="formularioIncidencia.invalid || enviando">
+        {{ enviando ? 'Subiendo evidencias...' : 'Enviar Reporte' }}
+      </button>
+    </div>
+  </form>
+</div>

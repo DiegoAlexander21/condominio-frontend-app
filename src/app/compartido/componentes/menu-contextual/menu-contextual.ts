@@ -13,10 +13,13 @@ export class MenuContextualComponent {
   @Input() mostrarAsignarOcupantes: boolean = false;
   @Input() mostrarVerDetalle: boolean = false;
   @Input() mostrarEditar: boolean = true;
+  @Input() mostrarActualizarEstado: boolean = false;
+  @Input() mostrarEliminar: boolean = true;
   @Output() alEditar = new EventEmitter<number>();
   @Output() alEliminar = new EventEmitter<number>();
   @Output() alAsignarOcupantes = new EventEmitter<number>();
   @Output() alVerDetalle = new EventEmitter<number>();
+  @Output() alActualizarEstado = new EventEmitter<number>();
 
   menuAbierto = false;
   private referenciaElemento = inject(ElementRef);
@@ -42,6 +45,11 @@ export class MenuContextualComponent {
 
   verDetalle(): void {
     this.alVerDetalle.emit(this.identificador);
+    this.menuAbierto = false;
+  }
+
+  actualizarEstado(): void {
+    this.alActualizarEstado.emit(this.identificador);
     this.menuAbierto = false;
   }
 

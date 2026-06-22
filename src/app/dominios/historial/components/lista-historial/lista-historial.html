@@ -19,19 +19,24 @@
     <div class="grilla-tarjetas" *ngIf="respuesta.contenido.length > 0; else sinResultados">
       <div class="tarjeta" *ngFor="let historial of respuesta.contenido">
         <div class="tarjeta-encabezado">
-          <h3 class="tarjeta-titulo">
-            <span class="material-symbols-outlined icono-tarjeta">home</span>
+          <h3 class="titulo-principal">
             Unidad {{ historial.numeroUnidad || 'N/A' }}
           </h3>
         </div>
 
         <div class="tarjeta-detalle">
-          <div class="detalle-cambio">
-            <span class="propietario-antiguo">{{ historial.propietarioAnterior }}</span>
-            <span class="material-symbols-outlined icono-flecha">sync_alt</span>
-            <span class="propietario-nuevo">{{ historial.nuevoPropietario }}</span>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">person_remove</span>
+            <span>Anterior: <strong style="text-decoration: line-through; color: var(--secundario);">{{ historial.propietarioAnterior }}</strong></span>
           </div>
-          <p class="fecha-cambio">{{ historial.fechaCambio | date:'dd/MM/yyyy, HH:mm' }}</p>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">person_add</span>
+            <span>Nuevo: <strong>{{ historial.nuevoPropietario }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">schedule</span>
+            <span>Fecha: <strong>{{ historial.fechaCambio | date:'dd/MM/yyyy, HH:mm' }}</strong></span>
+          </div>
         </div>
       </div>
     </div>

@@ -12,11 +12,15 @@
       <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">visibility</span>
       Ver Detalles
     </button>
+    <button class="opcion-menu" *ngIf="mostrarActualizarEstado" (click)="actualizarEstado()">
+      <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">update</span>
+      Actualizar Estado
+    </button>
     <button class="opcion-menu" *ngIf="mostrarEditar" (click)="editar()">
       <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">edit</span>
       Editar
     </button>
-    <button class="opcion-menu opcion-eliminar" (click)="eliminar()">
+    <button class="opcion-menu opcion-eliminar" *ngIf="mostrarEliminar" (click)="eliminar()">
       <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">delete</span>
       Eliminar
     </button>

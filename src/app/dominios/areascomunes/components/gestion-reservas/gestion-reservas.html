@@ -58,33 +58,38 @@
   </div>
 
   <ng-container *ngIf="!cargando && busquedaRealizada && formularioFiltro.get('areaComunId')?.value">
-    <div class="lista-reservas" *ngIf="listaReservas.length > 0; else sinResultados">
+    <div class="grilla-tarjetas" *ngIf="listaReservas.length > 0; else sinResultados">
       
-      <div class="tarjeta-reserva-moderna" *ngFor="let r of listaReservas" [class.cancelada]="r.estado === 'CANCELADA'">
-        <div class="reserva-contenido">
-          <div class="reserva-cabecera">
-            <h3 class="reserva-hora">
-              <span class="material-symbols-outlined icono-reloj">event_available</span>
-              {{ r.fechaReserva | date:'dd/MM/yyyy' }} • {{ r.horaInicio | slice:0:5 }} - {{ r.horaFin | slice:0:5 }}
-            </h3>
-            <div class="estado-y-acciones">
-              <span class="badge-estado-moderno" [ngClass]="r.estado.toLowerCase()">{{ r.estado }}</span>
-              <app-menu-contextual 
-                *ngIf="puedeCancelar(r)"
-                [identificador]="r.id"
-                [mostrarVerDetalle]="false"
-                [mostrarEditar]="false"
-                (alEliminar)="eliminarReserva($event)">
-              </app-menu-contextual>
-            </div>
+      <div class="tarjeta" *ngFor="let r of listaReservas">
+        <div class="tarjeta-encabezado">
+          <h3 class="titulo-principal">
+            {{ r.fechaReserva | date:'dd/MM/yyyy' }}
+          </h3>
+          <app-menu-contextual 
+            *ngIf="puedeCancelar(r)"
+            [identificador]="r.id"
+            [mostrarVerDetalle]="false"
+            [mostrarEditar]="false"
+            (alEliminar)="eliminarReserva($event)">
+          </app-menu-contextual>
+        </div>
+        
+        <div class="tarjeta-detalle">
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">schedule</span>
+            <span>Horario: <strong>{{ r.horaInicio | slice:0:5 }} - {{ r.horaFin | slice:0:5 }}</strong></span>
           </div>
-          
-          <div class="reserva-detalles">
-            <div class="detalle-usuario">
-              <span class="material-symbols-outlined icono-usuario">person</span>
-              <span class="nombre">{{ r.responsableNombre }}</span>
-              <span class="unidad">• Unidad {{ r.unidadNumero }}</span>
-            </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">person</span>
+            <span>Responsable: <strong>{{ r.responsableNombre }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">home</span>
+            <span>Unidad: <strong>{{ r.unidadNumero }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">info</span>
+            <span>Estado: <strong>{{ r.estado }}</strong></span>
           </div>
         </div>
       </div>

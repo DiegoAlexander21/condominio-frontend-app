@@ -9,7 +9,7 @@
       <div class="tarjeta" *ngFor="let unidad of respuesta.contenido">
         
         <div class="tarjeta-encabezado">
-          <h3 class="tarjeta-titulo">{{ unidad.torre }} - Dpto {{ unidad.numeroUnidad }}</h3>
+          <h3 class="titulo-principal">{{ unidad.torre }} - Unidad {{ unidad.numeroUnidad }}</h3>
           <app-menu-contextual 
             [identificador]="unidad.id" 
             [mostrarAsignarOcupantes]="true"
@@ -20,14 +20,22 @@
         </div>
 
         <div class="tarjeta-detalle">
-          <p><strong>Condominio:</strong> {{ unidad.nombreCondominio }}</p>
-          <p><strong>Piso:</strong> {{ unidad.piso }}</p>
-          <p><strong>Área:</strong> {{ unidad.area | number:'1.2-2' }} m²</p>
-          <p><strong>Estado:</strong> 
-            <span class="etiqueta-estado" [class.ocupado]="unidad.estado.includes('Ocupado')" [class.asignado]="unidad.estado === 'Propietario asignado'">
-              {{ unidad.estado }}
-            </span>
-          </p>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">business</span>
+            <span>Condominio: <strong>{{ unidad.nombreCondominio }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">stairs</span>
+            <span>Piso: <strong>{{ unidad.piso }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">square_foot</span>
+            <span>Área: <strong>{{ unidad.area | number:'1.2-2' }} m²</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">info</span>
+            <span>Estado: <strong>{{ unidad.estado }}</strong></span>
+          </div>
         </div>
 
       </div>
