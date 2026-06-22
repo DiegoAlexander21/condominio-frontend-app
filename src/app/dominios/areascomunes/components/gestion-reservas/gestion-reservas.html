@@ -1,0 +1,119 @@
+<div class="contenedor-reservas">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Gestión de Reservas</h2>
+    <div class="acciones-cabecera">
+      <button 
+        class="boton-primario" 
+        [routerLink]="['/areas-comunes/reservas/nuevo']"
+        [queryParams]="{
+          condominioId: formularioFiltro.get('condominioId')?.value, 
+          areaComunId: formularioFiltro.get('areaComunId')?.value,
+          fecha: formularioFiltro.get('fecha')?.value
+        }">
+        Nueva Reserva
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="formularioFiltro" class="panel-filtros" (ngSubmit)="buscarReservas()">
+    <div class="grupo-filtro">
+      <label>Condominio</label>
+      <app-select-personalizado 
+        formControlName="condominioId"
+        [opciones]="listaCondominios"
+        placeholder="Todos los condominios">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Área Común</label>
+      <app-select-personalizado 
+        formControlName="areaComunId"
+        [opciones]="listaAreas"
+        placeholder="Cualquier área común">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Fecha</label>
+      <app-calendario-personalizado 
+        formControlName="fecha"
+        placeholder="Todas las fechas">
+      </app-calendario-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="cargando" class="texto-cargando">
+    Cargando reservas...
+  </div>
+
+  <ng-container *ngIf="!cargando && busquedaRealizada && formularioFiltro.get('areaComunId')?.value">
+    <div class="lista-reservas" *ngIf="listaReservas.length > 0; else sinResultados">
+      
+      <div class="tarjeta-reserva-moderna" *ngFor="let r of listaReservas" [class.cancelada]="r.estado === 'CANCELADA'">
+        <div class="reserva-contenido">
+          <div class="reserva-cabecera">
+            <h3 class="reserva-hora">
+              <span class="material-symbols-outlined icono-reloj">event_available</span>
+              {{ r.fechaReserva | date:'dd/MM/yyyy' }} • {{ r.horaInicio | slice:0:5 }} - {{ r.horaFin | slice:0:5 }}
+            </h3>
+            <div class="estado-y-acciones">
+              <span class="badge-estado-moderno" [ngClass]="r.estado.toLowerCase()">{{ r.estado }}</span>
+              <app-menu-contextual 
+                *ngIf="puedeCancelar(r)"
+                [identificador]="r.id"
+                [mostrarVerDetalle]="false"
+                [mostrarEditar]="false"
+                (alEliminar)="eliminarReserva($event)">
+              </app-menu-contextual>
+            </div>
+          </div>
+          
+          <div class="reserva-detalles">
+            <div class="detalle-usuario">
+              <span class="material-symbols-outlined icono-usuario">person</span>
+              <span class="nombre">{{ r.responsableNombre }}</span>
+              <span class="unidad">• Unidad {{ r.unidadNumero }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="paginacion" *ngIf="totalPaginasReservas > 1">
+      <button class="boton-secundario" [disabled]="paginaActualReservas === 0" (click)="cambiarPagina(-1)">
+        Anterior
+      </button>
+      <span class="info-paginacion">Página {{ paginaActualReservas + 1 }} de {{ totalPaginasReservas }}</span>
+      <button class="boton-secundario" [disabled]="paginaActualReservas >= totalPaginasReservas - 1" (click)="cambiarPagina(1)">
+        Siguiente
+      </button>
+    </div>
+
+    <ng-template #sinResultados>
+      <div class="estado-vacio">
+        <p class="texto-cargando">No hay reservas para esta fecha y área.</p>
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <app-modal-confirmacion
+    [visible]="mostrarModalEliminar"
+    titulo="Cancelar Reserva"
+    mensaje="¿Está seguro de cancelar esta reserva? Esta acción cambiará su estado a CANCELADA."
+    textoConfirmar="Confirmar"
+    (alConfirmar)="confirmarEliminacion()"
+    (alCancelar)="cancelarEliminacion()">
+  </app-modal-confirmacion>
+</div>

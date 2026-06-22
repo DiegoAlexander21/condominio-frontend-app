@@ -12,7 +12,7 @@
       <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">visibility</span>
       Ver Detalles
     </button>
-    <button class="opcion-menu" (click)="editar()">
+    <button class="opcion-menu" *ngIf="mostrarEditar" (click)="editar()">
       <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">edit</span>
       Editar
     </button>

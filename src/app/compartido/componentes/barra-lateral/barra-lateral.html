@@ -24,9 +24,16 @@
         </a>
       </li>
       <li>
-        <a routerLink="/areas-comunes" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+        <a routerLink="/areas-comunes" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace"
+           [routerLinkActiveOptions]="{exact: true}">
           <span class="material-symbols-outlined icono">deck</span>
           <span class="texto">Áreas Comunes</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/areas-comunes/reservas" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">event_available</span>
+          <span class="texto">Reservas</span>
         </a>
       </li>
     </ul>

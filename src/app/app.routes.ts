@@ -67,7 +67,7 @@ export const routes: Routes = [
       {
         path: 'areas-comunes',
         canActivate: [rolGuard],
-        data: { roles: ['ADMINISTRADOR'] },
+        data: { roles: ['ADMINISTRADOR', 'RESIDENTE'] },
         loadChildren: () => import('./dominios/areascomunes/areascomunes-module').then(m => m.AreascomunesModule)
       },
       {

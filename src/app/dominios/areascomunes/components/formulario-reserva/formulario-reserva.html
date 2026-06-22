@@ -1,0 +1,91 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">Registrar Reserva</h2>
+
+  <form [formGroup]="formularioReserva" (ngSubmit)="guardarReserva()" class="formulario-flex">
+  <div class="fila-controles">
+    <div class="grupo-control">
+      <label for="condominioId">Condominio</label>
+      <select id="condominioId" formControlName="condominioId" class="control-formulario"
+        [class.invalido]="formularioReserva.get('condominioId')?.invalid && formularioReserva.get('condominioId')?.touched">
+        <option [ngValue]="null">Seleccione Condominio</option>
+        <option *ngFor="let c of listaCondominios" [value]="c.id">{{ c.nombre }}</option>
+      </select>
+      <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="(formularioReserva.get('condominioId')?.invalid && formularioReserva.get('condominioId')?.touched) ? 'visible' : 'hidden'">
+        Debe seleccionar un condominio.
+      </div>
+    </div>
+
+    <div class="grupo-control">
+      <label for="areaComunId" class="etiqueta-relativa">
+        Área Común
+        <app-tooltip-informativo *ngIf="areaActual" titulo="Reglas del Área" icono="info">
+          <strong>Horario:</strong> {{ areaActual.horaInicio | slice:0:5 }} a {{ areaActual.horaFin | slice:0:5 }}<br>
+          <strong>Aforo:</strong> {{ areaActual.capacidad }} personas
+        </app-tooltip-informativo>
+      </label>
+      <select id="areaComunId" formControlName="areaComunId" class="control-formulario"
+        [class.invalido]="formularioReserva.get('areaComunId')?.invalid && formularioReserva.get('areaComunId')?.touched">
+        <option [ngValue]="null">Seleccione Área Común</option>
+        <option *ngFor="let a of listaAreas" [value]="a.id">{{ a.nombre }}</option>
+      </select>
+      <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="(formularioReserva.get('areaComunId')?.invalid && formularioReserva.get('areaComunId')?.touched) ? 'visible' : 'hidden'">
+        Debe seleccionar un área común.
+      </div>
+    </div>
+  </div>
+
+  <div class="fila-controles">
+    <div class="grupo-control" *ngIf="esAdmin">
+      <label for="unidadId">Unidad Solicitante</label>
+      <select id="unidadId" formControlName="unidadId" class="control-formulario"
+        [class.invalido]="formularioReserva.get('unidadId')?.invalid && formularioReserva.get('unidadId')?.touched">
+        <option [ngValue]="null">Seleccione Unidad</option>
+        <option *ngFor="let u of listaUnidades" [value]="u.id">Unidad {{ u.numeroUnidad }} (Piso {{ u.piso }})</option>
+      </select>
+      <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="(formularioReserva.get('unidadId')?.invalid && formularioReserva.get('unidadId')?.touched) ? 'visible' : 'hidden'">
+        Debe seleccionar la unidad solicitante.
+      </div>
+    </div>
+
+    <div class="grupo-control">
+      <label for="responsableNombre">Nombre del Responsable</label>
+      <input type="text" id="responsableNombre" formControlName="responsableNombre" class="control-formulario"
+        placeholder="Ej. Samuel Luke"
+        [class.invalido]="formularioReserva.get('responsableNombre')?.invalid && formularioReserva.get('responsableNombre')?.touched">
+      <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="(formularioReserva.get('responsableNombre')?.invalid && formularioReserva.get('responsableNombre')?.touched) ? 'visible' : 'hidden'">
+        El nombre es obligatorio.
+      </div>
+    </div>
+  </div>
+
+  <div class="fila-controles">
+    <div class="grupo-control">
+      <label for="fechaReserva">Fecha de Reserva</label>
+      <input type="date" id="fechaReserva" formControlName="fechaReserva" class="control-formulario"
+        [class.invalido]="formularioReserva.get('fechaReserva')?.invalid && formularioReserva.get('fechaReserva')?.touched">
+      <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="(formularioReserva.get('fechaReserva')?.invalid && formularioReserva.get('fechaReserva')?.touched) ? 'visible' : 'hidden'">
+        La fecha es obligatoria.
+      </div>
+    </div>
+
+    <div class="grupo-control">
+      <label>Horario *</label>
+      <div class="horario-contenedor">
+        <input type="time" formControlName="horaInicio" class="control-formulario" title="Hora de inicio">
+        <span class="separador-horario">hasta</span>
+        <input type="time" formControlName="horaFin" class="control-formulario" title="Hora de fin">
+      </div>
+      <div class="texto-ayuda mensaje-error-reservado" [style.visibility]="((formularioReserva.get('horaInicio')?.invalid || formularioReserva.get('horaFin')?.invalid) && (formularioReserva.get('horaInicio')?.touched || formularioReserva.get('horaFin')?.touched)) ? 'visible' : 'hidden'">
+        Ambas horas son obligatorias.
+      </div>
+    </div>
+  </div>
+
+  <div class="acciones-formulario">
+    <button type="button" class="boton-secundario" (click)="volver()">Cancelar</button>
+    <button type="submit" class="boton-primario">
+      Confirmar Reserva
+    </button>
+  </div>
+</form>
+</div>

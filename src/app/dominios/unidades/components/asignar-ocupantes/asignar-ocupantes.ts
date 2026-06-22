@@ -28,15 +28,15 @@ export class AsignarOcupantesComponent implements OnInit {
 
   constructor() {
     this.formularioOcupantes = this.constructorFormulario.group({
-      nombrePropietario: ['', [Validators.maxLength(15)]],
+      nombrePropietario: ['', [Validators.maxLength(150)]],
       dniPropietario: ['', [Validators.pattern('^([0-9]{8})?$')]],
-      emailPropietario: ['', [Validators.email, Validators.maxLength(20)]],
+      emailPropietario: ['', [Validators.email, Validators.maxLength(150)]],
       telefonoPropietario: ['', [Validators.maxLength(9)]],
 
-      nombreResidente: ['', [Validators.maxLength(15)]],
+      nombreResidente: ['', [Validators.maxLength(150)]],
       dniResidente: ['', [Validators.pattern('^([0-9]{8})?$')]],
-      emailResidente: ['', [Validators.email, Validators.maxLength(20)]],
-      parentesco: [{ value: '', disabled: true }, [Validators.maxLength(15)]],
+      emailResidente: ['', [Validators.email, Validators.maxLength(150)]],
+      parentesco: [{ value: '', disabled: true }, [Validators.maxLength(50)]],
       residenteActivo: [false]
     });
   }
@@ -76,14 +76,14 @@ export class AsignarOcupantesComponent implements OnInit {
     const controlDniR = this.formularioOcupantes.get('dniResidente');
 
     if (tieneDatosPropietario || tieneDatosResidente) {
-      controlNombreP?.setValidators([Validators.required, Validators.maxLength(15)]);
+      controlNombreP?.setValidators([Validators.required, Validators.maxLength(150)]);
       controlDniP?.setValidators([Validators.required, Validators.pattern('^[0-9]{8}$')]);
-      this.formularioOcupantes.get('emailPropietario')?.setValidators([Validators.required, Validators.email, Validators.maxLength(20)]);
+      this.formularioOcupantes.get('emailPropietario')?.setValidators([Validators.required, Validators.email, Validators.maxLength(150)]);
       this.formularioOcupantes.get('telefonoPropietario')?.setValidators([Validators.required, Validators.pattern('^[0-9]{9}$')]);
     } else {
-      controlNombreP?.setValidators([Validators.maxLength(15)]);
+      controlNombreP?.setValidators([Validators.maxLength(150)]);
       controlDniP?.setValidators([Validators.pattern('^([0-9]{8})?$')]);
-      this.formularioOcupantes.get('emailPropietario')?.setValidators([Validators.email, Validators.maxLength(20)]);
+      this.formularioOcupantes.get('emailPropietario')?.setValidators([Validators.email, Validators.maxLength(150)]);
       this.formularioOcupantes.get('telefonoPropietario')?.setValidators([Validators.pattern('^([0-9]{9})?$')]);
     }
 
@@ -93,10 +93,10 @@ export class AsignarOcupantesComponent implements OnInit {
       this.formularioOcupantes.get('emailResidente')?.enable({ emitEvent: false });
       this.formularioOcupantes.get('parentesco')?.enable({ emitEvent: false });
 
-      controlNombreR?.setValidators([Validators.required, Validators.maxLength(15)]);
+      controlNombreR?.setValidators([Validators.required, Validators.maxLength(150)]);
       controlDniR?.setValidators([Validators.required, Validators.pattern('^[0-9]{8}$')]);
-      this.formularioOcupantes.get('emailResidente')?.setValidators([Validators.required, Validators.email, Validators.maxLength(20)]);
-      this.formularioOcupantes.get('parentesco')?.setValidators([Validators.required, Validators.maxLength(15)]);
+      this.formularioOcupantes.get('emailResidente')?.setValidators([Validators.required, Validators.email, Validators.maxLength(150)]);
+      this.formularioOcupantes.get('parentesco')?.setValidators([Validators.required, Validators.maxLength(50)]);
     } else {
       controlNombreR?.disable({ emitEvent: false });
       controlDniR?.disable({ emitEvent: false });

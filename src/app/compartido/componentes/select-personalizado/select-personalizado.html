@@ -1,0 +1,16 @@
+<div class="custom-select-container {{ claseAdicional }}" [class.disabled]="disabled" [class.invalido]="esInvalido" (click)="toggleDesplegable()">
+  <span class="material-symbols-outlined icono-opcional" *ngIf="icono">{{ icono }}</span>
+  <div class="custom-select">
+    <span class="select-valor" [class.placeholder-text]="valorActual === '' || valorActual === null">{{ textoSeleccionado }}</span>
+    <span class="material-symbols-outlined icono-chevron">expand_more</span>
+  </div>
+
+  <div class="opciones-lista" *ngIf="desplegableAbierto">
+    <div class="opcion" (click)="seleccionarOpcion('', $event)">
+      {{ placeholder }}
+    </div>
+    <div class="opcion" *ngFor="let opcion of opciones" (click)="seleccionarOpcion(opcion[propId], $event)">
+      {{ opcion[propNombre] }}
+    </div>
+  </div>
+</div>

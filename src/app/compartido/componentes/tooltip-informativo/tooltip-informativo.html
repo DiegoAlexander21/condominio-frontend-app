@@ -1,0 +1,16 @@
+<div class="contenedor-tooltip" (mouseenter)="mostrar()" (mouseleave)="ocultar()">
+  <span 
+    class="material-symbols-outlined icono-activador" 
+    (click)="alternarTooltip($event)">
+    {{ icono }}
+  </span>
+
+  <div class="caja-tooltip" *ngIf="mostrarTooltip" (click)="$event.stopPropagation()">
+    <div class="cabecera-tooltip" *ngIf="titulo">
+      <strong>{{ titulo }}</strong>
+    </div>
+    <div class="contenido-tooltip">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

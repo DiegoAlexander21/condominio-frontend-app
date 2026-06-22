@@ -12,6 +12,7 @@ export class MenuContextualComponent {
   @Input() identificador!: number;
   @Input() mostrarAsignarOcupantes: boolean = false;
   @Input() mostrarVerDetalle: boolean = false;
+  @Input() mostrarEditar: boolean = true;
   @Output() alEditar = new EventEmitter<number>();
   @Output() alEliminar = new EventEmitter<number>();
   @Output() alAsignarOcupantes = new EventEmitter<number>();

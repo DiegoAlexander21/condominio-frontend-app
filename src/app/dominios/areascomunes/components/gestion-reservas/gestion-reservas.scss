@@ -1,0 +1,197 @@
+.contenedor-reservas {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .cabecera-lista {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    .titulo-principal {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--primario);
+    }
+
+    @media (max-width: 635px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+
+      .boton-primario {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+
+  .panel-filtros {
+    display: flex;
+    gap: 1.5rem;
+    background: var(--blanco);
+    padding: 0.85rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+
+    .grupo-filtro {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--terciario);
+      }
+    }
+
+    .grupo-filtro-boton {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      
+      .boton-limpiar {
+        height: 48px;
+        width: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .boton-buscar {
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0 1.5rem;
+        border-radius: 30px;
+      }
+
+      @media (max-width: 635px) {
+        width: 100%;
+        justify-content: flex-end;
+        
+        .boton-buscar {
+          flex: 1;
+        }
+      }
+    }
+  }
+
+  .lista-reservas {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .tarjeta-reserva-moderna {
+      display: flex;
+      background: var(--blanco);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.03);
+
+      &.cancelada {
+        opacity: 0.6;
+        background: #fafafa;
+      }
+
+      .reserva-contenido {
+        padding: 1.25rem 1.5rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        .reserva-cabecera {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .reserva-hora {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primario);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            .icono-reloj {
+              font-size: 1.2rem;
+              color: var(--secundario);
+            }
+          }
+
+          .estado-y-acciones {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .badge-estado-moderno {
+              padding: 0.35rem 0.75rem;
+              border-radius: 20px;
+              font-size: 0.75rem;
+              font-weight: 600;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+
+              &.activa {
+                background: rgba(40, 181, 61, 0.1);
+                color: var(--exito);
+              }
+
+              &.cancelada {
+                background: rgba(222, 75, 75, 0.1);
+                color: var(--error);
+              }
+            }
+          }
+        }
+
+        .reserva-detalles {
+          .detalle-usuario {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--terciario);
+            font-size: 0.95rem;
+
+            .icono-usuario {
+              font-size: 1.1rem;
+              color: var(--secundario);
+            }
+
+            .nombre {
+              font-weight: 500;
+              color: var(--primario);
+            }
+
+            .unidad {
+              color: var(--secundario);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .estado-vacio, .texto-cargando {
+    text-align: center;
+    padding: 3rem;
+    color: var(--terciario);
+    font-size: 1.1rem;
+  }
+}

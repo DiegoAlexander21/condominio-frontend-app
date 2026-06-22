@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -13,12 +13,13 @@ import { MenuContextualComponent } from '../../../../compartido/componentes/menu
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
 import { ModalConfirmacionComponent } from '../../../../compartido/componentes/modal-confirmacion/modal-confirmacion';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
+import { SelectPersonalizadoComponent } from '../../../../compartido/componentes/select-personalizado/select-personalizado';
 
 
 @Component({
   selector: 'app-lista-areas',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuContextualComponent, PaginacionComponent, ModalConfirmacionComponent],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuContextualComponent, PaginacionComponent, ModalConfirmacionComponent, SelectPersonalizadoComponent],
   templateUrl: './lista-areas.html',
   styleUrls: ['./lista-areas.scss']
 })
@@ -27,7 +28,6 @@ export class ListaAreasComponent implements OnInit {
   private condominioServicio = inject(CondominioService);
   private formBuilder = inject(FormBuilder);
   private enrutador = inject(Router);
-  private elemento = inject(ElementRef);
   private toastServicio = inject(ToastService);
 
   listaAreas: AreaComunResponse[] = [];
@@ -45,37 +45,10 @@ export class ListaAreasComponent implements OnInit {
   mostrarModalDetalle = false;
   mostrarModalEliminar = false;
   idAreaAEliminar: number | null = null;
-  
-  desplegableAbierto = false;
-  opcionSeleccionada: string = 'Todos los condominios';
-
   constructor() {
     this.formularioFiltro = this.formBuilder.group({
       condominioId: ['']
     });
-  }
-
-  toggleDesplegable(): void {
-    this.desplegableAbierto = !this.desplegableAbierto;
-  }
-
-  seleccionarCondominio(id: number | string, nombre: string, event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
-    this.formularioFiltro.patchValue({ condominioId: id });
-    this.opcionSeleccionada = nombre;
-    this.desplegableAbierto = false;
-  }
-
-  @HostListener('document:click', ['$event'])
-  cerrarDesplegableAlHacerClicAfuera(event: Event): void {
-    if (this.desplegableAbierto) {
-      const clickDentro = this.elemento.nativeElement.querySelector('.custom-select-container')?.contains(event.target as Node);
-      if (!clickDentro) {
-        this.desplegableAbierto = false;
-      }
-    }
   }
 
   ngOnInit(): void {

@@ -4,23 +4,13 @@
     
     <div class="acciones-cabecera">
       <form [formGroup]="formularioFiltro" class="contenedor-busqueda">
-        <div class="grupo-busqueda custom-select-container" (click)="toggleDesplegable()">
-          <span class="material-symbols-outlined icono-busqueda">business</span>
-          
-          <div class="custom-select">
-            <span class="select-valor">{{ opcionSeleccionada }}</span>
-            <span class="material-symbols-outlined icono-chevron">expand_more</span>
-          </div>
-
-          <div class="opciones-lista" *ngIf="desplegableAbierto">
-            <div class="opcion" (click)="seleccionarCondominio('', 'Todos los condominios', $event)">
-              Todos los condominios
-            </div>
-            <div class="opcion" *ngFor="let c of listaCondominios" (click)="seleccionarCondominio(c.id, c.nombre, $event)">
-              {{ c.nombre }}
-            </div>
-          </div>
-          
+        <div class="grupo-busqueda">
+          <app-select-personalizado 
+            formControlName="condominioId"
+            [opciones]="listaCondominios"
+            placeholder="Todos los condominios"
+            icono="business">
+          </app-select-personalizado>
         </div>
       </form>
 

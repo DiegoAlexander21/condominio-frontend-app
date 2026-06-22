@@ -11,7 +11,7 @@
       <div class="fila-controles">
         <div class="grupo-control">
           <label for="nombrePropietario">Nombre</label>
-          <input id="nombrePropietario" type="text" formControlName="nombrePropietario" class="control-formulario" placeholder="Ej. Carlos Espá" maxlength="15">
+          <input id="nombrePropietario" type="text" formControlName="nombrePropietario" class="control-formulario" placeholder="Ej. Carlos Espá" maxlength="150">
           <app-mensaje-error [control]="formularioOcupantes.get('nombrePropietario')"></app-mensaje-error>
         </div>
 
@@ -25,7 +25,7 @@
       <div class="fila-controles">
         <div class="grupo-control">
           <label for="emailPropietario">Correo</label>
-          <input id="emailPropietario" type="email" formControlName="emailPropietario" class="control-formulario" placeholder="carlos@gmail.com" maxlength="20">
+          <input id="emailPropietario" type="email" formControlName="emailPropietario" class="control-formulario" placeholder="carlos@gmail.com" maxlength="150">
           <app-mensaje-error [control]="formularioOcupantes.get('emailPropietario')"></app-mensaje-error>
         </div>
 
@@ -43,7 +43,7 @@
       <div class="fila-controles">
         <div class="grupo-control">
           <label for="nombreResidente">Nombre</label>
-          <input id="nombreResidente" type="text" formControlName="nombreResidente" class="control-formulario" placeholder="Ej. Ana Gómez" maxlength="15">
+          <input id="nombreResidente" type="text" formControlName="nombreResidente" class="control-formulario" placeholder="Ej. Ana Gómez" maxlength="150">
           <app-mensaje-error [control]="formularioOcupantes.get('nombreResidente')"></app-mensaje-error>
         </div>
 
@@ -57,13 +57,13 @@
       <div class="fila-controles">
         <div class="grupo-control">
           <label for="emailResidente">Correo</label>
-          <input id="emailResidente" type="email" formControlName="emailResidente" class="control-formulario" placeholder="ana@ejemplo.com" maxlength="20">
+          <input id="emailResidente" type="email" formControlName="emailResidente" class="control-formulario" placeholder="ana@ejemplo.com" maxlength="150">
           <app-mensaje-error [control]="formularioOcupantes.get('emailResidente')"></app-mensaje-error>
         </div>
 
         <div class="grupo-control">
           <label for="parentesco">Parentesco</label>
-          <input id="parentesco" type="text" formControlName="parentesco" class="control-formulario" placeholder="Ej. Inquilino, Hijo" maxlength="15">
+          <input id="parentesco" type="text" formControlName="parentesco" class="control-formulario" placeholder="Ej. Inquilino, Hijo" maxlength="50">
           <app-mensaje-error [control]="formularioOcupantes.get('parentesco')"></app-mensaje-error>
         </div>
       </div>

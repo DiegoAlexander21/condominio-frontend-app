@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListaHistorialComponent } from './lista-historial';
+import { FormularioReservaComponent } from './formulario-reserva';
 
-describe('ListaHistorial', () => {
-  let component: ListaHistorialComponent;
-  let fixture: ComponentFixture<ListaHistorialComponent>;
+describe('FormularioReserva', () => {
+  let component: FormularioReservaComponent;
+  let fixture: ComponentFixture<FormularioReservaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ListaHistorialComponent]
+      imports: [FormularioReservaComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ListaHistorialComponent);
+    fixture = TestBed.createComponent(FormularioReservaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

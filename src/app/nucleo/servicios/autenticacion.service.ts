@@ -58,6 +58,13 @@ export class AutenticacionService {
     return payload?.roles || [];
   }
 
+  obtenerUnidadId(): number | null {
+    const token = this.obtenerToken();
+    if (!token) return null;
+    const payload = this.decodificarToken(token);
+    return payload?.unidadId || null;
+  }
+
   private decodificarToken(token: string): any {
     try {
       const base64Url = token.split('.')[1];
