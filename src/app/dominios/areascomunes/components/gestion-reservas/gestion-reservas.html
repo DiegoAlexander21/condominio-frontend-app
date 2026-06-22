@@ -16,7 +16,7 @@
   </div>
 
   <form [formGroup]="formularioFiltro" class="panel-filtros" (ngSubmit)="buscarReservas()">
-    <div class="grupo-filtro">
+    <div class="grupo-filtro" *ngIf="esAdmin">
       <label>Condominio</label>
       <app-select-personalizado 
         formControlName="condominioId"

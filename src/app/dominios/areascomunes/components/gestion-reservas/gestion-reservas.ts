@@ -136,7 +136,8 @@ export class GestionReservasComponent implements OnInit {
 
     if (areaComunId) {
       this.cargando = true;
-      this.areasComunesServicio.obtenerReservas(Number(areaComunId), fecha || undefined, this.paginaActualReservas)
+      const unidadIdParaFiltro = this.esAdmin ? undefined : (this.unidadIdUsuario || undefined);
+      this.areasComunesServicio.obtenerReservas(Number(areaComunId), fecha || undefined, unidadIdParaFiltro, this.paginaActualReservas)
         .subscribe({
           next: (res: any) => {
             this.listaReservas = res.contenido;

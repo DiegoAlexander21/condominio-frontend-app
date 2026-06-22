@@ -36,10 +36,13 @@ export class AreasComunesService {
     return this.clienteHttp.delete<void>(`${this.urlAPI}/${id}`);
   }
 
-  obtenerReservas(areaComunId: number, fecha?: string, pagina: number = 0, tamano: number = 10): Observable<RespuestaPaginada<ReservaAreaComunResponse>> {
+  obtenerReservas(areaComunId: number, fecha?: string, unidadId?: number, pagina: number = 0, tamano: number = 10): Observable<RespuestaPaginada<ReservaAreaComunResponse>> {
     let url = `${this.urlReservas}?areaComunId=${areaComunId}&pagina=${pagina}&tamano=${tamano}&sort=id,desc`;
     if (fecha) {
       url += `&fecha=${fecha}`;
+    }
+    if (unidadId) {
+      url += `&unidadId=${unidadId}`;
     }
     return this.clienteHttp.get<RespuestaPaginada<ReservaAreaComunResponse>>(url);
   }

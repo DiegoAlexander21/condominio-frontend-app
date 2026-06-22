@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AutenticacionService } from '../../../nucleo/servicios/autenticacion.service';
 
 @Component({
   selector: 'app-barra-lateral',
@@ -9,9 +10,17 @@ import { RouterModule } from '@angular/router';
   templateUrl: './barra-lateral.html',
   styleUrls: ['./barra-lateral.scss']
 })
-export class BarraLateralComponent {
+export class BarraLateralComponent implements OnInit {
   @Input() menuAbierto: boolean = false;
   @Output() alCerrar = new EventEmitter<void>();
+
+  private authServicio = inject(AutenticacionService);
+  esAdmin: boolean = false;
+
+  ngOnInit(): void {
+    const roles = this.authServicio.obtenerRoles();
+    this.esAdmin = roles.includes('ADMINISTRADOR');
+  }
 
   cerrarMenuMovil(): void {
     this.alCerrar.emit();

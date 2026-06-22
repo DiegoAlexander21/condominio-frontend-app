@@ -65,6 +65,12 @@ export const routes: Routes = [
         loadComponent: () => import('./dominios/historial/components/lista-historial/lista-historial').then(m => m.ListaHistorialComponent)
       },
       {
+        path: 'perfil',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'PROPIETARIO', 'RESIDENTE', 'CONSERJERIA'] },
+        loadComponent: () => import('./dominios/seguridad/components/perfil/perfil').then(m => m.PerfilComponent)
+      },
+      {
         path: 'areas-comunes',
         canActivate: [rolGuard],
         data: { roles: ['ADMINISTRADOR', 'RESIDENTE'] },

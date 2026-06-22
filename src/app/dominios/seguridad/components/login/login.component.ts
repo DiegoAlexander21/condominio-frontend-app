@@ -44,7 +44,14 @@ export class LoginComponent {
       this.servicioAutenticacion.iniciarSesion(credenciales).subscribe({
         next: (respuesta) => {
           this.servicioAutenticacion.guardarToken(respuesta.tokenAcceso, recordarme);
-          this.enrutador.navigate(['/condominios']);
+          
+          if (this.servicioAutenticacion.obtenerRoles().includes('ADMINISTRADOR')) {
+            this.enrutador.navigate(['/condominios']);
+          } else if (this.servicioAutenticacion.obtenerUnidadId()) {
+            this.enrutador.navigate(['/areas-comunes/reservas']);
+          } else {
+            this.enrutador.navigate(['/perfil']);
+          }
         },
         error: (error) => {
           const codigoError = error.error?.codigo;

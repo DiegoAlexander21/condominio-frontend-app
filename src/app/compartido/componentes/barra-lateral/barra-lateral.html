@@ -5,25 +5,25 @@
 
   <nav class="navegacion-principal">
     <ul class="lista-enlaces">
-      <li>
+      <li *ngIf="esAdmin">
         <a routerLink="/condominios" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">apartment</span>
           <span class="texto">Condominios</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="esAdmin">
         <a routerLink="/unidades" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">home</span>
           <span class="texto">Unidades</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="esAdmin">
         <a routerLink="/historial" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">history</span>
           <span class="texto">Historial</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="esAdmin">
         <a routerLink="/areas-comunes" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace"
            [routerLinkActiveOptions]="{exact: true}">
           <span class="material-symbols-outlined icono">deck</span>
@@ -34,6 +34,12 @@
         <a routerLink="/areas-comunes/reservas" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">event_available</span>
           <span class="texto">Reservas</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/perfil" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">person</span>
+          <span class="texto">Mi Perfil</span>
         </a>
       </li>
     </ul>

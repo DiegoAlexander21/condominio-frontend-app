@@ -6,6 +6,7 @@ import { ToastService } from '../../../../compartido/componentes/toast/toast.ser
 import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion.service';
 import { UnidadService } from '../../../unidades/services/unidad';
 import { UnidadResponse } from '../../../unidades/modelos/unidad-response.interface';
+import { UnidadForm } from '../../../unidades/modelos/unidad-form.interface';
 import { AreaComunForm } from '../../modelos/area-comun-form';
 import { CondominioResponse } from '../../../condominio/modelos/condominio-response.interface';
 import { CondominioService } from '../../../condominio/services/condominio.service';
@@ -70,6 +71,14 @@ export class FormularioReservaComponent implements OnInit {
           this.cargarUnidades(this.condominioId);
         }
         this.cargarAreas(this.condominioId);
+      } else if (!this.esAdmin && this.unidadIdUsuario) {
+        this.unidadServicio.obtenerUnidad(this.unidadIdUsuario).subscribe({
+          next: (res: UnidadForm) => {
+            this.condominioId = res.condominioId;
+            this.formularioReserva.get('condominioId')?.setValue(this.condominioId);
+            this.cargarAreas(this.condominioId!);
+          }
+        });
       }
       
       if (this.areaComunId) {
@@ -100,20 +109,20 @@ export class FormularioReservaComponent implements OnInit {
 
   private cargarCondominios(): void {
     this.condominiosServicio.obtenerListaCondominios(0, 100).subscribe({
-      next: (res: any) => this.listaCondominios = res.contenido
+      next: (res: { contenido: CondominioResponse[] }) => this.listaCondominios = res.contenido
     });
   }
 
   private cargarAreas(condominioId: number): void {
     this.areasComunesServicio.obtenerAreas(condominioId, 0, 100).subscribe({
-      next: (res: any) => this.listaAreas = res.contenido
+      next: (res: { contenido: AreaComunResponse[] }) => this.listaAreas = res.contenido
     });
   }
 
   private cargarUnidades(condominioId: number): void {
     this.unidadServicio.obtenerListaUnidades(0, 100).subscribe({
-      next: (res: any) => {
-        this.listaUnidades = res.contenido.filter((u: any) => u.condominioId === condominioId || true);
+      next: (res: { contenido: UnidadResponse[] }) => {
+        this.listaUnidades = res.contenido;
       }
     });
   }
