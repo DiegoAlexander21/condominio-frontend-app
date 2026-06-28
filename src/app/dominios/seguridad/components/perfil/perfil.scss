@@ -11,7 +11,7 @@
     margin-bottom: 2rem;
 
     .titulo-gigante {
-      font-size: 4rem;
+      font-size: 2rem;
       font-weight: 500;
       margin: 0;
       color: var(--primario);
@@ -50,33 +50,17 @@
           min-width: 200px;
           display: flex;
           flex-direction: column;
+          font-family: var(--fuente-principal);
 
           label {
             display: block;
             margin-bottom: 0.5rem;
-            color: var(--secundario);
+            color: var(--primario);
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
-          }
-
-          .valor {
-            font-size: 1.2rem;
-            color: var(--primario);
             font-family: var(--fuente-principal);
-
-            &.badge-rol {
-              display: inline-block;
-              padding: 0.3rem 0.8rem;
-              background-color: rgba(49, 56, 82, 0.1);
-              color: var(--primario);
-              border-radius: 20px;
-              font-size: 0.9rem;
-              font-weight: 600;
-              width: fit-content;
-              font-family: var(--fuente-principal);
-            }
           }
         }
       }

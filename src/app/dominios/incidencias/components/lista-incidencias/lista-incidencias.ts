@@ -1,21 +1,33 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { IncidenciasService } from '../../services/incidencias.service';
 import { IncidenciaResponse, EstadoIncidencia } from '../../modelos/incidencia-response';
 import { RespuestaPaginada } from '../../../../compartido/modelos/respuesta-paginada.interface';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion.service';
-import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { SelectPersonalizadoComponent } from '../../../../compartido/componentes/select-personalizado/select-personalizado';
 import { MenuContextualComponent } from '../../../../compartido/componentes/menu-contextual/menu-contextual';
+import { InputBusquedaComponent } from '../../../../compartido/componentes/input-busqueda/input-busqueda';
+import { CalendarioPersonalizadoComponent } from '../../../../compartido/componentes/calendario-personalizado/calendario-personalizado';
 
 @Component({
   selector: 'app-lista-incidencias',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, PaginacionComponent, SelectPersonalizadoComponent, MenuContextualComponent],
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    FormsModule, 
+    ReactiveFormsModule, 
+    PaginacionComponent, 
+    SelectPersonalizadoComponent, 
+    MenuContextualComponent, 
+    InputBusquedaComponent, 
+    CalendarioPersonalizadoComponent
+  ],
   templateUrl: './lista-incidencias.html',
   styleUrl: './lista-incidencias.scss'
 })
@@ -24,24 +36,24 @@ export class ListaIncidencias implements OnInit {
   private incidenciasService = inject(IncidenciasService);
   private authService = inject(AutenticacionService);
   private toastService = inject(ToastService);
+  private fb = inject(FormBuilder);
 
   listaIncidencias: IncidenciaResponse[] = [];
-  estadoFiltro: EstadoIncidencia | '' = '';
+  listaIncidenciasGlobal: IncidenciaResponse[] = [];
+  listaIncidenciasFiltradas: IncidenciaResponse[] = [];
+
   cargando = false;
   esAdministrador = false;
   estados = Object.values(EstadoIncidencia);
+
   opcionesEstado: any[] = [
     { id: 'REGISTRADO', nombre: 'Registrado' },
     { id: 'EN_REVISION', nombre: 'En Revisión' },
     { id: 'EN_ATENCION', nombre: 'En Atención' },
     { id: 'RESUELTO', nombre: 'Resuelto' }
   ];
-  
-  opcionesTipo: any[] = [
-    { id: 'UNIDAD', nombre: 'Unidad' },
-    { id: 'AREA', nombre: 'Área Común' }
-  ];
-  tipoFiltro: string = '';
+
+  formularioFiltro: FormGroup;
 
   mostrarModalDetalle = false;
   incidenciaSeleccionada: IncidenciaResponse | null = null;
@@ -52,56 +64,113 @@ export class ListaIncidencias implements OnInit {
   totalElementos = 0;
   totalPaginas = 0;
 
-  ngOnInit(): void {
-    this.esAdministrador = this.authService.obtenerRoles().includes('ROLE_ADMINISTRADOR') || this.authService.obtenerRoles().includes('ADMINISTRADOR');
-    this.cargarIncidencias();
+  constructor() {
+    this.formularioFiltro = this.fb.group({
+      termino: [''],
+      estado: [''],
+      fecha: ['']
+    });
   }
 
-  cargarIncidencias(): void {
+  ngOnInit(): void {
+    this.esAdministrador = this.authService.obtenerRoles().includes('ROLE_ADMINISTRADOR') || this.authService.obtenerRoles().includes('ADMINISTRADOR');
+    this.obtenerDatos();
+  }
+
+  obtenerDatos(): void {
     this.cargando = true;
-    const estado = this.estadoFiltro ? this.estadoFiltro as EstadoIncidencia : undefined;
-    
     let unidadIdConsulta: number | undefined;
     if (!this.esAdministrador) {
       const miUnidad = this.authService.obtenerUnidadId();
       unidadIdConsulta = miUnidad ? miUnidad : undefined;
     }
 
-    this.incidenciasService.obtenerListaPorEstado(estado, unidadIdConsulta, this.paginaActual, this.tamanoPagina).subscribe({
+    this.incidenciasService.obtenerListaPorEstado(undefined, unidadIdConsulta, 0, 10000).subscribe({
       next: (res: RespuestaPaginada<IncidenciaResponse>) => {
-        this.listaIncidencias = res.contenido.map(incidencia => ({
+        this.listaIncidenciasGlobal = res.contenido.map(incidencia => ({
           ...incidencia,
           estadoFormateado: this.formatearEstado(incidencia.estado),
           gravedadFormateada: this.formatearGravedad(incidencia.gravedad),
           causaFormateada: this.formatearCausa(incidencia.causa)
         }));
-        
-        if (this.tipoFiltro === 'UNIDAD') {
-          this.listaIncidencias = this.listaIncidencias.filter(i => i.unidadId);
-        } else if (this.tipoFiltro === 'AREA') {
-          this.listaIncidencias = this.listaIncidencias.filter(i => i.areaComunId);
-        }
-
-        this.totalElementos = res.totalElementos;
-        this.totalPaginas = res.totalPaginas;
         this.cargando = false;
+        this.aplicarFiltrosLocales();
       },
       error: (err: HttpErrorResponse) => {
         this.toastService.mostrarError('Error al cargar incidencias');
         this.cargando = false;
+        this.listaIncidenciasGlobal = [];
+        this.aplicarFiltrosLocales();
       }
     });
   }
 
-  alCambiarFiltro(): void {
+  buscarIncidencias(): void {
     this.paginaActual = 0;
-    this.cargarIncidencias();
+    this.aplicarFiltrosLocales();
+  }
+
+  aplicarFiltrosLocales(): void {
+    const filtros = this.formularioFiltro.value;
+    let resultados = [...this.listaIncidenciasGlobal];
+
+    if (filtros.termino && filtros.termino.trim() !== '') {
+      const termino = filtros.termino.toLowerCase();
+      resultados = resultados.filter(i => 
+        (i.lugarAfectado && i.lugarAfectado.toLowerCase().includes(termino)) ||
+        (i.descripcion && i.descripcion.toLowerCase().includes(termino)) ||
+        (i.responsableAtencion && i.responsableAtencion.toLowerCase().includes(termino))
+      );
+    }
+
+    if (filtros.estado) {
+      resultados = resultados.filter(i => i.estado === filtros.estado);
+    }
+
+    if (filtros.fecha) {
+      const fechaBuscada = typeof filtros.fecha === 'string' ? filtros.fecha.split('T')[0] : '';
+      resultados = resultados.filter(i => {
+        if (!i.fechaReporte) return false;
+        let fechaIncidencia = '';
+        if (Array.isArray(i.fechaReporte)) {
+          const year = i.fechaReporte[0];
+          const month = i.fechaReporte[1].toString().padStart(2, '0');
+          const day = i.fechaReporte[2].toString().padStart(2, '0');
+          fechaIncidencia = `${year}-${month}-${day}`;
+        } else if (typeof i.fechaReporte === 'string') {
+          fechaIncidencia = i.fechaReporte.substring(0, 10);
+        }
+        return fechaIncidencia === fechaBuscada;
+      });
+    }
+
+    this.listaIncidenciasFiltradas = resultados;
+    this.totalPaginas = Math.ceil(this.listaIncidenciasFiltradas.length / this.tamanoPagina) || 1;
+    if (this.paginaActual >= this.totalPaginas) {
+      this.paginaActual = 0;
+    }
+    this.actualizarPagina();
+  }
+
+  actualizarPagina(): void {
+    const inicio = this.paginaActual * this.tamanoPagina;
+    const fin = inicio + this.tamanoPagina;
+    this.listaIncidencias = this.listaIncidenciasFiltradas.slice(inicio, fin);
+  }
+
+  limpiarFiltros(): void {
+    this.formularioFiltro.reset({
+      termino: '',
+      estado: '',
+      fecha: ''
+    });
+    this.buscarIncidencias();
   }
 
   cambiarPagina(nuevaPagina: number): void {
     if (nuevaPagina >= 0 && nuevaPagina < this.totalPaginas) {
       this.paginaActual = nuevaPagina;
-      this.cargarIncidencias();
+      this.actualizarPagina();
     }
   }
 
@@ -169,7 +238,7 @@ export class ListaIncidencias implements OnInit {
       next: (res: IncidenciaResponse) => {
         this.toastService.mostrarExito('Estado actualizado correctamente');
         this.cerrarModalEstado();
-        this.cargarIncidencias();
+        this.obtenerDatos();
       },
       error: (err: HttpErrorResponse) => {
         this.toastService.mostrarError('Error al actualizar estado');

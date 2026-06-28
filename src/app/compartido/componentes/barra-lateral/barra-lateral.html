@@ -42,6 +42,30 @@
           <span class="texto">Incidencias</span>
         </a>
       </li>
+      <li *ngIf="esAdmin">
+        <a routerLink="/finanzas/gastos" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">request_quote</span>
+          <span class="texto">Gastos</span>
+        </a>
+      </li>
+      <li *ngIf="esAdmin">
+        <a routerLink="/finanzas/estados-cuenta" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">receipt_long</span>
+          <span class="texto">Estados de Cuenta</span>
+        </a>
+      </li>
+      <li *ngIf="esAdmin">
+        <a routerLink="/finanzas/pagos" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">payments</span>
+          <span class="texto">Pagos</span>
+        </a>
+      </li>
+      <li *ngIf="esResidente">
+        <a routerLink="/finanzas/mi-estado-cuenta" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">account_balance_wallet</span>
+          <span class="texto">Mi Estado Cuenta</span>
+        </a>
+      </li>
       <li>
         <a routerLink="/perfil" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">person</span>

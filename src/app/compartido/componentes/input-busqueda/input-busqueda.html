@@ -1,0 +1,13 @@
+<div class="contenedor-busqueda">
+  <div class="grupo-busqueda">
+    <span class="material-symbols-outlined icono-busqueda">search</span>
+    <input 
+      type="text" 
+      [placeholder]="placeholder"
+      [value]="valor"
+      [disabled]="disabled"
+      (input)="alCambiar($event)"
+      (blur)="alTocar()"
+      class="input-busqueda">
+  </div>
+</div>

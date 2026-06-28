@@ -1,23 +1,43 @@
 <div class="contenedor-historial">
   <div class="cabecera-lista">
     <h2 class="titulo-principal">Historial de Titularidad</h2>
-
-    <form [formGroup]="formularioBusqueda" class="contenedor-busqueda">
-      <div class="grupo-busqueda">
-        <span class="material-symbols-outlined icono-busqueda">search</span>
-        <input 
-          type="text" 
-          formControlName="termino" 
-          placeholder="Buscar por unidad o propietario..."
-          class="input-busqueda">
-      </div>
-    </form>
   </div>
 
-  <ng-container *ngIf="respuestaPaginada$ | async as respuesta">
-    
-    <div class="grilla-tarjetas" *ngIf="respuesta.contenido.length > 0; else sinResultados">
-      <div class="tarjeta" *ngFor="let historial of respuesta.contenido">
+  <form [formGroup]="formularioFiltro" class="panel-filtros" (ngSubmit)="buscarHistorial()">
+    <div class="grupo-filtro">
+      <label>Buscar Unidad o Propietario</label>
+      <app-input-busqueda 
+        formControlName="termino" 
+        placeholder="Ej: 101, Lex Luthor...">
+      </app-input-busqueda>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Fecha del Cambio</label>
+      <app-calendario-personalizado 
+        formControlName="fecha"
+        placeholder="Cualquier fecha">
+      </app-calendario-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="cargando" class="texto-cargando">
+    Cargando la información del historial...
+  </div>
+
+  <ng-container *ngIf="!cargando">
+    <div class="grilla-tarjetas" *ngIf="listaHistorial.length > 0; else sinResultados">
+      <div class="tarjeta" *ngFor="let historial of listaHistorial">
         <div class="tarjeta-encabezado">
           <h3 class="titulo-principal">
             Unidad {{ historial.numeroUnidad || 'N/A' }}
@@ -33,7 +53,7 @@
             <span class="material-symbols-outlined icono-inline">person_add</span>
             <span>Nuevo: <strong>{{ historial.nuevoPropietario }}</strong></span>
           </div>
-          <div class="detalle-fila">
+          <div class="detalle-fila" *ngIf="historial.fechaCambio">
             <span class="material-symbols-outlined icono-inline">schedule</span>
             <span>Fecha: <strong>{{ historial.fechaCambio | date:'dd/MM/yyyy, HH:mm' }}</strong></span>
           </div>
@@ -42,14 +62,16 @@
     </div>
 
     <ng-template #sinResultados>
-      <p class="texto-cargando">No se encontraron registros de titularidad.</p>
+      <div class="estado-vacio">
+        <p class="texto-cargando">No hay registros que coincidan con los filtros.</p>
+      </div>
     </ng-template>
 
     <app-paginacion
-      [paginaActual]="respuesta.paginaActual"
-      [totalPaginas]="respuesta.totalPaginas"
+      *ngIf="totalPaginas > 1"
+      [paginaActual]="paginaActual"
+      [totalPaginas]="totalPaginas"
       (cambioPagina)="cambiarPagina($event)">
     </app-paginacion>
-
   </ng-container>
 </div>

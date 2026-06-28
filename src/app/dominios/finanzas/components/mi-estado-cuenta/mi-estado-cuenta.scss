@@ -1,0 +1,255 @@
+@use './modal';
+
+.estado-error {
+  color: var(--error);
+}
+
+.estado-exito {
+  color: var(--exito);
+}
+
+.estado-pendiente {
+  color: #d39e00;
+}
+
+.contenedor-principal {
+  padding: 1.4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .cabecera-lista {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    .titulo-principal {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--primario, #2c3e50);
+      margin: 0;
+    }
+  }
+
+  .pestanas {
+    display: flex;
+    gap: 1rem;
+    
+    .pestana {
+      background: none;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1.1rem;
+      font-family: var(--fuente-principal);
+      color: var(--secundario);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+
+      &:hover {
+        color: var(--primario);
+      }
+
+      &.activa {
+        color: var(--primario);
+        border-bottom-color: var(--primario);
+        font-weight: 600;
+      }
+    }
+  }
+
+  .informacion-unidad {
+    margin-bottom: 2rem;
+
+    .cuerpo-horizontal {
+      flex-direction: row !important;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1.5rem;
+
+      .fila-minimalista {
+        flex: 1;
+        min-width: 200px;
+      }
+    }
+  }
+
+  .panel-filtros {
+    display: flex;
+    gap: 1.5rem;
+    background: var(--blanco, #ffffff);
+    padding: 0.85rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+
+    .grupo-filtro {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--terciario, #95a5a6);
+      }
+    }
+
+    .grupo-filtro-boton {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      
+      .boton-limpiar {
+        height: 48px;
+        width: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .boton-buscar {
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0 1.5rem;
+        border-radius: 30px;
+      }
+
+      @media (max-width: 635px) {
+        width: 100%;
+        justify-content: flex-end;
+        
+        .boton-buscar {
+          flex: 1;
+        }
+      }
+    }
+  }
+
+  .tarjeta-minimalista {
+    background-color: var(--blanco, #ffffff);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    
+    .encabezado-minimalista {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+
+      h3 {
+        margin: 0;
+        color: var(--primario, #2c3e50);
+        font-size: 1.15rem;
+        font-weight: 500;
+        flex: 1;
+      }
+    }
+
+    .cuerpo-minimalista {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      
+      .fila-minimalista {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primario, #2c3e50);
+        font-size: 0.95rem;
+        
+        .icono-minimalista {
+          color: var(--secundario, #7f8c8d);
+          font-size: 1.2rem;
+        }
+
+        &.fila-sin-borde {
+          border: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        &.fila-separador {
+          border-top: 1px dashed #eee;
+          padding-top: 1rem;
+          margin-top: 0.5rem;
+        }
+
+        &.saldo-destacado {
+          font-size: 1.1rem;
+          color: var(--primario);
+        }
+      }
+
+      .saldo-deudor {
+        border-top: 1px dashed #f0f0f0;
+        padding-top: 0.75rem;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  .accion-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: none;
+    border: none;
+    color: var(--primario);
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    
+    &:hover {
+      background-color: rgba(49, 56, 82, 0.05);
+    }
+    
+    .material-symbols-outlined {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.espaciado-superior {
+  margin-top: 1.5rem;
+}
+
+.modal-evidencia {
+  max-width: 500px;
+}
+
+.contenedor-imagen-modal {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--secundario);
+  display: flex;
+  justify-content: center;
+  background-color: #f9f9f9;
+
+  .imagen-evidencia {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    max-height: 400px;
+  }
+}

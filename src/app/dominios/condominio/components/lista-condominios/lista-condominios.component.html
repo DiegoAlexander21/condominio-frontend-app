@@ -1,12 +1,57 @@
 <div class="contenedor-condominios">
-  <header class="cabecera-lista">
+  <div class="cabecera-lista">
     <h2 class="titulo-principal">Gestión de Condominios</h2>
-    <button class="boton-primario" routerLink="/condominios/nuevo">Nuevo Condominio</button>
-  </header>
+    <div class="acciones-cabecera">
+      <button class="boton-primario" routerLink="/condominios/nuevo">
+        Nuevo Condominio
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="formularioFiltro" class="panel-filtros" (ngSubmit)="buscarCondominios()">
+    <div class="grupo-filtro">
+      <label>Nombre de Condominio</label>
+      <app-input-busqueda 
+        formControlName="nombre" 
+        placeholder="Buscar por nombre...">
+      </app-input-busqueda>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Tamaño</label>
+      <app-select-personalizado 
+        formControlName="rangoTorres"
+        [opciones]="listaTorres"
+        placeholder="Todos los tamaños">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Fecha Registro</label>
+      <app-calendario-personalizado 
+        formControlName="fecha"
+        placeholder="Cualquier fecha">
+      </app-calendario-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="cargando" class="texto-cargando">
+    Cargando la información de los condominios...
+  </div>
   
-  <ng-container *ngIf="respuestaPaginada$ | async as respuesta; else cargando">
-    <div class="grilla-tarjetas">
-      <div class="tarjeta" *ngFor="let condominio of respuesta.contenido">
+  <ng-container *ngIf="!cargando">
+    <div class="grilla-tarjetas" *ngIf="listaCondominios.length > 0; else sinResultados">
+      <div class="tarjeta" *ngFor="let condominio of listaCondominios">
         
         <div class="tarjeta-encabezado">
           <h3 class="titulo-principal">{{ condominio.nombre }}</h3>
@@ -26,21 +71,28 @@
             <span class="material-symbols-outlined icono-inline">layers</span>
             <span>Pisos por Torre: <strong>{{ condominio.pisosPorTorre }}</strong></span>
           </div>
+          <div class="detalle-fila" *ngIf="condominio.fechaRegistro">
+            <span class="material-symbols-outlined icono-inline">event</span>
+            <span>Registrado: <strong>{{ condominio.fechaRegistro | date:'dd/MM/yyyy' }}</strong></span>
+          </div>
         </div>
 
       </div>
     </div>
     
     <app-paginacion 
-      [paginaActual]="respuesta.paginaActual" 
-      [totalPaginas]="respuesta.totalPaginas" 
+      *ngIf="totalPaginas > 1"
+      [paginaActual]="paginaActual" 
+      [totalPaginas]="totalPaginas" 
       (cambioPagina)="cambiarPagina($event)">
     </app-paginacion>
+
+    <ng-template #sinResultados>
+      <div class="estado-vacio">
+        <p class="texto-cargando">No hay condominios que coincidan con los filtros.</p>
+      </div>
+    </ng-template>
   </ng-container>
-  
-  <ng-template #cargando>
-    <p class="texto-cargando">Cargando la información de los condominios...</p>
-  </ng-template>
 
   <app-modal-confirmacion 
     [visible]="mostrarModalEliminar" 

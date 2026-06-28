@@ -1,0 +1,83 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">{{ esEdicion ? 'Editar Gasto' : 'Nuevo Gasto' }}</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+    
+    <div class="grupo-control">
+      <label>Descripción del Gasto</label>
+      <input type="text" formControlName="descripcion" placeholder="Ej. Mantenimiento de Ascensor">
+      <app-mensaje-error [control]="formulario.get('descripcion')" nombreCampo="La descripción"></app-mensaje-error>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label>Tipo de Gasto</label>
+        <select formControlName="tipoGasto">
+          <option value="FIJO">Fijo (Regular)</option>
+          <option value="EXTRAORDINARIO">Extraordinario</option>
+        </select>
+        <app-mensaje-error [control]="formulario.get('tipoGasto')" nombreCampo="El tipo de gasto"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label>Método de Distribución</label>
+        <select formControlName="metodoDistribucion">
+          <option value="PARTES_IGUALES">Partes Iguales</option>
+          <option value="COEFICIENTE_TAMANO">Coeficiente por Tamaño</option>
+          <option value="COBRO_DIRECTO">Cobro Directo (1 Unidad)</option>
+        </select>
+        <app-mensaje-error [control]="formulario.get('metodoDistribucion')" nombreCampo="El método de distribución"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label>Monto Total (S/)</label>
+        <input type="number" step="0.01" formControlName="montoTotal" placeholder="0.00">
+        <app-mensaje-error [control]="formulario.get('montoTotal')" nombreCampo="El monto total"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label>Fecha Límite de Pago</label>
+        <input type="date" formControlName="fechaLimite">
+        <app-mensaje-error [control]="formulario.get('fechaLimite')" nombreCampo="La fecha límite"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label>Condominio</label>
+        <select formControlName="condominioId">
+          <option value="">Seleccione un condominio...</option>
+          <option *ngFor="let c of condominios" [value]="c.id">{{ c.nombre }}</option>
+        </select>
+        <app-mensaje-error [control]="formulario.get('condominioId')" nombreCampo="El condominio"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label>Torre (Opcional)</label>
+        <input type="text" formControlName="torre" placeholder="Ej. A">
+        <app-mensaje-error [control]="formulario.get('torre')" nombreCampo="La torre"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles" *ngIf="formulario.get('tipoGasto')?.value === 'EXTRAORDINARIO'">
+      <div class="grupo-control">
+        <label>Incidencia Asociada</label>
+        <select formControlName="incidenciaId">
+          <option [ngValue]="null">Seleccione una incidencia</option>
+          <option *ngFor="let inc of incidencias" [value]="inc.id">{{ inc.descripcion }}</option>
+        </select>
+        <app-mensaje-error [control]="formulario.get('incidenciaId')" nombreCampo="La incidencia"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="acciones-formulario">
+      <button type="button" class="boton-secundario" (click)="cancelar()" [disabled]="cargando">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="formulario.invalid || cargando">
+        {{ cargando ? 'Guardando...' : 'Guardar Gasto' }}
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -58,6 +58,7 @@ input:not([type="checkbox"]):not([type="radio"]), select {
   border: none;
   padding: 1rem 3rem;
   font-size: 1rem;
+  text-decoration: none;
   border-radius: 30px;
   cursor: pointer;
   transition: opacity 0.3s ease;
@@ -81,6 +82,7 @@ input:not([type="checkbox"]):not([type="radio"]), select {
   border: 1px solid var(--secundario);
   padding: 1rem 3rem;
   font-size: 1rem;
+  text-decoration: none;
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -115,17 +117,18 @@ input:not([type="checkbox"]):not([type="radio"]), select {
 
 .estado-vacio {
   text-align: center;
-  padding: 3rem;
-  background-color: var(--blanco);
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  padding: 1.5rem 0;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
 }
 
 .texto-cargando, .mensaje-vacio {
-  color: var(--secundario);
-  font-style: italic;
+  color: var(--primario);
+  font-size: 0.95rem;
   text-align: center;
-  padding: 2rem;
+  margin: 0;
+  padding: 0.5rem;
 }
 
 .grilla-tarjetas {

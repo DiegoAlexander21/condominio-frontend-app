@@ -83,6 +83,12 @@ export const routes: Routes = [
         loadChildren: () => import('./dominios/incidencias/incidencias.routes').then(m => m.incidenciasRoutes)
       },
       {
+        path: 'finanzas',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'PROPIETARIO', 'RESIDENTE'] },
+        loadChildren: () => import('./dominios/finanzas/finanzas.routes').then(m => m.finanzasRoutes)
+      },
+      {
         path: '',
         redirectTo: 'condominios',
         pathMatch: 'full'

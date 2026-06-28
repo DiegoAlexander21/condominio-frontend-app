@@ -3,4 +3,5 @@ export interface CondominioResponse {
   nombre: string;
   torres: number;
   pisosPorTorre: number;
+  fechaRegistro: string;
 }

@@ -5,23 +5,39 @@
 
   <div class="menu-desplegable" *ngIf="menuAbierto">
     <button class="opcion-menu" *ngIf="mostrarAsignarOcupantes" (click)="asignarOcupantes()">
-      <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">group_add</span>
+      <span class="material-symbols-outlined icono-opcion">group_add</span>
       Asignar Ocupantes
     </button>
     <button class="opcion-menu" *ngIf="mostrarVerDetalle" (click)="verDetalle()">
-      <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">visibility</span>
+      <span class="material-symbols-outlined icono-opcion">visibility</span>
       Ver Detalles
     </button>
     <button class="opcion-menu" *ngIf="mostrarActualizarEstado" (click)="actualizarEstado()">
-      <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">update</span>
+      <span class="material-symbols-outlined icono-opcion">update</span>
       Actualizar Estado
     </button>
     <button class="opcion-menu" *ngIf="mostrarEditar" (click)="editar()">
-      <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">edit</span>
+      <span class="material-symbols-outlined icono-opcion">edit</span>
       Editar
     </button>
+    <button class="opcion-menu" *ngIf="mostrarDistribuir" (click)="distribuir()">
+      <span class="material-symbols-outlined icono-opcion">account_tree</span>
+      Distribuir
+    </button>
+    <button class="opcion-menu" *ngIf="mostrarRegistrarPago" (click)="registrarPago()">
+      <span class="material-symbols-outlined icono-opcion">payments</span>
+      Registrar Pago
+    </button>
+    <button class="opcion-menu" *ngIf="mostrarAprobar" (click)="aprobar()">
+      <span class="material-symbols-outlined icono-opcion">check_circle</span>
+      Aprobar
+    </button>
+    <button class="opcion-menu opcion-eliminar" *ngIf="mostrarRechazar" (click)="rechazar()">
+      <span class="material-symbols-outlined icono-opcion">cancel</span>
+      Rechazar
+    </button>
     <button class="opcion-menu opcion-eliminar" *ngIf="mostrarEliminar" (click)="eliminar()">
-      <span class="material-symbols-outlined" style="margin-right: 8px; font-size: 1.1em;">delete</span>
+      <span class="material-symbols-outlined icono-opcion">delete</span>
       Eliminar
     </button>
   </div>

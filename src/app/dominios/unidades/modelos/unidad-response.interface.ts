@@ -6,6 +6,5 @@ export interface UnidadResponse {
   torre: string;
   piso: number;
   area: number;
-  estado: string;
   nombreMostrar?: string;
 }
