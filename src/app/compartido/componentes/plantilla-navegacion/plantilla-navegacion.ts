@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AutenticacionService } from '../../../nucleo/servicios/autenticacion.service';
@@ -23,31 +23,31 @@ export class PlantillaNavegacionComponent {
   private enrutador = inject(Router);
   private servicioAutenticacion = inject(AutenticacionService);
 
-  menuAbierto: boolean = false;
-  mostrarModalSalir: boolean = false;
+  menuAbierto = signal<boolean>(false);
+  mostrarModalSalir = signal<boolean>(false);
 
   alternarMenu(): void {
-    this.menuAbierto = !this.menuAbierto;
+    this.menuAbierto.update(v => !v);
   }
 
   cerrarMenuMovil(): void {
     if (window.innerWidth <= 768) {
-      this.menuAbierto = false;
+      this.menuAbierto.set(false);
     }
   }
 
   abrirModalSalir(): void {
-    this.mostrarModalSalir = true;
+    this.mostrarModalSalir.set(true);
     this.cerrarMenuMovil();
   }
 
   cancelarCierreSesion(): void {
-    this.mostrarModalSalir = false;
+    this.mostrarModalSalir.set(false);
   }
 
   confirmarCierreSesion(): void {
     this.servicioAutenticacion.cerrarSesion();
-    this.mostrarModalSalir = false;
+    this.mostrarModalSalir.set(false);
     this.enrutador.navigate(['/login']);
   }
 }
