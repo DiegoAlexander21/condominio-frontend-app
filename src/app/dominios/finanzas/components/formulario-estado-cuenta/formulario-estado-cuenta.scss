@@ -1,0 +1,27 @@
+.contenedor-formulario {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: transparent;
+
+  .titulo-principal {
+    color: var(--primario);
+    font-family: var(--fuente-principal);
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--secundario);
+  }
+
+  .descripcion-formulario {
+    color: var(--terciario);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.acciones-centro {
+  justify-content: center;
+  margin-top: 2rem;
+}

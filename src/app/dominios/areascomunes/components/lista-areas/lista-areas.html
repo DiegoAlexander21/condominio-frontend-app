@@ -3,22 +3,40 @@
     <h2 class="titulo-principal">Áreas Comunes</h2>
     
     <div class="acciones-cabecera">
-      <form [formGroup]="formularioFiltro" class="contenedor-busqueda">
-        <div class="grupo-busqueda">
-          <app-select-personalizado 
-            formControlName="condominioId"
-            [opciones]="listaCondominios"
-            placeholder="Todos los condominios"
-            icono="business">
-          </app-select-personalizado>
-        </div>
-      </form>
-
       <a routerLink="nuevo" class="boton-primario">
         Nueva Área
       </a>
     </div>
   </div>
+
+  <form [formGroup]="formularioFiltro" class="panel-filtros" (ngSubmit)="buscarAreas()">
+    <div class="grupo-filtro">
+      <label>Buscar Área o Normas</label>
+      <app-input-busqueda 
+        formControlName="termino" 
+        placeholder="Ej: Piscina, prohibido fumar...">
+      </app-input-busqueda>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Capacidad / Aforo</label>
+      <app-select-personalizado 
+        formControlName="aforo"
+        [opciones]="listaAforos"
+        placeholder="Cualquier aforo">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
 
   <div *ngIf="cargando" class="texto-cargando">
     Cargando áreas comunes...
@@ -52,7 +70,7 @@
     </div>
 
     <app-paginacion
-      *ngIf="totalElementos > 0"
+      *ngIf="totalPaginas > 1"
       [paginaActual]="paginaActual"
       [totalPaginas]="totalPaginas"
       (cambioPagina)="cambiarPagina($event)">
@@ -60,7 +78,7 @@
 
     <ng-template #sinResultados>
       <div class="estado-vacio">
-        <p class="texto-cargando">No se encontraron áreas comunes registradas para este condominio.</p>
+        <p class="texto-cargando">No se encontraron áreas comunes registradas.</p>
       </div>
     </ng-template>
   </ng-container>
@@ -99,6 +117,7 @@
       </div>
     </div>
   </div>
+  
   <app-modal-confirmacion
     [visible]="mostrarModalEliminar"
     titulo="Eliminar Área Común"

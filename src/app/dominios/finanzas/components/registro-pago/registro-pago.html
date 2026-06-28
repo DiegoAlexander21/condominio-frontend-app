@@ -1,0 +1,52 @@
+<div class="contenedor-principal">
+  <div class="encabezado-acciones">
+    <h2>Registrar Pago</h2>
+  </div>
+
+  <div *ngIf="error" class="alerta alerta-error">{{ error }}</div>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex tarjeta">
+    
+    <div class="alerta alerta-info" *ngIf="saldoPendiente > 0">
+      <span class="material-symbols-outlined icono-inline">info</span>
+      Saldo pendiente para esta cuenta: <strong>S/ {{ saldoPendiente | number:'1.2-2' }}</strong>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label>ID de Unidad</label>
+        <input type="number" formControlName="unidadId" readonly class="input-solo-lectura">
+      </div>
+
+      <div class="grupo-control">
+        <label>Monto a Pagar (S/)</label>
+        <input type="number" step="0.01" formControlName="monto" placeholder="0.00">
+        <div class="texto-ayuda texto-error" *ngIf="formulario.get('monto')?.touched && formulario.get('monto')?.invalid">
+          Monto inválido.
+        </div>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label>Observaciones</label>
+        <input type="text" formControlName="observacion" placeholder="Ej. Pago mediante transferencia BCP">
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label>Evidencia de Pago (URLs separadas por comas)</label>
+        <input type="text" formControlName="evidenciaUrl" placeholder="https://mi-bucket.com/recibo.jpg">
+      </div>
+    </div>
+
+    <div class="acciones-formulario">
+      <button type="button" class="boton-secundario" (click)="cancelar()" [disabled]="cargando">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="cargando">
+        {{ cargando ? 'Procesando...' : 'Registrar Pago' }}
+      </button>
+    </div>
+
+  </form>
+</div>

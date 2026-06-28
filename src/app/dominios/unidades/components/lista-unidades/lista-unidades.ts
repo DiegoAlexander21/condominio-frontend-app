@@ -9,11 +9,14 @@ import { PaginacionComponent } from '../../../../compartido/componentes/paginaci
 import { ModalConfirmacionComponent } from '../../../../compartido/componentes/modal-confirmacion/modal-confirmacion';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { InputBusquedaComponent } from '../../../../compartido/componentes/input-busqueda/input-busqueda';
+
 
 @Component({
   selector: 'app-lista-unidades',
   standalone: true,
-  imports: [CommonModule, RouterModule, MenuContextualComponent, PaginacionComponent, ModalConfirmacionComponent],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuContextualComponent, PaginacionComponent, ModalConfirmacionComponent, InputBusquedaComponent],
   templateUrl: './lista-unidades.html',
   styleUrls: ['./lista-unidades.scss']
 })
@@ -22,24 +25,90 @@ export class ListaUnidadesComponent implements OnInit {
   private enrutador = inject(Router);
   private toastServicio = inject(ToastService);
   
-  respuestaPaginada$: Observable<RespuestaPaginada<UnidadResponse>> | undefined;
+  listaUnidades: UnidadResponse[] = [];
+  listaUnidadesGlobal: UnidadResponse[] = [];
+  listaUnidadesFiltradas: UnidadResponse[] = [];
+
+  cargando = false;
+
   paginaActual = 0;
   tamanoPagina = 9;
+  totalPaginas = 1;
 
   mostrarModalEliminar = false;
   idUnidadAEliminar: number | null = null;
+
+  formularioFiltro: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.formularioFiltro = this.fb.group({
+      termino: ['']
+    });
+  }
 
   ngOnInit(): void {
     this.obtenerDatos();
   }
 
   obtenerDatos(): void {
-    this.respuestaPaginada$ = this.unidadServicio.obtenerListaUnidades(this.paginaActual, this.tamanoPagina);
+    this.cargando = true;
+    this.unidadServicio.obtenerListaUnidades(0, 10000).subscribe({
+      next: (data) => {
+        this.listaUnidadesGlobal = data.contenido;
+        this.cargando = false;
+        this.aplicarFiltrosLocales();
+      },
+      error: () => {
+        this.cargando = false;
+        this.toastServicio.mostrarError('Error al cargar unidades.');
+      }
+    });
+  }
+
+
+  buscarUnidades(): void {
+    this.paginaActual = 0;
+    this.aplicarFiltrosLocales();
+  }
+
+  aplicarFiltrosLocales(): void {
+    const filtros = this.formularioFiltro.value;
+    let resultados = [...this.listaUnidadesGlobal];
+
+    if (filtros.termino && filtros.termino.trim() !== '') {
+      const termino = filtros.termino.toLowerCase();
+      resultados = resultados.filter(u => 
+        u.numeroUnidad.toLowerCase().includes(termino) || 
+        u.nombreCondominio.toLowerCase().includes(termino)
+      );
+    }
+
+
+
+    this.listaUnidadesFiltradas = resultados;
+    this.totalPaginas = Math.ceil(this.listaUnidadesFiltradas.length / this.tamanoPagina) || 1;
+    if (this.paginaActual >= this.totalPaginas) {
+      this.paginaActual = 0;
+    }
+    this.actualizarPagina();
+  }
+
+  actualizarPagina(): void {
+    const inicio = this.paginaActual * this.tamanoPagina;
+    const fin = inicio + this.tamanoPagina;
+    this.listaUnidades = this.listaUnidadesFiltradas.slice(inicio, fin);
+  }
+
+  limpiarFiltros(): void {
+    this.formularioFiltro.reset({
+      termino: ''
+    });
+    this.buscarUnidades();
   }
 
   cambiarPagina(nuevaPagina: number): void {
     this.paginaActual = nuevaPagina;
-    this.obtenerDatos();
+    this.actualizarPagina();
   }
 
   editarUnidad(id: number): void {

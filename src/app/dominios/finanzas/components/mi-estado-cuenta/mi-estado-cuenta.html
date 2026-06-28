@@ -1,0 +1,304 @@
+<div class="contenedor-principal">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Mi Estado de Cuenta</h2>
+    
+    <div class="acciones-cabecera pestanas">
+      <button class="pestana" [class.activa]="pestanaActiva === 'estados'" (click)="cambiarPestana('estados')">
+        Resumen Mensual
+      </button>
+      <button class="pestana" [class.activa]="pestanaActiva === 'pagos'" (click)="cambiarPestana('pagos')">
+        Historial de Pagos
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="texto-cargando">Cargando su información financiera...</div>
+
+  <ng-container *ngIf="!cargando && unidad">
+    <div class="tarjeta-minimalista informacion-unidad">
+      <div class="cuerpo-minimalista cuerpo-horizontal">
+        <div class="fila-minimalista">
+          <span class="material-symbols-outlined icono-minimalista">location_city</span>
+          <span><strong>Condominio:</strong> {{ unidad.condominio?.nombre }}</span>
+        </div>
+        <div class="fila-minimalista">
+          <span class="material-symbols-outlined icono-minimalista">business</span>
+          <span><strong>Torre:</strong> {{ unidad.torre || 'N/A' }}</span>
+        </div>
+        <div class="fila-minimalista">
+          <span class="material-symbols-outlined icono-minimalista">layers</span>
+          <span><strong>Piso:</strong> {{ unidad.piso }}</span>
+        </div>
+        <div class="fila-minimalista">
+          <span class="material-symbols-outlined icono-minimalista">door_front</span>
+          <span><strong>Unidad N°:</strong> {{ unidad.numeroUnidad }}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="pestanaActiva === 'estados'">
+      <form [formGroup]="filtroEstados" class="panel-filtros" (ngSubmit)="aplicarFiltrosEstados()">
+        <div class="grupo-filtro">
+          <label>Estado</label>
+          <app-select-personalizado 
+            formControlName="estado"
+            [opciones]="opcionesEstadoCuenta"
+            propId="valor"
+            propNombre="etiqueta"
+            placeholder="Todos">
+          </app-select-personalizado>
+        </div>
+
+        <div class="grupo-filtro">
+          <label>Periodo</label>
+          <app-calendario-personalizado 
+            formControlName="periodo"
+            placeholder="Cualquier periodo">
+          </app-calendario-personalizado>
+        </div>
+
+        <div class="grupo-filtro-boton">
+          <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltrosEstados()" title="Limpiar Filtros">
+            <span class="material-symbols-outlined">filter_alt_off</span>
+          </button>
+          <button type="submit" class="boton-primario boton-buscar">
+            <span class="material-symbols-outlined">search</span> Buscar
+          </button>
+        </div>
+      </form>
+
+      <div class="grilla-tarjetas" *ngIf="estadosPaginados.length > 0; else sinResultadosEstados">
+        <div class="tarjeta-minimalista" *ngFor="let estado of estadosPaginados">
+          <div class="encabezado-minimalista">
+            <h3 class="titulo-principal">Periodo: {{ formatearPeriodo(estado.periodo) }}</h3>
+            <app-menu-contextual 
+              [identificador]="estado.id" 
+              [mostrarEditar]="false"
+              [mostrarEliminar]="false"
+              [mostrarVerDetalle]="true"
+              [mostrarRegistrarPago]="estado.saldo > 0"
+              (alVerDetalle)="abrirModalDetalleEstado(estado)"
+              (alRegistrarPago)="abrirModalPago($event)">
+            </app-menu-contextual>
+          </div>
+
+          <div class="cuerpo-minimalista">
+            <div class="fila-minimalista saldo-deudor fila-sin-borde">
+              <span class="material-symbols-outlined icono-minimalista">account_balance_wallet</span>
+              <span>Total a Pagar: <strong>S/ {{ estado.saldo | number:'1.2-2' }}</strong></span>
+            </div>
+            <div class="fila-minimalista" *ngIf="estado.fechaVencimiento">
+              <span class="material-symbols-outlined icono-minimalista">event</span>
+              <span>Vence: {{ estado.fechaVencimiento | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="fila-minimalista">
+              <ng-container *ngIf="estado.saldo > 0; else alDia">
+                <span class="material-symbols-outlined icono-minimalista estado-error">warning</span>
+                <span class="estado-error">Estado: Moroso</span>
+              </ng-container>
+              <ng-template #alDia>
+                <span class="material-symbols-outlined icono-minimalista estado-exito">check_circle</span>
+                <span class="estado-exito">Estado: Al Día</span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <app-paginacion 
+        *ngIf="totalPaginasEstados > 1"
+        [paginaActual]="paginaActualEstados" 
+        [totalPaginas]="totalPaginasEstados" 
+        (cambioPagina)="cambiarPaginaEstados($event)">
+      </app-paginacion>
+
+      <ng-template #sinResultadosEstados>
+        <div class="estado-vacio">
+          <p class="texto-cargando">No se encontraron estados de cuenta con los filtros aplicados.</p>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <ng-container *ngIf="pestanaActiva === 'pagos'">
+      <form [formGroup]="filtroPagos" class="panel-filtros" (ngSubmit)="aplicarFiltrosPagos()">
+        <div class="grupo-filtro">
+          <label>Estado del Pago</label>
+          <app-select-personalizado 
+            formControlName="estado"
+            [opciones]="opcionesEstadoPago"
+            propId="valor"
+            propNombre="etiqueta"
+            placeholder="Todos">
+          </app-select-personalizado>
+        </div>
+
+        <div class="grupo-filtro">
+          <label>Periodo</label>
+          <app-calendario-personalizado 
+            formControlName="periodo"
+            placeholder="Cualquier periodo">
+          </app-calendario-personalizado>
+        </div>
+
+        <div class="grupo-filtro-boton">
+          <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltrosPagos()" title="Limpiar Filtros">
+            <span class="material-symbols-outlined">filter_alt_off</span>
+          </button>
+          <button type="submit" class="boton-primario boton-buscar">
+            <span class="material-symbols-outlined">search</span> Buscar
+          </button>
+        </div>
+      </form>
+
+      <div class="grilla-tarjetas" *ngIf="pagosPaginados.length > 0; else sinResultadosPagos">
+        <div class="tarjeta-minimalista" *ngFor="let pago of pagosPaginados">
+          <div class="encabezado-minimalista">
+            <h3 class="titulo-principal">Pago S/ {{ pago.monto | number:'1.2-2' }}</h3>
+            <app-menu-contextual 
+              [identificador]="pago.id" 
+              [mostrarEditar]="false"
+              [mostrarEliminar]="false"
+              [mostrarVerDetalle]="pago.evidencias && pago.evidencias.length > 0"
+              (alVerDetalle)="verRecibo(pago)">
+            </app-menu-contextual>
+          </div>
+          
+          <div class="cuerpo-minimalista">
+            <div class="fila-minimalista">
+              <span class="material-symbols-outlined icono-minimalista">calendar_today</span>
+              <span>Fecha: {{ pago.fechaPago | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <div class="fila-minimalista" *ngIf="pago.observacion">
+              <span class="material-symbols-outlined icono-minimalista">notes</span>
+              <span>Nota: {{ pago.observacion }}</span>
+            </div>
+            <div class="fila-minimalista">
+              <ng-container *ngIf="pago.estado === 'APROBADO'">
+                <span class="material-symbols-outlined icono-minimalista estado-exito">check_circle</span>
+                <span class="estado-exito">Estado: Aprobado</span>
+              </ng-container>
+              <ng-container *ngIf="pago.estado === 'RECHAZADO'">
+                <span class="material-symbols-outlined icono-minimalista estado-error">cancel</span>
+                <span class="estado-error">Estado: Rechazado</span>
+              </ng-container>
+              <ng-container *ngIf="pago.estado === 'PENDIENTE'">
+                <span class="material-symbols-outlined icono-minimalista estado-pendiente">pending</span>
+                <span class="estado-pendiente">Estado: Pendiente</span>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <app-paginacion 
+        *ngIf="totalPaginasPagos > 1"
+        [paginaActual]="paginaActualPagos" 
+        [totalPaginas]="totalPaginasPagos" 
+        (cambioPagina)="cambiarPaginaPagos($event)">
+      </app-paginacion>
+
+      <ng-template #sinResultadosPagos>
+        <div class="estado-vacio">
+          <p class="texto-cargando">No se encontraron pagos con los filtros aplicados.</p>
+        </div>
+      </ng-template>
+    </ng-container>
+
+  </ng-container>
+
+  <div class="modal-overlay" *ngIf="mostrarModalPago">
+    <div class="modal-contenido">
+      <div class="modal-cabecera">
+        <h3>Registrar Pago</h3>
+        <button class="boton-cerrar-modal" (click)="cerrarModalPago()">
+          <span class="material-symbols-outlined icono-cerrar">close</span>
+        </button>
+      </div>
+      <div class="modal-cuerpo">
+        <app-formulario-pago 
+          [estadoCuentaId]="estadoCuentaSeleccionadoId!" 
+          [unidadId]="unidad.id"
+          [saldoPendiente]="saldoSeleccionado"
+          (pagoRegistrado)="onPagoRegistrado()"
+          (cancelar)="cerrarModalPago()">
+        </app-formulario-pago>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalDetalle && estadoDetalleSeleccionado">
+    <div class="modal-contenido">
+      <div class="modal-cabecera">
+        <h3>Detalles del Estado de Cuenta</h3>
+        <button class="boton-cerrar-modal" (click)="cerrarModalDetalle()">
+          <span class="material-symbols-outlined icono-cerrar">close</span>
+        </button>
+      </div>
+      <div class="modal-cuerpo">
+        <h4 class="titulo-area">
+          <span>Periodo: {{ formatearPeriodo(estadoDetalleSeleccionado.periodo) }}</span>
+        </h4>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="etiqueta">Cuotas de Mantenimiento</span>
+            <span class="valor">S/ {{ estadoDetalleSeleccionado.totalCuotas | number:'1.2-2' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="etiqueta">Gastos Extraordinarios</span>
+            <span class="valor">S/ {{ estadoDetalleSeleccionado.totalExtraordinarios | number:'1.2-2' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="etiqueta">Total Facturado</span>
+            <span class="valor">S/ {{ (estadoDetalleSeleccionado.totalCuotas + estadoDetalleSeleccionado.totalExtraordinarios) | number:'1.2-2' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="etiqueta">Monto Pagado</span>
+            <span class="valor">S/ {{ estadoDetalleSeleccionado.totalPagado | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="seccion-normas">
+          <h5 class="subtitulo">Balance Actual</h5>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="etiqueta">Saldo Restante</span>
+              <span class="valor" [class.estado-error]="estadoDetalleSeleccionado.saldo > 0">S/ {{ estadoDetalleSeleccionado.saldo | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModalRecibo && pagoSeleccionado">
+    <div class="modal-contenido modal-evidencia">
+      <div class="modal-cabecera">
+        <h3>Evidencia del Pago</h3>
+        <button class="boton-cerrar-modal" (click)="cerrarModalRecibo()">
+          <span class="material-symbols-outlined icono-cerrar">close</span>
+        </button>
+      </div>
+      <div class="modal-cuerpo">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="etiqueta">Monto Pagado</span>
+            <span class="valor">S/ {{ pagoSeleccionado.monto | number:'1.2-2' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="etiqueta">Fecha</span>
+            <span class="valor">{{ pagoSeleccionado.fechaPago | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+        
+        <div class="seccion-normas espaciado-superior" *ngIf="pagoSeleccionado.evidencias && pagoSeleccionado.evidencias.length > 0">
+          <h5 class="subtitulo">Comprobante (Voucher)</h5>
+          <div class="contenedor-imagen-modal">
+            <img [src]="pagoSeleccionado.evidencias[0].urlArchivo" alt="Comprobante de pago" class="imagen-evidencia">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

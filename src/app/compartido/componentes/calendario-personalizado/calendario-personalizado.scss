@@ -71,7 +71,8 @@
     position: absolute;
     top: calc(100% + 0.5rem);
     left: 0;
-    width: 280px;
+    right: 0;
+    min-width: 280px;
     background-color: var(--blanco);
     border: 1px solid rgba(0,0,0,0.08);
     border-radius: 12px;

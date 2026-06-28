@@ -14,11 +14,12 @@ import { MenuContextualComponent } from '../../../../compartido/componentes/menu
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { SelectPersonalizadoComponent } from '../../../../compartido/componentes/select-personalizado/select-personalizado';
 import { CalendarioPersonalizadoComponent } from '../../../../compartido/componentes/calendario-personalizado/calendario-personalizado';
+import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
 
 @Component({
   selector: 'app-gestion-reservas',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, ModalConfirmacionComponent, MenuContextualComponent, SelectPersonalizadoComponent, CalendarioPersonalizadoComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, ModalConfirmacionComponent, MenuContextualComponent, SelectPersonalizadoComponent, CalendarioPersonalizadoComponent, PaginacionComponent],
   templateUrl: './gestion-reservas.html',
   styleUrls: ['./gestion-reservas.scss']
 })
@@ -41,10 +42,10 @@ export class GestionReservasComponent implements OnInit {
   esAdmin: boolean = false;
   unidadIdUsuario: number | null = null;
   cargando = false;
-  busquedaRealizada = false;
 
   mostrarModalEliminar = false;
   idReservaAEliminar: number | null = null;
+  mostrarResultados = false;
 
   constructor() {
     this.formularioFiltro = this.formBuilder.group({
@@ -66,7 +67,6 @@ export class GestionReservasComponent implements OnInit {
     }
 
     this.formularioFiltro.get('condominioId')?.valueChanges.subscribe(condominioId => {
-      this.busquedaRealizada = false;
       this.formularioFiltro.get('areaComunId')?.setValue('');
       this.listaAreas = [];
       this.listaReservas = [];
@@ -75,13 +75,7 @@ export class GestionReservasComponent implements OnInit {
       }
     });
 
-    this.formularioFiltro.get('areaComunId')?.valueChanges.subscribe(() => {
-      this.busquedaRealizada = false;
-    });
 
-    this.formularioFiltro.get('fecha')?.valueChanges.subscribe(() => {
-      this.busquedaRealizada = false;
-    });
   }
 
   private obtenerFechaActual(): string {
@@ -121,13 +115,22 @@ export class GestionReservasComponent implements OnInit {
   }
 
   buscarReservas(): void {
-    if (this.formularioFiltro.get('areaComunId')?.value) {
-      this.paginaActualReservas = 0;
-      this.busquedaRealizada = true;
-      this.cargarReservas();
-    } else {
-      this.toastServicio.mostrarError('Seleccione un Área Común para buscar');
+    this.paginaActualReservas = 0;
+    
+    if (this.esAdmin) {
+      const condominioId = this.formularioFiltro.get('condominioId')?.value;
+      if (!condominioId) {
+        this.toastServicio.mostrarError('Primero debe seleccionar un Condominio');
+        return;
+      }
     }
+
+    if (!this.formularioFiltro.get('areaComunId')?.value) {
+      this.toastServicio.mostrarError('Seleccione un Área Común para buscar');
+      return;
+    }
+    
+    this.cargarReservas();
   }
 
   cargarReservas(): void {
@@ -143,6 +146,7 @@ export class GestionReservasComponent implements OnInit {
             this.listaReservas = res.contenido;
             this.totalPaginasReservas = res.totalPaginas;
             this.cargando = false;
+            this.mostrarResultados = true;
           },
           error: () => {
             this.cargando = false;
@@ -156,9 +160,9 @@ export class GestionReservasComponent implements OnInit {
   }
 
   limpiarFiltros(): void {
-    this.busquedaRealizada = false;
     this.listaReservas = [];
     this.paginaActualReservas = 0;
+    this.mostrarResultados = false;
     
     this.formularioFiltro.patchValue({
       areaComunId: '',

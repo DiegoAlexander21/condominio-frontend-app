@@ -1,0 +1,116 @@
+<div class="contenedor-principal">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Estados de Cuenta (Administrador)</h2>
+    <div class="acciones-cabecera">
+      <button class="boton-primario" routerLink="/finanzas/estados-cuenta/generar">
+        <span></span> Generar Mes
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="formularioFiltro" class="panel-filtros" (ngSubmit)="buscarEstados()">
+    <div class="grupo-filtro">
+      <label>Buscar Unidad</label>
+      <app-input-busqueda 
+        formControlName="unidadDetalles" 
+        placeholder="Ej. Depto. 101...">
+      </app-input-busqueda>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Estado</label>
+      <app-select-personalizado 
+        formControlName="estado"
+        [opciones]="opcionesEstado"
+        placeholder="Todos">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Periodo</label>
+      <app-calendario-personalizado 
+        formControlName="periodo"
+        placeholder="Cualquier periodo">
+      </app-calendario-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="cargando" class="texto-cargando">Cargando estados de cuenta...</div>
+
+  <ng-container *ngIf="!cargando">
+    <div class="grilla-tarjetas" *ngIf="estados.length > 0; else sinResultados">
+      <div class="tarjeta-minimalista" *ngFor="let estado of estados">
+        <div class="encabezado-minimalista">
+          <h3 class="titulo-principal">{{ estado.unidadDetalles }}</h3>
+          <app-menu-contextual 
+            [identificador]="estado.id" 
+            [mostrarEditar]="false"
+            [mostrarEliminar]="true"
+            (alEliminar)="eliminar($event)">
+          </app-menu-contextual>
+        </div>
+
+        <div class="cuerpo-minimalista">
+          <div class="fila-minimalista">
+            <span class="material-symbols-outlined icono-minimalista">calendar_month</span>
+            <span>Periodo: {{ formatearPeriodo(estado.periodo) }}</span>
+          </div>
+          <div class="fila-minimalista">
+            <span class="material-symbols-outlined icono-minimalista">payments</span>
+            <span>Cargos: S/ {{ (estado.totalCuotas + estado.totalExtraordinarios) | number:'1.2-2' }}</span>
+          </div>
+          <div class="fila-minimalista">
+            <span class="material-symbols-outlined icono-minimalista">check_circle</span>
+            <span>Pagado: S/ {{ estado.totalPagado | number:'1.2-2' }}</span>
+          </div>
+          <div class="fila-minimalista">
+            <span class="material-symbols-outlined icono-minimalista">account_balance_wallet</span>
+            <span>Saldo: S/ {{ estado.saldo | number:'1.2-2' }}</span>
+          </div>
+          <div class="fila-minimalista">
+            <ng-container *ngIf="estado.saldo > 0; else alDia">
+              <span class="material-symbols-outlined icono-minimalista estado-error">warning</span>
+              <span class="estado-error">Estado: Moroso</span>
+            </ng-container>
+            <ng-template #alDia>
+              <span class="material-symbols-outlined icono-minimalista estado-exito">check_circle</span>
+              <span class="estado-exito">Estado: Al Día</span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <app-paginacion 
+      *ngIf="totalPaginas > 1"
+      [paginaActual]="paginaActual" 
+      [totalPaginas]="totalPaginas" 
+      (cambioPagina)="cambiarPagina($event)">
+    </app-paginacion>
+
+    <ng-template #sinResultados>
+      <div class="estado-vacio">
+        <p class="texto-cargando">No se encontraron estados de cuenta con los filtros aplicados.</p>
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <app-modal-confirmacion 
+    [visible]="mostrarModalEliminar" 
+    titulo="Eliminar Estado de Cuenta"
+    mensaje="¿Estás seguro que deseas eliminar este estado de cuenta permanentemente?"
+    textoConfirmar="Eliminar"
+    (alCancelar)="cancelarEliminacion()" 
+    (alConfirmar)="confirmarEliminacion()">
+  </app-modal-confirmacion>
+</div>

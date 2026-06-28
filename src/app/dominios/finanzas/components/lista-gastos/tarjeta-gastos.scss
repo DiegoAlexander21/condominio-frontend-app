@@ -1,0 +1,44 @@
+.tarjeta-minimalista {
+  background-color: var(--blanco);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+  
+  .encabezado-minimalista {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+
+    h3 {
+      margin: 0;
+      color: var(--primario);
+      font-size: 1.15rem;
+      font-weight: 500;
+      flex: 1;
+    }
+  }
+
+  .cuerpo-minimalista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+
+    .fila-minimalista {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primario);
+      font-size: 0.95rem;
+      
+
+      .icono-minimalista {
+        color: var(--secundario);
+        font-size: 1.2rem;
+      }
+    }
+  }
+}

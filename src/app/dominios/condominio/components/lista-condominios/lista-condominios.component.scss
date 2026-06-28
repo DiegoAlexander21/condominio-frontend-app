@@ -1,32 +1,94 @@
 .contenedor-condominios {
   padding: 2rem;
-  
+  max-width: 1200px;
+  margin: 0 auto;
+
   .cabecera-lista {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--secundario);
-    padding-bottom: 0.5rem;
     margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
 
     .titulo-principal {
+      font-size: 1.8rem;
+      font-weight: 600;
       color: var(--primario);
       margin: 0;
-      font-size: 2rem;
-      border-bottom: none;
-      padding-bottom: 0;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 635px) {
       flex-direction: column;
       align-items: flex-start;
-      
-      .boton-primario {
+      gap: 1rem;
+
+      .acciones-cabecera, .boton-primario {
         width: 100%;
+        justify-content: center;
       }
     }
   }
 
+  .panel-filtros {
+    display: flex;
+    gap: 1.5rem;
+    background: var(--blanco);
+    padding: 0.85rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+
+    .grupo-filtro {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--terciario);
+      }
+
+
+    }
+
+    .grupo-filtro-boton {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      
+      .boton-limpiar {
+        height: 48px;
+        width: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .boton-buscar {
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0 1.5rem;
+        border-radius: 30px;
+      }
+
+      @media (max-width: 635px) {
+        width: 100%;
+        justify-content: flex-end;
+        
+        .boton-buscar {
+          flex: 1;
+        }
+      }
+    }
+  }
 }

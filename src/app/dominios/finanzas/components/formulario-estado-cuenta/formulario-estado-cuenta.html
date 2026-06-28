@@ -1,0 +1,49 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">Generar Estado de Cuenta Mensual</h2>
+  <p class="descripcion-formulario">Selecciona un condominio, torre, unidad y el periodo para generar el estado de cuenta.</p>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+    
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="condominioId">Condominio *</label>
+        <select id="condominioId" (change)="filtrarPorCondominio($event)" [disabled]="cargandoDatos">
+          <option value="" disabled selected>Seleccione un condominio...</option>
+          <option *ngFor="let c of listaCondominios" [value]="c.id">{{ c.nombre }}</option>
+        </select>
+      </div>
+
+      <div class="grupo-control">
+        <label for="filtroTorre">Torre</label>
+        <select id="filtroTorre" (change)="filtrarPorTorre($event)" [disabled]="listaTorres.length === 0">
+          <option value="" disabled selected>Seleccione una torre...</option>
+          <option *ngFor="let t of listaTorres" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="unidadId">Unidad *</label>
+        <select id="unidadId" formControlName="unidadId">
+          <option value="" disabled selected>Seleccione la Unidad destino</option>
+          <option *ngFor="let u of listaUnidadesFiltradas" [value]="u.id">{{ u.nombre }}</option>
+        </select>
+        <app-mensaje-error [control]="formulario.get('unidadId')" nombreCampo="La unidad"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label for="periodo">Periodo (Mes/Año) *</label>
+        <input type="month" id="periodo" formControlName="periodo">
+        <app-mensaje-error [control]="formulario.get('periodo')" nombreCampo="El periodo"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="acciones-formulario acciones-centro">
+      <button type="button" class="boton-secundario" (click)="cancelar()" [disabled]="guardando">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="formulario.invalid || guardando">
+        {{ guardando ? 'Generando...' : 'Generar' }}
+      </button>
+    </div>
+  </form>
+</div>

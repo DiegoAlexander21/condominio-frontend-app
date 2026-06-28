@@ -16,10 +16,12 @@ export class BarraLateralComponent implements OnInit {
 
   private authServicio = inject(AutenticacionService);
   esAdmin: boolean = false;
+  esResidente: boolean = false;
 
   ngOnInit(): void {
     const roles = this.authServicio.obtenerRoles();
     this.esAdmin = roles.includes('ADMINISTRADOR');
+    this.esResidente = roles.includes('RESIDENTE') || roles.includes('PROPIETARIO');
   }
 
   cerrarMenuMovil(): void {

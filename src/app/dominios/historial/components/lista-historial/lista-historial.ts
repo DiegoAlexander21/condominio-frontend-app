@@ -1,19 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-
+import { InputBusquedaComponent } from '../../../../compartido/componentes/input-busqueda/input-busqueda';
+import { CalendarioPersonalizadoComponent } from '../../../../compartido/componentes/calendario-personalizado/calendario-personalizado';
 import { HistorialService } from '../../services/historial';
 import { HistorialTitularidadResponse } from '../../modelos/historial-response';
-import { RespuestaPaginada } from '../../../../compartido/modelos/respuesta-paginada.interface';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
-
 
 @Component({
   selector: 'app-lista-historial',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PaginacionComponent],
+  imports: [CommonModule, ReactiveFormsModule, PaginacionComponent, InputBusquedaComponent, CalendarioPersonalizadoComponent],
   templateUrl: './lista-historial.html',
   styleUrls: ['./lista-historial.scss']
 })
@@ -21,44 +18,101 @@ export class ListaHistorialComponent implements OnInit {
   private historialServicio = inject(HistorialService);
   private constructorFormulario = inject(FormBuilder);
 
-  respuestaPaginada$: Observable<RespuestaPaginada<HistorialTitularidadResponse>> | undefined;
+  listaHistorial: HistorialTitularidadResponse[] = [];
+  listaHistorialGlobal: HistorialTitularidadResponse[] = [];
+  listaHistorialFiltrada: HistorialTitularidadResponse[] = [];
+
+  cargando = false;
+
   paginaActual = 0;
   tamanoPagina = 9;
-  
-  formularioBusqueda: FormGroup = this.constructorFormulario.group({
-    termino: ['']
+  totalPaginas = 1;
+
+  formularioFiltro: FormGroup = this.constructorFormulario.group({
+    termino: [''],
+    fecha: ['']
   });
 
   ngOnInit(): void {
     this.obtenerDatos();
-    
-    this.formularioBusqueda.get('termino')?.valueChanges.pipe(
-      debounceTime(500),
-      distinctUntilChanged()
-    ).subscribe(() => {
-      this.paginaActual = 0;
-      this.obtenerDatos();
-    });
   }
 
   obtenerDatos(): void {
-    const termino = this.formularioBusqueda.get('termino')?.value;
-    this.respuestaPaginada$ = this.historialServicio.obtenerListaHistorial(this.paginaActual, this.tamanoPagina, termino).pipe(
-      catchError(error => {
+    this.cargando = true;
+    this.historialServicio.obtenerListaHistorial(0, 10000, '').subscribe({
+      next: (data) => {
+        this.listaHistorialGlobal = data.contenido;
+        this.cargando = false;
+        this.aplicarFiltrosLocales();
+      },
+      error: (error) => {
         console.error(error);
-        return of({
-          contenido: [],
-          paginaActual: 0,
-          totalElementos: 0,
-          totalPaginas: 0,
-          ultimaPagina: true
-        });
-      })
-    );
+        this.cargando = false;
+        this.listaHistorialGlobal = [];
+        this.aplicarFiltrosLocales();
+      }
+    });
+  }
+
+  buscarHistorial(): void {
+    this.paginaActual = 0;
+    this.aplicarFiltrosLocales();
+  }
+
+  aplicarFiltrosLocales(): void {
+    const filtros = this.formularioFiltro.value;
+    let resultados = [...this.listaHistorialGlobal];
+
+    if (filtros.termino && filtros.termino.trim() !== '') {
+      const termino = filtros.termino.toLowerCase();
+      resultados = resultados.filter(h => 
+        (h.numeroUnidad && h.numeroUnidad.toLowerCase().includes(termino)) ||
+        (h.propietarioAnterior && h.propietarioAnterior.toLowerCase().includes(termino)) ||
+        (h.nuevoPropietario && h.nuevoPropietario.toLowerCase().includes(termino))
+      );
+    }
+
+    if (filtros.fecha) {
+      const fechaBuscada = typeof filtros.fecha === 'string' ? filtros.fecha.split('T')[0] : '';
+      resultados = resultados.filter(h => {
+        if (!h.fechaCambio) return false;
+        let fechaHistorial = '';
+        if (Array.isArray(h.fechaCambio)) {
+          const year = h.fechaCambio[0];
+          const month = h.fechaCambio[1].toString().padStart(2, '0');
+          const day = h.fechaCambio[2].toString().padStart(2, '0');
+          fechaHistorial = `${year}-${month}-${day}`;
+        } else if (typeof h.fechaCambio === 'string') {
+          fechaHistorial = h.fechaCambio.substring(0, 10);
+        }
+        return fechaHistorial === fechaBuscada;
+      });
+    }
+
+    this.listaHistorialFiltrada = resultados;
+    this.totalPaginas = Math.ceil(this.listaHistorialFiltrada.length / this.tamanoPagina) || 1;
+    if (this.paginaActual >= this.totalPaginas) {
+      this.paginaActual = 0;
+    }
+    this.actualizarPagina();
+  }
+
+  actualizarPagina(): void {
+    const inicio = this.paginaActual * this.tamanoPagina;
+    const fin = inicio + this.tamanoPagina;
+    this.listaHistorial = this.listaHistorialFiltrada.slice(inicio, fin);
+  }
+
+  limpiarFiltros(): void {
+    this.formularioFiltro.reset({
+      termino: '',
+      fecha: ''
+    });
+    this.buscarHistorial();
   }
 
   cambiarPagina(nuevaPagina: number): void {
     this.paginaActual = nuevaPagina;
-    this.obtenerDatos();
+    this.actualizarPagina();
   }
 }

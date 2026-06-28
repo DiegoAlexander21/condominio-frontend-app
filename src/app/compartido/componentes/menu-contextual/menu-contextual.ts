@@ -14,12 +14,20 @@ export class MenuContextualComponent {
   @Input() mostrarVerDetalle: boolean = false;
   @Input() mostrarEditar: boolean = true;
   @Input() mostrarActualizarEstado: boolean = false;
+  @Input() mostrarDistribuir: boolean = false;
+  @Input() mostrarRegistrarPago: boolean = false;
+  @Input() mostrarAprobar: boolean = false;
+  @Input() mostrarRechazar: boolean = false;
   @Input() mostrarEliminar: boolean = true;
   @Output() alEditar = new EventEmitter<number>();
   @Output() alEliminar = new EventEmitter<number>();
+  @Output() alDistribuir = new EventEmitter<number>();
   @Output() alAsignarOcupantes = new EventEmitter<number>();
   @Output() alVerDetalle = new EventEmitter<number>();
   @Output() alActualizarEstado = new EventEmitter<number>();
+  @Output() alRegistrarPago = new EventEmitter<number>();
+  @Output() alAprobar = new EventEmitter<number>();
+  @Output() alRechazar = new EventEmitter<number>();
 
   menuAbierto = false;
   private referenciaElemento = inject(ElementRef);
@@ -38,6 +46,11 @@ export class MenuContextualComponent {
     this.menuAbierto = false;
   }
 
+  distribuir(): void {
+    this.alDistribuir.emit(this.identificador);
+    this.menuAbierto = false;
+  }
+
   asignarOcupantes(): void {
     this.alAsignarOcupantes.emit(this.identificador);
     this.menuAbierto = false;
@@ -50,6 +63,21 @@ export class MenuContextualComponent {
 
   actualizarEstado(): void {
     this.alActualizarEstado.emit(this.identificador);
+    this.menuAbierto = false;
+  }
+
+  registrarPago(): void {
+    this.alRegistrarPago.emit(this.identificador);
+    this.menuAbierto = false;
+  }
+
+  aprobar(): void {
+    this.alAprobar.emit(this.identificador);
+    this.menuAbierto = false;
+  }
+
+  rechazar(): void {
+    this.alRechazar.emit(this.identificador);
     this.menuAbierto = false;
   }
 

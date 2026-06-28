@@ -1,0 +1,51 @@
+.contenedor-principal {
+  padding: 1.5rem;
+}
+
+.encabezado-acciones {
+  margin-bottom: 2rem;
+
+  h2 {
+    color: var(--primario);
+    font-size: 1.8rem;
+    margin: 0;
+  }
+}
+
+.tarjeta {
+  background-color: var(--blanco);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+}
+
+.alerta {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.alerta-error {
+  background-color: rgba(222, 75, 75, 0.1);
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.alerta-info {
+  background-color: rgba(49, 56, 82, 0.1);
+  color: var(--primario);
+  border: 1px solid var(--secundario);
+}
+
+.input-solo-lectura {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.texto-error {
+  color: var(--error);
+}

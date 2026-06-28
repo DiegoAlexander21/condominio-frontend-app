@@ -1,0 +1,167 @@
+<div class="contenedor-principal">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Gestión de Gastos</h2>
+    <div class="acciones-cabecera">
+      <a routerLink="/finanzas/gastos/nuevo" class="boton-primario">Nuevo Gasto</a>
+    </div>
+  </div>
+
+  <form [formGroup]="formularioFiltro" class="panel-filtros" (ngSubmit)="buscarGastos()">
+    <div class="grupo-filtro">
+      <label>Buscar Descripción</label>
+      <app-input-busqueda 
+        formControlName="termino" 
+        placeholder="Ej: Mantenimiento, Luz...">
+      </app-input-busqueda>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Tipo de Gasto</label>
+      <app-select-personalizado 
+        formControlName="tipo"
+        [opciones]="opcionesTipo"
+        placeholder="Cualquier tipo">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Estado de Distribución</label>
+      <app-select-personalizado 
+        formControlName="estado"
+        [opciones]="opcionesEstado"
+        placeholder="Cualquier estado">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="error" class="alerta alerta-error">{{ error }}</div>
+  <div *ngIf="exito" class="alerta alerta-exito">{{ exito }}</div>
+
+  <div *ngIf="cargando" class="texto-cargando">Cargando gastos...</div>
+
+  <div *ngIf="!cargando && gastos.length === 0" class="estado-vacio">
+    <p class="texto-cargando">No hay gastos registrados que coincidan con los filtros.</p>
+  </div>
+
+  <div class="grilla-tarjetas" *ngIf="!cargando && gastos.length > 0">
+    <div class="tarjeta-minimalista" *ngFor="let gasto of gastos">
+      <div class="encabezado-minimalista">
+        <h3 class="titulo-principal">{{ gasto.descripcion }}</h3>
+        <app-menu-contextual
+          [identificador]="gasto.id"
+          [mostrarEditar]="true"
+          [mostrarEliminar]="true"
+          [mostrarDistribuir]="!gasto.distribuido"
+          [mostrarVerDetalle]="true"
+          (alEditar)="editarGasto($event)"
+          (alEliminar)="eliminarGasto($event)"
+          (alDistribuir)="distribuirGasto($event)"
+          (alVerDetalle)="abrirModalDetalle($event)">
+        </app-menu-contextual>
+      </div>
+
+      <div class="cuerpo-minimalista">
+        <div class="fila-minimalista">
+          <span class="material-symbols-outlined icono-minimalista">info</span>
+          <span>Tipo: {{ gasto.tipoGasto | titlecase }}</span>
+        </div>
+        <div class="fila-minimalista">
+          <span class="material-symbols-outlined icono-minimalista">payments</span>
+          <span>Monto: S/ {{ gasto.montoTotal | number:'1.2-2' }}</span>
+        </div>
+        <div class="fila-minimalista">
+          <span class="material-symbols-outlined icono-minimalista">task_alt</span>
+          <span>Estado: {{ gasto.distribuido ? 'Distribuido' : 'Pendiente' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-paginacion 
+    *ngIf="totalPaginas > 1"
+    [paginaActual]="paginaActual"
+    [totalPaginas]="totalPaginas"
+    (cambioPagina)="cambiarPagina($event)">
+  </app-paginacion>
+  
+  <div class="fondo-modal" *ngIf="mostrarModal && gastoSeleccionado" (click)="cerrarModalFondo($event)">
+    <div class="tarjeta-modal">
+      <div class="encabezado-modal">
+        <h3>Detalles del Gasto</h3>
+        <button class="boton-cerrar" (click)="cerrarModalDetalle()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="cuerpo-modal-detalle">
+        <p><strong>Descripción:</strong> {{ gastoSeleccionado.descripcion }}</p>
+        <p><strong>Monto Total:</strong> S/ {{ gastoSeleccionado.montoTotal | number:'1.2-2' }}</p>
+        <p><strong>Tipo de Gasto:</strong> {{ gastoSeleccionado.tipoGasto | titlecase }}</p>
+        <p><strong>Condominio:</strong> {{ gastoSeleccionado.condominioNombre }} {{ gastoSeleccionado.torre ? ('(Torre ' + gastoSeleccionado.torre + ')') : '' }}</p>
+        <p><strong>Método Distribución:</strong> {{ gastoSeleccionado.metodoDistribucion.replace('_', ' ') | titlecase }}</p>
+        
+        <div *ngIf="gastoSeleccionado.tipoGasto === 'EXTRAORDINARIO' && gastoSeleccionado.incidenciaId">
+           <p><strong>Incidencia Asociada:</strong> 
+             <span *ngIf="cargandoDetalleIncidencia" class="texto-cargando">Cargando...</span>
+             <span *ngIf="!cargandoDetalleIncidencia">{{ detalleIncidencia }}</span>
+           </p>
+        </div>
+
+        <div *ngIf="gastoSeleccionado.nombreUnidadCausante">
+           <p><strong>Unidad Responsable:</strong> {{ gastoSeleccionado.nombreUnidadCausante }}</p>
+        </div>
+
+        <p><strong>Fecha Límite:</strong> {{ gastoSeleccionado.fechaLimite || 'No establecida' }}</p>
+        <p><strong>Estado:</strong> {{ gastoSeleccionado.distribuido ? 'Distribuido' : 'Pendiente' }}</p>
+      </div>
+      <div class="pie-modal">
+        <button class="boton-primario" (click)="cerrarModalDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fondo-modal" *ngIf="modalDistribucionVisible" (click)="cerrarModalFondo($event)">
+    <div class="tarjeta-modal">
+      <div class="encabezado-modal">
+        <h3>Seleccionar Unidad</h3>
+        <button class="boton-cerrar" (click)="cerrarModalDistribucion()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="cuerpo-modal-distribucion">
+        <p class="texto-instruccion">Seleccione la unidad a la cual se le realizará el cobro directo de este gasto:</p>
+        
+        <div *ngIf="cargandoUnidades" class="texto-cargando">Cargando unidades...</div>
+        
+        <div class="grupo-control" *ngIf="!cargandoUnidades">
+          <label>Unidad Destino</label>
+          <select (change)="unidadSeleccionadaId = +$any($event.target).value" class="w-100">
+            <option [value]="null">Seleccione una unidad...</option>
+            <option *ngFor="let u of listaUnidades" [value]="u.id">{{ u.nombre }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="pie-modal">
+        <button class="boton-secundario" (click)="cerrarModalDistribucion()">Cancelar</button>
+        <button class="boton-primario" (click)="confirmarDistribucionDirecta()" [disabled]="!unidadSeleccionadaId || cargandoUnidades">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <app-modal-confirmacion
+    [visible]="modalConfirmacionVisible"
+    [titulo]="modalConfirmacionTitulo"
+    [mensaje]="modalConfirmacionMensaje"
+    (alConfirmar)="confirmarAccion()"
+    (alCancelar)="cancelarAccion()">
+  </app-modal-confirmacion>
+</div>

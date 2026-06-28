@@ -1,0 +1,52 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">Registrar Pago</h2>
+  <p class="texto-informativo">El pago pasará a estado PENDIENTE hasta que la administración lo apruebe.</p>
+  
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+    <div class="fila-controles fila-bloque">
+      <div class="grupo-control">
+        <label for="monto">Monto a Pagar (S/) *</label>
+        <input type="number" id="monto" formControlName="monto" step="0.01">
+        <app-mensaje-error [control]="formulario.get('monto')" nombreCampo="El monto"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label>Comprobante de Pago (Voucher) *</label>
+        
+        <div class="contenedor-upload" *ngIf="!imagenPrevia" (click)="fileInput.click()">
+          <input type="file" #fileInput (change)="alSeleccionarArchivo($event)" accept="image/*" class="input-archivo-oculto">
+          <div class="upload-placeholder">
+            <span class="material-symbols-outlined icono-upload">cloud_upload</span>
+            <p>Haz clic para adjuntar comprobante</p>
+            <small>Formatos soportados: JPG, PNG, WEBP</small>
+            <small class="texto-limites">Máximo 1 imagen • 5 MB</small>
+          </div>
+        </div>
+
+        <div class="grilla-previews" *ngIf="imagenPrevia">
+          <div class="contenedor-preview">
+            <img [src]="imagenPrevia" alt="Vista previa del comprobante" class="imagen-preview cursor-pointer" (click)="abrirImagen()">
+            <button type="button" class="boton-eliminar-foto" (click)="eliminarFoto()">
+              <span class="material-symbols-outlined icono-cerrar-preview">close</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control control-ancho-completo">
+        <label for="observacion">Observaciones (Opcional)</label>
+        <input type="text" id="observacion" formControlName="observacion" placeholder="Ej. Transferencia BCP N° 123456">
+      </div>
+    </div>
+
+    <div class="acciones-formulario acciones-centro">
+      <button type="button" class="boton-secundario" (click)="onCancelar()" [disabled]="guardando">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="guardando">
+        <i class="fas" [ngClass]="guardando ? 'fa-spinner fa-spin' : 'fa-save'"></i>
+        {{ guardando ? 'Enviando...' : 'Registrar Pago' }}
+      </button>
+    </div>
+  </form>
+</div>

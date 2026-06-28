@@ -1,0 +1,95 @@
+.texto-informativo {
+  margin-bottom: 2rem;
+  color: var(--terciario);
+}
+
+.control-ancho-completo {
+  flex: 1 1 100%;
+}
+
+.acciones-centro {
+  justify-content: center;
+}
+
+.fila-bloque {
+  display: block;
+}
+
+.contenedor-upload {
+  border: 2px dashed var(--secundario);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: transparent;
+
+  &:hover {
+    border-color: var(--primario);
+    background-color: rgba(49, 56, 82, 0.02);
+  }
+
+  .icono-upload {
+    font-size: 3rem;
+    color: var(--secundario);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: var(--primario);
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
+  }
+
+  small {
+    color: var(--secundario);
+  }
+}
+
+.contenedor-preview {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-top: 1rem;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .boton-eliminar-foto {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--error);
+    color: var(--blanco);
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+  }
+}
+
+.input-archivo-oculto {
+  display: none;
+}
+
+.texto-limites {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--terciario);
+}
+
+.grilla-previews {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+}

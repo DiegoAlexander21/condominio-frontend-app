@@ -79,7 +79,7 @@ export class PerfilComponent implements OnInit {
     this.unidadServicio.obtenerListaUnidades(0, 100).subscribe({
       next: (res: { contenido: UnidadResponse[] }) => {
         this.listaUnidades = res.contenido
-          .filter(u => u.condominioId === condominioId && (u.estado == null || !u.estado.startsWith("Ocupado")))
+          .filter(u => u.condominioId === condominioId)
           .map(u => ({
             ...u,
             nombreMostrar: `Torre ${u.torre} - Depto. ${u.numeroUnidad}`

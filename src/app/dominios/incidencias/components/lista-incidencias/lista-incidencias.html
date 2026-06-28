@@ -1,33 +1,52 @@
 <div class="contenedor-incidencias">
   <div class="cabecera-lista">
-    <h1 class="titulo-principal">Incidencias y Daños</h1>
-    <div class="acciones">
-      <div class="contenedor-busqueda">
-        <app-select-personalizado
-          [(ngModel)]="tipoFiltro"
-          (ngModelChange)="alCambiarFiltro()"
-          [opciones]="opcionesTipo"
-          placeholder="Todos los Tipos"
-          icono="category">
-        </app-select-personalizado>
-      </div>
-      <div class="contenedor-busqueda">
-        <app-select-personalizado
-          [(ngModel)]="estadoFiltro"
-          (ngModelChange)="alCambiarFiltro()"
-          [opciones]="opcionesEstado"
-          placeholder="Todos los Estados"
-          icono="filter_alt">
-        </app-select-personalizado>
-      </div>
+    <h2 class="titulo-principal">Incidencias y Daños</h2>
+    <div class="acciones-cabecera">
       <a routerLink="/incidencias/nuevo" class="boton-primario">Reportar Incidencia</a>
     </div>
   </div>
 
+  <form [formGroup]="formularioFiltro" class="panel-filtros" (ngSubmit)="buscarIncidencias()">
+    <div class="grupo-filtro">
+      <label>Buscar Descripción o Lugar</label>
+      <app-input-busqueda 
+        formControlName="termino" 
+        placeholder="Ej: Fuga, pasillo...">
+      </app-input-busqueda>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Estado</label>
+      <app-select-personalizado 
+        formControlName="estado"
+        [opciones]="opcionesEstado"
+        placeholder="Todos los estados">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Fecha de Reporte</label>
+      <app-calendario-personalizado 
+        formControlName="fecha"
+        placeholder="Cualquier fecha">
+      </app-calendario-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
   <p *ngIf="cargando" class="texto-cargando">Cargando incidencias...</p>
 
   <div *ngIf="!cargando && listaIncidencias.length === 0" class="mensaje-vacio">
-    No se encontraron incidencias.
+    No se encontraron incidencias que coincidan con los filtros.
   </div>
 
   <div class="grilla-tarjetas" *ngIf="!cargando && listaIncidencias.length > 0">
@@ -144,7 +163,7 @@
         </div>
         <div class="contenedor-busqueda selector-estado-contenedor" *ngIf="esDanioProvocado()">
           <p class="texto-instruccion-estado" style="margin-top: 15px;">Responsable del daño:</p>
-          <input type="text" [(ngModel)]="responsableModal" class="filtro-estado selector-estado-dropdown" placeholder="Nombre de quien causó el daño" />
+          <input type="text" [(ngModel)]="responsableModal" [ngModelOptions]="{standalone: true}" class="filtro-estado selector-estado-dropdown" placeholder="Nombre de quien causó el daño" />
         </div>
         <div class="acciones-modal-estado">
           <button class="boton-secundario boton-modal-estado" (click)="cerrarModalEstado()">Cancelar</button>
