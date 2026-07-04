@@ -1,0 +1,18 @@
+<div class="contenedor-dashboard">
+  <div class="cabecera-dashboard">
+    <h2 class="titulo-principal">Dashboard y Reportes</h2>
+    <p class="subtitulo">Visión general del estado del condominio</p>
+  </div>
+
+  <div *ngIf="cargando" class="texto-cargando">
+    Cargando estadísticas...
+  </div>
+
+  <div *ngIf="!cargando" class="grilla-dashboard">
+    <app-grafico-incidencias class="tarjeta-dashboard" [datos]="estadisticasIncidencias"></app-grafico-incidencias>
+    
+    <app-grafico-gastos class="tarjeta-dashboard span-2" [datos]="estadisticasGastos"></app-grafico-gastos>
+
+    <app-lista-morosas class="tarjeta-dashboard span-3" [unidades]="unidadesMorosas"></app-lista-morosas>
+  </div>
+</div>

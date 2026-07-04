@@ -1,0 +1,27 @@
+<div class="contenedor-lista">
+  <h3 class="subtitulo-lista">Unidades Morosas</h3>
+  
+  <div class="tabla-morosos" *ngIf="unidades.length > 0; else sinMorosos">
+    <div class="fila-cabecera">
+      <div class="columna">Unidad</div>
+      <div class="columna">Periodo</div>
+      <div class="columna">Deuda</div>
+    </div>
+    
+    <div class="fila-dato" *ngFor="let unidad of unidades">
+      <div class="columna principal">
+        <span class="torre">{{ unidad.unidadNombre }}</span>
+      </div>
+      <div class="columna atraso">
+        <span class="badge">{{ unidad.periodo }}</span>
+      </div>
+      <div class="columna monto">
+        ${{ unidad.saldo | number:'1.2-2' }}
+      </div>
+    </div>
+  </div>
+
+  <ng-template #sinMorosos>
+    <div class="mensaje-vacio">No hay unidades morosas registradas.</div>
+  </ng-template>
+</div>

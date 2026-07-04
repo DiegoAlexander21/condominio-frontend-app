@@ -11,6 +11,12 @@
           <span class="texto">Condominios</span>
         </a>
       </li>
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">dashboard</span>
+          <span class="texto">Dashboard</span>
+        </a>
+      </li>
       <li *ngIf="esAdmin">
         <a routerLink="/unidades" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">home</span>

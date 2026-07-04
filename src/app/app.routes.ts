@@ -23,6 +23,12 @@ export const routes: Routes = [
         loadComponent: () => import('./dominios/condominio/components/lista-condominios/lista-condominios.component').then(m => m.ListaCondominiosComponent)
       },
       {
+        path: 'dashboard',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'PROPIETARIO', 'RESIDENTE'] },
+        loadChildren: () => import('./dominios/dashboard/dashboard.routes').then(m => m.RUTAS_DASHBOARD)
+      },
+      {
         path: 'condominios/nuevo',
         canActivate: [rolGuard],
         data: { roles: ['ADMINISTRADOR'] },

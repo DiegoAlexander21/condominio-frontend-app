@@ -1,0 +1,105 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.contenedor-lista {
+  background-color: var(--blanco);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  .subtitulo-lista {
+    color: var(--primario);
+    font-family: var(--fuente-principal);
+    font-size: 1.25rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+  }
+
+  .tabla-morosos {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .fila-cabecera {
+      display: flex;
+      padding: 0.5rem 0;
+      border-bottom: 2px solid #e0e0e0;
+      color: var(--secundario);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+
+      .columna {
+        flex: 1;
+        &:first-child { flex: 2; }
+        &:last-child { text-align: center; }
+      }
+    }
+
+    .fila-dato {
+      display: flex;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      align-items: center;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .columna {
+        flex: 1;
+        font-size: 0.95rem;
+
+        &.principal {
+          flex: 2;
+          display: flex;
+          flex-direction: column;
+
+          .torre {
+            font-weight: 600;
+            color: var(--primario);
+          }
+          .propietario {
+            font-size: 0.8rem;
+            color: var(--secundario);
+          }
+        }
+
+        &.monto {
+          color: var(--error);
+          font-weight: bold;
+        }
+
+        &.atraso {
+          text-align: center;
+          
+          .badge {
+            background-color: rgba(222, 75, 75, 0.1);
+            color: var(--error);
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  .mensaje-vacio {
+    color: var(--secundario);
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+}
