@@ -40,8 +40,9 @@
 
       .columna {
         flex: 1;
-        &:first-child { flex: 2; }
-        &:last-child { text-align: center; }
+        &.principal { flex: 2; }
+        &.atraso { text-align: center; }
+        &.monto { text-align: center; }
       }
     }
 
@@ -77,6 +78,7 @@
         &.monto {
           color: var(--error);
           font-weight: bold;
+          text-align: center;
         }
 
         &.atraso {

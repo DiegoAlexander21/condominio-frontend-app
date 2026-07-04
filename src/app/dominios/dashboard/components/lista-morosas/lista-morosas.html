@@ -3,9 +3,9 @@
   
   <div class="tabla-morosos" *ngIf="unidades.length > 0; else sinMorosos">
     <div class="fila-cabecera">
-      <div class="columna">Unidad</div>
-      <div class="columna">Periodo</div>
-      <div class="columna">Deuda</div>
+      <div class="columna principal">UNIDAD</div>
+      <div class="columna atraso">PERIODO</div>
+      <div class="columna monto">DEUDA</div>
     </div>
     
     <div class="fila-dato" *ngFor="let unidad of unidades">
@@ -16,7 +16,7 @@
         <span class="badge">{{ unidad.periodo }}</span>
       </div>
       <div class="columna monto">
-        ${{ unidad.saldo | number:'1.2-2' }}
+        S/ {{ unidad.saldo | number:'1.2-2' }}
       </div>
     </div>
   </div>

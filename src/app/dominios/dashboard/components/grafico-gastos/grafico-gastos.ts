@@ -29,7 +29,7 @@ export class GraficoGastosComponent implements OnChanges {
         beginAtZero: true,
         ticks: {
           callback: function(value) {
-            return '$' + value;
+            return 'S/ ' + value;
           }
         }
       }
