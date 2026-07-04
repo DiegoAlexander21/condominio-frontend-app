@@ -84,4 +84,9 @@
       }
     }
   }
+
+  .texto-tachado {
+    text-decoration: line-through;
+    color: var(--secundario);
+  }
 }
