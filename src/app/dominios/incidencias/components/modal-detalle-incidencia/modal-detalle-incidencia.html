@@ -1,0 +1,59 @@
+<div class="modal-overlay" (click)="cerrarModalFondo($event)">
+  <div class="modal-contenido">
+    <div class="modal-cabecera">
+      <h3>Detalles de la Incidencia</h3>
+      <button class="boton-cerrar-modal" (click)="cerrar.emit()">
+        <span class="material-symbols-outlined icono-cerrar">close</span>
+      </button>
+    </div>
+    <div class="modal-cuerpo" *ngIf="incidencia">
+      <h4 class="titulo-area">
+        <span>{{incidencia.lugarAfectado}}</span>
+      </h4>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="etiqueta">Gravedad</span>
+          <span class="valor">{{ incidencia.gravedadFormateada }}</span>
+        </div>
+        <div class="info-item">
+          <span class="etiqueta">Causa Probable</span>
+          <span class="valor">{{ incidencia.causaFormateada }}</span>
+        </div>
+        <div class="info-item">
+          <span class="etiqueta">Fecha de Reporte</span>
+          <span class="valor">{{ incidencia.fechaReporte | date:'dd/MM/yyyy, HH:mm' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="etiqueta">Estado Actual</span>
+          <span class="valor">{{ incidencia.estadoFormateado }}</span>
+        </div>
+        <div class="info-item" *ngIf="incidencia.responsableAtencion && incidencia.responsableAtencion !== 'Sin asignar'">
+          <span class="etiqueta">Responsable del Daño</span>
+          <span class="valor">{{ incidencia.responsableAtencion }}</span>
+        </div>
+      </div>
+
+      <div class="seccion-normas">
+        <h5 class="subtitulo">Descripción Detallada</h5>
+        <div class="contenedor-texto">
+          <p>{{ incidencia.descripcion }}</p>
+        </div>
+      </div>
+
+      <div class="seccion-normas margen-superior" *ngIf="evidenciasSeleccionadas.length > 0">
+        <h5 class="subtitulo">Evidencia Fotográfica</h5>
+        <div class="grilla-previews">
+          <div class="contenedor-imagen" *ngFor="let evUrl of evidenciasSeleccionadas">
+            <img [src]="evUrl" alt="Evidencia de la incidencia" class="imagen-evidencia cursor-pointer" (click)="abrirImagen(evUrl)">
+          </div>
+        </div>
+      </div>
+
+      <div class="seccion-normas margen-superior" *ngIf="cargandoEvidencias">
+        <p class="texto-cargando">Cargando evidencias fotográficas...</p>
+      </div>
+
+    </div>
+  </div>
+</div>

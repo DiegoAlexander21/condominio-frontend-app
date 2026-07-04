@@ -46,11 +46,11 @@ export class IncidenciasService {
     return this.httpClient.post<IncidenciaResponse>(`${this.urlBase}/unidad`, formulario);
   }
 
-  actualizarEstado(id: number, formulario: ActualizacionIncidenciaForm): Observable<any> {
-    return this.httpClient.put(`${this.urlBase}/${id}/estado`, formulario);
+  actualizarEstado(id: number, formulario: ActualizacionIncidenciaForm): Observable<IncidenciaResponse> {
+    return this.httpClient.put<IncidenciaResponse>(`${this.urlBase}/${id}/estado`, formulario);
   }
 
-  subirImagenCloudinary(archivo: File): Observable<any> {
+  subirImagenCloudinary(archivo: File): Observable<{secure_url: string}> {
     const cloudName = 'dxciesoqh';
     const uploadPreset = 'condominio_preset';
     const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
@@ -59,6 +59,6 @@ export class IncidenciasService {
     formData.append('file', archivo);
     formData.append('upload_preset', uploadPreset);
 
-    return this.httpClient.post(url, formData);
+    return this.httpClient.post<{secure_url: string}>(url, formData);
   }
 }

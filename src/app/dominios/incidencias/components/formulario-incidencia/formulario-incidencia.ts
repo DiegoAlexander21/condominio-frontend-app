@@ -17,11 +17,12 @@ import { RespuestaPaginada } from '../../../../compartido/modelos/respuesta-pagi
 import { HttpErrorResponse } from '@angular/common/http';
 import { forkJoin, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
 
 @Component({
   selector: 'app-formulario-incidencia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, MensajeErrorComponent],
   templateUrl: './formulario-incidencia.html',
   styleUrl: './formulario-incidencia.scss'
 })
@@ -127,8 +128,9 @@ export class FormularioIncidencia implements OnInit {
     unidadCtrl?.updateValueAndValidity();
   }
 
-  alSeleccionarArchivo(evento: any): void {
-    const archivos: FileList = evento.target.files;
+  alSeleccionarArchivo(evento: Event): void {
+    const input = evento.target as HTMLInputElement;
+    const archivos: FileList | null = input.files;
     if (!archivos || archivos.length === 0) return;
 
     for (let i = 0; i < archivos.length; i++) {
@@ -152,7 +154,7 @@ export class FormularioIncidencia implements OnInit {
       lector.readAsDataURL(archivo);
     }
     
-    evento.target.value = '';
+    input.value = '';
   }
 
   eliminarFoto(index: number): void {
@@ -213,8 +215,8 @@ export class FormularioIncidencia implements OnInit {
     const peticionCloudinary$: Observable<string[]> = this.archivosSeleccionados.length > 0
       ? forkJoin(this.archivosSeleccionados.map(archivo => this.incidenciasService.subirImagenCloudinary(archivo)))
           .pipe(
-            switchMap((respuestasCloudinary: any[]) => {
-              const urls = respuestasCloudinary.map(res => res.secure_url);
+            switchMap((respuestasCloudinary: any) => {
+              const urls = (respuestasCloudinary as {secure_url: string}[]).map(res => res.secure_url);
               return of(urls);
             })
           )
@@ -248,7 +250,7 @@ export class FormularioIncidencia implements OnInit {
           }
         });
       },
-      error: (err: any) => {
+      error: (err: unknown) => {
         this.toastService.mostrarError('Error al subir las imágenes a Cloudinary');
         this.enviando = false;
       }
