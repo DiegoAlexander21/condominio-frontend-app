@@ -9,5 +9,5 @@ import { ToastComponent } from './compartido/componentes/toast/toast';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('frontend-app');
+  protected readonly titulo = signal('Gestión de Condominios');
 }
