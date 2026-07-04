@@ -1,0 +1,112 @@
+<form [formGroup]="filtroPagos" class="panel-filtros" (ngSubmit)="aplicarFiltrosPagos()">
+  <div class="grupo-filtro">
+    <label>Estado del Pago</label>
+    <app-select-personalizado 
+      formControlName="estado"
+      [opciones]="opcionesEstadoPago"
+      propId="valor"
+      propNombre="etiqueta"
+      placeholder="Todos">
+    </app-select-personalizado>
+  </div>
+
+  <div class="grupo-filtro">
+    <label>Periodo</label>
+    <app-calendario-personalizado 
+      formControlName="periodo"
+      placeholder="Cualquier periodo">
+    </app-calendario-personalizado>
+  </div>
+
+  <div class="grupo-filtro-boton">
+    <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltrosPagos()" title="Limpiar Filtros">
+      <span class="material-symbols-outlined">filter_alt_off</span>
+    </button>
+    <button type="submit" class="boton-primario boton-buscar">
+      <span class="material-symbols-outlined">search</span> Buscar
+    </button>
+  </div>
+</form>
+
+<div class="grilla-tarjetas" *ngIf="pagosPaginados.length > 0; else sinResultadosPagos">
+  <div class="tarjeta-minimalista" *ngFor="let pago of pagosPaginados">
+    <div class="encabezado-minimalista">
+      <h3 class="titulo-principal">Pago S/ {{ pago.monto | number:'1.2-2' }}</h3>
+      <app-menu-contextual 
+        [identificador]="pago.id" 
+        [mostrarEditar]="false"
+        [mostrarEliminar]="false"
+        [mostrarVerDetalle]="pago.evidencias && pago.evidencias.length > 0"
+        (alVerDetalle)="verRecibo(pago)">
+      </app-menu-contextual>
+    </div>
+    
+    <div class="cuerpo-minimalista">
+      <div class="fila-minimalista">
+        <span class="material-symbols-outlined icono-minimalista">calendar_today</span>
+        <span>Fecha: {{ pago.fechaPago | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="fila-minimalista" *ngIf="pago.observacion">
+        <span class="material-symbols-outlined icono-minimalista">notes</span>
+        <span>Nota: {{ pago.observacion }}</span>
+      </div>
+      <div class="fila-minimalista">
+        <ng-container *ngIf="pago.estado === 'APROBADO'">
+          <span class="material-symbols-outlined icono-minimalista estado-exito">check_circle</span>
+          <span class="estado-exito">Estado: Aprobado</span>
+        </ng-container>
+        <ng-container *ngIf="pago.estado === 'RECHAZADO'">
+          <span class="material-symbols-outlined icono-minimalista estado-error">cancel</span>
+          <span class="estado-error">Estado: Rechazado</span>
+        </ng-container>
+        <ng-container *ngIf="pago.estado === 'PENDIENTE'">
+          <span class="material-symbols-outlined icono-minimalista estado-pendiente">pending</span>
+          <span class="estado-pendiente">Estado: Pendiente</span>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-paginacion 
+  *ngIf="totalPaginasPagos > 1"
+  [paginaActual]="paginaActualPagos" 
+  [totalPaginas]="totalPaginasPagos" 
+  (cambioPagina)="cambiarPaginaPagos($event)">
+</app-paginacion>
+
+<ng-template #sinResultadosPagos>
+  <div class="estado-vacio">
+    <p class="texto-cargando">No se encontraron pagos con los filtros aplicados.</p>
+  </div>
+</ng-template>
+
+<div class="modal-overlay" *ngIf="mostrarModalRecibo && pagoSeleccionado">
+  <div class="modal-contenido modal-evidencia">
+    <div class="modal-cabecera">
+      <h3>Evidencia del Pago</h3>
+      <button class="boton-cerrar-modal" (click)="cerrarModalRecibo()">
+        <span class="material-symbols-outlined icono-cerrar">close</span>
+      </button>
+    </div>
+    <div class="modal-cuerpo">
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="etiqueta">Monto Pagado</span>
+          <span class="valor">S/ {{ pagoSeleccionado.monto | number:'1.2-2' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="etiqueta">Fecha</span>
+          <span class="valor">{{ pagoSeleccionado.fechaPago | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+      
+      <div class="seccion-normas espaciado-superior" *ngIf="pagoSeleccionado.evidencias && pagoSeleccionado.evidencias.length > 0">
+        <h5 class="subtitulo">Comprobante (Voucher)</h5>
+        <div class="contenedor-imagen-modal">
+          <img [src]="pagoSeleccionado.evidencias[0].urlArchivo" alt="Comprobante de pago" class="imagen-evidencia">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

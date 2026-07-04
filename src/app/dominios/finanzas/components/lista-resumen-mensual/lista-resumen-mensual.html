@@ -1,0 +1,145 @@
+<form [formGroup]="filtroEstados" class="panel-filtros" (ngSubmit)="aplicarFiltrosEstados()">
+  <div class="grupo-filtro">
+    <label>Estado</label>
+    <app-select-personalizado 
+      formControlName="estado"
+      [opciones]="opcionesEstadoCuenta"
+      propId="valor"
+      propNombre="etiqueta"
+      placeholder="Todos">
+    </app-select-personalizado>
+  </div>
+
+  <div class="grupo-filtro">
+    <label>Periodo</label>
+    <app-calendario-personalizado 
+      formControlName="periodo"
+      placeholder="Cualquier periodo">
+    </app-calendario-personalizado>
+  </div>
+
+  <div class="grupo-filtro-boton">
+    <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltrosEstados()" title="Limpiar Filtros">
+      <span class="material-symbols-outlined">filter_alt_off</span>
+    </button>
+    <button type="submit" class="boton-primario boton-buscar">
+      <span class="material-symbols-outlined">search</span> Buscar
+    </button>
+  </div>
+</form>
+
+<div class="grilla-tarjetas" *ngIf="estadosPaginados.length > 0; else sinResultadosEstados">
+  <div class="tarjeta-minimalista" *ngFor="let estado of estadosPaginados">
+    <div class="encabezado-minimalista">
+      <h3 class="titulo-principal">Periodo: {{ formatearPeriodo(estado.periodo) }}</h3>
+      <app-menu-contextual 
+        [identificador]="estado.id" 
+        [mostrarEditar]="false"
+        [mostrarEliminar]="false"
+        [mostrarVerDetalle]="true"
+        [mostrarRegistrarPago]="estado.saldo > 0"
+        (alVerDetalle)="abrirModalDetalleEstado(estado)"
+        (alRegistrarPago)="abrirModalPago($event)">
+      </app-menu-contextual>
+    </div>
+
+    <div class="cuerpo-minimalista">
+      <div class="fila-minimalista saldo-deudor fila-sin-borde">
+        <span class="material-symbols-outlined icono-minimalista">account_balance_wallet</span>
+        <span>Total a Pagar: <strong>S/ {{ estado.saldo | number:'1.2-2' }}</strong></span>
+      </div>
+      <div class="fila-minimalista" *ngIf="estado.fechaVencimiento">
+        <span class="material-symbols-outlined icono-minimalista">event</span>
+        <span>Vence: {{ estado.fechaVencimiento | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="fila-minimalista">
+        <ng-container *ngIf="estado.saldo > 0; else alDia">
+          <span class="material-symbols-outlined icono-minimalista estado-error">warning</span>
+          <span class="estado-error">Estado: Moroso</span>
+        </ng-container>
+        <ng-template #alDia>
+          <span class="material-symbols-outlined icono-minimalista estado-exito">check_circle</span>
+          <span class="estado-exito">Estado: Al Día</span>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-paginacion 
+  *ngIf="totalPaginasEstados > 1"
+  [paginaActual]="paginaActualEstados" 
+  [totalPaginas]="totalPaginasEstados" 
+  (cambioPagina)="cambiarPaginaEstados($event)">
+</app-paginacion>
+
+<ng-template #sinResultadosEstados>
+  <div class="estado-vacio">
+    <p class="texto-cargando">No se encontraron estados de cuenta con los filtros aplicados.</p>
+  </div>
+</ng-template>
+
+<div class="modal-overlay" *ngIf="mostrarModalPago && unidad">
+  <div class="modal-contenido">
+    <div class="modal-cabecera">
+      <h3>Registrar Pago</h3>
+      <button class="boton-cerrar-modal" (click)="cerrarModalPago()">
+        <span class="material-symbols-outlined icono-cerrar">close</span>
+      </button>
+    </div>
+    <div class="modal-cuerpo">
+      <app-formulario-pago 
+        [estadoCuentaId]="estadoCuentaSeleccionadoId!" 
+        [unidadId]="unidad.id"
+        [saldoPendiente]="saldoSeleccionado"
+        (pagoRegistrado)="onPagoRegistrado()"
+        (cancelar)="cerrarModalPago()">
+      </app-formulario-pago>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="mostrarModalDetalle && estadoDetalleSeleccionado">
+  <div class="modal-contenido">
+    <div class="modal-cabecera">
+      <h3>Detalles del Estado de Cuenta</h3>
+      <button class="boton-cerrar-modal" (click)="cerrarModalDetalle()">
+        <span class="material-symbols-outlined icono-cerrar">close</span>
+      </button>
+    </div>
+    <div class="modal-cuerpo">
+      <h4 class="titulo-area">
+        <span>Periodo: {{ formatearPeriodo(estadoDetalleSeleccionado.periodo) }}</span>
+      </h4>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="etiqueta">Cuotas de Mantenimiento</span>
+          <span class="valor">S/ {{ estadoDetalleSeleccionado.totalCuotas | number:'1.2-2' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="etiqueta">Gastos Extraordinarios</span>
+          <span class="valor">S/ {{ estadoDetalleSeleccionado.totalExtraordinarios | number:'1.2-2' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="etiqueta">Total Facturado</span>
+          <span class="valor">S/ {{ (estadoDetalleSeleccionado.totalCuotas + estadoDetalleSeleccionado.totalExtraordinarios) | number:'1.2-2' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="etiqueta">Monto Pagado</span>
+          <span class="valor">S/ {{ estadoDetalleSeleccionado.totalPagado | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="seccion-normas">
+        <h5 class="subtitulo">Balance Actual</h5>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="etiqueta">Saldo Restante</span>
+            <span class="valor" [class.estado-error]="estadoDetalleSeleccionado.saldo > 0">S/ {{ estadoDetalleSeleccionado.saldo | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

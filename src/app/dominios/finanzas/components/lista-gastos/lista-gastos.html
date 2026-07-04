@@ -94,68 +94,18 @@
     (cambioPagina)="cambiarPagina($event)">
   </app-paginacion>
   
-  <div class="fondo-modal" *ngIf="mostrarModal && gastoSeleccionado" (click)="cerrarModalFondo($event)">
-    <div class="tarjeta-modal">
-      <div class="encabezado-modal">
-        <h3>Detalles del Gasto</h3>
-        <button class="boton-cerrar" (click)="cerrarModalDetalle()">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-      <div class="cuerpo-modal-detalle">
-        <p><strong>Descripción:</strong> {{ gastoSeleccionado.descripcion }}</p>
-        <p><strong>Monto Total:</strong> S/ {{ gastoSeleccionado.montoTotal | number:'1.2-2' }}</p>
-        <p><strong>Tipo de Gasto:</strong> {{ gastoSeleccionado.tipoGasto | titlecase }}</p>
-        <p><strong>Condominio:</strong> {{ gastoSeleccionado.condominioNombre }} {{ gastoSeleccionado.torre ? ('(Torre ' + gastoSeleccionado.torre + ')') : '' }}</p>
-        <p><strong>Método Distribución:</strong> {{ gastoSeleccionado.metodoDistribucion.replace('_', ' ') | titlecase }}</p>
-        
-        <div *ngIf="gastoSeleccionado.tipoGasto === 'EXTRAORDINARIO' && gastoSeleccionado.incidenciaId">
-           <p><strong>Incidencia Asociada:</strong> 
-             <span *ngIf="cargandoDetalleIncidencia" class="texto-cargando">Cargando...</span>
-             <span *ngIf="!cargandoDetalleIncidencia">{{ detalleIncidencia }}</span>
-           </p>
-        </div>
+  <app-modal-detalle-gasto
+    [visible]="mostrarModalDetalleVisible"
+    [gasto]="gastoSeleccionado"
+    (cerrar)="cerrarModalDetalle()">
+  </app-modal-detalle-gasto>
 
-        <div *ngIf="gastoSeleccionado.nombreUnidadCausante">
-           <p><strong>Unidad Responsable:</strong> {{ gastoSeleccionado.nombreUnidadCausante }}</p>
-        </div>
-
-        <p><strong>Fecha Límite:</strong> {{ gastoSeleccionado.fechaLimite || 'No establecida' }}</p>
-        <p><strong>Estado:</strong> {{ gastoSeleccionado.distribuido ? 'Distribuido' : 'Pendiente' }}</p>
-      </div>
-      <div class="pie-modal">
-        <button class="boton-primario" (click)="cerrarModalDetalle()">Cerrar</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="fondo-modal" *ngIf="modalDistribucionVisible" (click)="cerrarModalFondo($event)">
-    <div class="tarjeta-modal">
-      <div class="encabezado-modal">
-        <h3>Seleccionar Unidad</h3>
-        <button class="boton-cerrar" (click)="cerrarModalDistribucion()">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-      <div class="cuerpo-modal-distribucion">
-        <p class="texto-instruccion">Seleccione la unidad a la cual se le realizará el cobro directo de este gasto:</p>
-        
-        <div *ngIf="cargandoUnidades" class="texto-cargando">Cargando unidades...</div>
-        
-        <div class="grupo-control" *ngIf="!cargandoUnidades">
-          <label>Unidad Destino</label>
-          <select (change)="unidadSeleccionadaId = +$any($event.target).value" class="w-100">
-            <option [value]="null">Seleccione una unidad...</option>
-            <option *ngFor="let u of listaUnidades" [value]="u.id">{{ u.nombre }}</option>
-          </select>
-        </div>
-      </div>
-      <div class="pie-modal">
-        <button class="boton-secundario" (click)="cerrarModalDistribucion()">Cancelar</button>
-        <button class="boton-primario" (click)="confirmarDistribucionDirecta()" [disabled]="!unidadSeleccionadaId || cargandoUnidades">Confirmar</button>
-      </div>
-    </div>
-  </div>
+  <app-modal-distribuir-gasto
+    [visible]="modalDistribucionVisible"
+    [gasto]="gastoParaDistribuir"
+    (confirmar)="confirmarDistribucionModal()"
+    (cancelar)="cerrarModalDistribucion()">
+  </app-modal-distribuir-gasto>
 
   <app-modal-confirmacion
     [visible]="modalConfirmacionVisible"

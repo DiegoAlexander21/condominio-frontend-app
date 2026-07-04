@@ -100,3 +100,17 @@ export interface AprobacionPagoForm {
   aprobar: boolean;
   observacionAdmin?: string;
 }
+
+export interface UnidadResumen {
+  id: number;
+  condominio?: { nombre: string };
+  torre?: string;
+  piso?: number;
+  numeroUnidad?: string;
+}
+
+export interface MiEstadoCuentaResponse {
+  unidad: UnidadResumen;
+  estadosCuenta: EstadoCuentaResponse[];
+  pagos: PagoResponse[];
+}
