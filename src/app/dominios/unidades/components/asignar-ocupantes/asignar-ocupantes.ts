@@ -6,6 +6,18 @@ import { UnidadService } from '../../services/unidad';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
 
+interface OcupantesFormValues {
+  nombrePropietario?: string;
+  dniPropietario?: string;
+  emailPropietario?: string;
+  telefonoPropietario?: string;
+  nombreResidente?: string;
+  dniResidente?: string;
+  emailResidente?: string;
+  parentesco?: string;
+  residenteActivo?: boolean;
+}
+
 
 
 @Component({
@@ -24,7 +36,7 @@ export class AsignarOcupantesComponent implements OnInit {
 
   formularioOcupantes: FormGroup;
   idUnidad: number | null = null;
-  estadoInicial: any;
+  estadoInicial: OcupantesFormValues | null = null;
 
   constructor() {
     this.formularioOcupantes = this.constructorFormulario.group({
@@ -55,7 +67,7 @@ export class AsignarOcupantesComponent implements OnInit {
     });
   }
 
-  private actualizarValidadoresCondicionales(valores: any): void {
+  private actualizarValidadoresCondicionales(valores: OcupantesFormValues): void {
     const nombreP = (valores.nombrePropietario || '').trim();
     const dniP = (valores.dniPropietario || '').trim();
     const emailP = (valores.emailPropietario || '').trim();
@@ -119,7 +131,6 @@ export class AsignarOcupantesComponent implements OnInit {
     this.formularioOcupantes.get('emailResidente')?.updateValueAndValidity({ emitEvent: false });
     this.formularioOcupantes.get('parentesco')?.updateValueAndValidity({ emitEvent: false });
 
-    // Forzar actualización del estado global del formulario
     this.formularioOcupantes.updateValueAndValidity({ emitEvent: false });
   }
 
