@@ -50,6 +50,7 @@ export class GestionPagosComponent implements OnInit {
   pagoSeleccionado: PagoResponse | null = null; 
 
   opcionesEstado = [
+    { id: '', nombre: 'Todos los estados' },
     { id: 'PENDIENTE', nombre: 'Pendientes' },
     { id: 'APROBADO', nombre: 'Aprobados' },
     { id: 'RECHAZADO', nombre: 'Rechazados' }
@@ -63,7 +64,7 @@ export class GestionPagosComponent implements OnInit {
     this.formularioFiltro = this.fb.group({
       termino: [''],
       periodo: [''],
-      estado: ['todos']
+      estado: ['']
     });
   }
 
@@ -113,7 +114,7 @@ export class GestionPagosComponent implements OnInit {
       });
     }
 
-    if (filtros.estado && filtros.estado !== 'todos') {
+    if (filtros.estado) {
       resultados = resultados.filter(p => p.estado === filtros.estado);
     }
 
@@ -140,7 +141,7 @@ export class GestionPagosComponent implements OnInit {
     this.formularioFiltro.reset({
       termino: '',
       periodo: '',
-      estado: 'todos'
+      estado: ''
     });
     this.buscarPagos();
   }
