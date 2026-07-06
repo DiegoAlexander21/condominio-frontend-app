@@ -28,7 +28,7 @@ export class FormularioUnidadComponent implements OnInit {
   idUnidad: number | null = null;
   condominios: CondominioResponse[] = [];
   condominioSeleccionado: CondominioResponse | null = null;
-  estadoInicial: any;
+  estadoInicial: Record<string, unknown> | null = null;
   nombreOriginal = '';
 
   constructor() {

@@ -1,0 +1,38 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">Programar Nueva Visita</h2>
+  
+  <form [formGroup]="formularioVisita" (ngSubmit)="preRegistrar()" class="formulario-flex">
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="nombreVisitante">Nombre del Visitante</label>
+        <input type="text" id="nombreVisitante" formControlName="nombreVisitante" placeholder="Ej. Carlos Mendoza" autocomplete="off">
+        <app-mensaje-error [control]="formularioVisita.get('nombreVisitante')" nombreCampo="El nombre"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label for="documentoVisitante">Documento de Identidad</label>
+        <input type="text" id="documentoVisitante" formControlName="documentoVisitante" placeholder="DNI, Pasaporte, etc." autocomplete="off">
+        <app-mensaje-error 
+          [control]="formularioVisita.get('documentoVisitante')" 
+          nombreCampo="El documento"
+          [mensajesPersonalizados]="{'pattern': 'Solo se permiten letras y números (sin espacios ni guiones).'}">
+        </app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="fechaVisitaProgramada">Fecha y Hora Programada</label>
+        <input type="datetime-local" id="fechaVisitaProgramada" formControlName="fechaVisitaProgramada">
+        <app-mensaje-error [control]="formularioVisita.get('fechaVisitaProgramada')" nombreCampo="La fecha"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="acciones-formulario">
+      <button type="button" class="boton-secundario" (click)="cancelar()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="formularioVisita.invalid || enviando">
+        {{ enviando ? 'Registrando...' : 'Registrar Visita' }}
+      </button>
+    </div>
+  </form>
+</div>

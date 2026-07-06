@@ -1,0 +1,71 @@
+.contenedor-principal {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contenedor-grilla {
+  padding: 0;
+}
+
+.tarjeta {
+  background-color: var(--blanco);
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  
+  .cabecera-tarjeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      margin: 0;
+      color: var(--primario);
+      font-size: 1.1rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-weight: 600;
+
+      &.pre-registrada {
+        background-color: rgba(75, 85, 120, 0.1);
+        color: var(--terciario);
+      }
+      &.ingreso {
+        background-color: rgba(40, 181, 61, 0.1);
+        color: var(--exito);
+      }
+      &.salida {
+        background-color: rgba(169, 176, 192, 0.2);
+        color: var(--secundario);
+      }
+      &.cancelada {
+        background-color: rgba(222, 75, 75, 0.1);
+        color: var(--error);
+      }
+    }
+  }
+
+  .cuerpo-tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--terciario);
+
+      strong {
+        color: var(--primario);
+      }
+    }
+  }
+}

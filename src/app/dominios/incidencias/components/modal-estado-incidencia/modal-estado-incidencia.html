@@ -1,0 +1,26 @@
+<div class="modal-overlay" (click)="cerrarModalFondo($event)">
+  <div class="modal-contenido modal-pequeno">
+    <div class="modal-cabecera">
+      <h3>Actualizar Estado</h3>
+      <button class="boton-cerrar-modal" (click)="cerrar.emit()">
+        <span class="material-symbols-outlined icono-cerrar">close</span>
+      </button>
+    </div>
+    <div class="modal-cuerpo">
+      <p class="texto-instruccion-estado">Seleccione el nuevo estado para esta incidencia:</p>
+      <div class="contenedor-busqueda selector-estado-contenedor">
+        <select #selectorEstadoModal class="filtro-estado selector-estado-dropdown">
+          <option *ngFor="let est of estados" [value]="est" [selected]="est === incidencia.estado">{{formatearEstado(est)}}</option>
+        </select>
+      </div>
+      <div class="contenedor-busqueda selector-estado-contenedor" *ngIf="esDanioProvocado">
+        <p class="texto-instruccion-estado margen-superior">Responsable del daño:</p>
+        <input type="text" [(ngModel)]="responsableModal" name="responsableModal" class="filtro-estado selector-estado-dropdown" placeholder="Nombre de quien causó el daño" />
+      </div>
+      <div class="acciones-modal-estado">
+        <button class="boton-secundario boton-modal-estado" (click)="cerrar.emit()">Cancelar</button>
+        <button class="boton-primario boton-modal-estado" (click)="confirmarCambioEstado(selectorEstadoModal.value)">Actualizar</button>
+      </div>
+    </div>
+  </div>
+</div>

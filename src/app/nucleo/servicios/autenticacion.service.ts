@@ -3,6 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Credenciales, RespuestaAutenticacion, RegistroUsuario } from '../modelos/credenciales.model';
 
+export interface TokenPayload {
+  exp?: number;
+  roles?: string[];
+  unidadId?: number;
+  [key: string]: unknown;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,8 +21,8 @@ export class AutenticacionService {
     return this.clienteHttp.post<RespuestaAutenticacion>(`${this.urlBase}/login`, credenciales);
   }
 
-  registrar(datosRegistro: RegistroUsuario): Observable<any> {
-    return this.clienteHttp.post(`${this.urlBase}/registro`, datosRegistro);
+  registrar(datosRegistro: RegistroUsuario): Observable<unknown> {
+    return this.clienteHttp.post<unknown>(`${this.urlBase}/registro`, datosRegistro);
   }
 
   guardarToken(token: string, recordarme: boolean): void {
@@ -65,7 +72,7 @@ export class AutenticacionService {
     return payload?.unidadId || null;
   }
 
-  private decodificarToken(token: string): any {
+  private decodificarToken(token: string): TokenPayload | null {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

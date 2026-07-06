@@ -1,0 +1,34 @@
+<div class="fondo-modal" *ngIf="visible && gasto" (click)="cerrarModalFondo($event)">
+  <div class="tarjeta-modal">
+    <div class="encabezado-modal">
+      <h3>Detalles del Gasto</h3>
+      <button class="boton-cerrar" (click)="cerrarModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="cuerpo-modal-detalle">
+      <p><strong>Descripción:</strong> {{ gasto.descripcion }}</p>
+      <p><strong>Monto Total:</strong> S/ {{ gasto.montoTotal | number:'1.2-2' }}</p>
+      <p><strong>Tipo de Gasto:</strong> {{ gasto.tipoGasto | titlecase }}</p>
+      <p><strong>Condominio:</strong> {{ gasto.condominioNombre }} {{ gasto.torre ? ('(Torre ' + gasto.torre + ')') : '' }}</p>
+      <p><strong>Método Distribución:</strong> {{ gasto.metodoDistribucion.replace('_', ' ') | titlecase }}</p>
+      
+      <div *ngIf="gasto.tipoGasto === 'EXTRAORDINARIO' && gasto.incidenciaId">
+         <p><strong>Incidencia Asociada:</strong> 
+           <span *ngIf="cargandoDetalleIncidencia" class="texto-cargando">Cargando...</span>
+           <span *ngIf="!cargandoDetalleIncidencia">{{ detalleIncidencia }}</span>
+         </p>
+      </div>
+
+      <div *ngIf="gasto.nombreUnidadCausante">
+         <p><strong>Unidad Responsable:</strong> {{ gasto.nombreUnidadCausante }}</p>
+      </div>
+
+      <p><strong>Fecha Límite:</strong> {{ gasto.fechaLimite || 'No establecida' }}</p>
+      <p><strong>Estado:</strong> {{ gasto.distribuido ? 'Distribuido' : 'Pendiente' }}</p>
+    </div>
+    <div class="pie-modal">
+      <button class="boton-primario" (click)="cerrarModal()">Cerrar</button>
+    </div>
+  </div>
+</div>

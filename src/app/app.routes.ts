@@ -23,6 +23,12 @@ export const routes: Routes = [
         loadComponent: () => import('./dominios/condominio/components/lista-condominios/lista-condominios.component').then(m => m.ListaCondominiosComponent)
       },
       {
+        path: 'dashboard',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'PROPIETARIO', 'RESIDENTE'] },
+        loadChildren: () => import('./dominios/dashboard/dashboard.routes').then(m => m.RUTAS_DASHBOARD)
+      },
+      {
         path: 'condominios/nuevo',
         canActivate: [rolGuard],
         data: { roles: ['ADMINISTRADOR'] },
@@ -87,6 +93,12 @@ export const routes: Routes = [
         canActivate: [rolGuard],
         data: { roles: ['ADMINISTRADOR', 'PROPIETARIO', 'RESIDENTE'] },
         loadChildren: () => import('./dominios/finanzas/finanzas.routes').then(m => m.finanzasRoutes)
+      },
+      {
+        path: 'visitas',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'RESIDENTE', 'PROPIETARIO', 'CONSERJERIA', 'CONSERJERIA_MANTENIMIENTO'] },
+        loadChildren: () => import('./dominios/visitas/visitas.routes').then(m => m.visitasRoutes)
       },
       {
         path: '',

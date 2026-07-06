@@ -7,6 +7,9 @@
       <ng-container *ngIf="mensajeActual.tipo === 'error'">
         <span class="material-symbols-outlined">error</span>
       </ng-container>
+      <ng-container *ngIf="mensajeActual.tipo === 'advertencia'">
+        <span class="material-symbols-outlined">warning</span>
+      </ng-container>
     </span>
     <span class="texto">{{ mensajeActual.texto }}</span>
   </div>

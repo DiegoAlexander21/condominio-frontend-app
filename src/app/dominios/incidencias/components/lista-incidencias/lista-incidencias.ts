@@ -13,6 +13,8 @@ import { SelectPersonalizadoComponent } from '../../../../compartido/componentes
 import { MenuContextualComponent } from '../../../../compartido/componentes/menu-contextual/menu-contextual';
 import { InputBusquedaComponent } from '../../../../compartido/componentes/input-busqueda/input-busqueda';
 import { CalendarioPersonalizadoComponent } from '../../../../compartido/componentes/calendario-personalizado/calendario-personalizado';
+import { ModalDetalleIncidenciaComponent } from '../modal-detalle-incidencia/modal-detalle-incidencia';
+import { ModalEstadoIncidenciaComponent } from '../modal-estado-incidencia/modal-estado-incidencia';
 
 @Component({
   selector: 'app-lista-incidencias',
@@ -26,7 +28,9 @@ import { CalendarioPersonalizadoComponent } from '../../../../compartido/compone
     SelectPersonalizadoComponent, 
     MenuContextualComponent, 
     InputBusquedaComponent, 
-    CalendarioPersonalizadoComponent
+    CalendarioPersonalizadoComponent,
+    ModalDetalleIncidenciaComponent,
+    ModalEstadoIncidenciaComponent
   ],
   templateUrl: './lista-incidencias.html',
   styleUrl: './lista-incidencias.scss'
@@ -46,7 +50,7 @@ export class ListaIncidencias implements OnInit {
   esAdministrador = false;
   estados = Object.values(EstadoIncidencia);
 
-  opcionesEstado: any[] = [
+  opcionesEstado: { id: string, nombre: string }[] = [
     { id: 'REGISTRADO', nombre: 'Registrado' },
     { id: 'EN_REVISION', nombre: 'En Revisión' },
     { id: 'EN_ATENCION', nombre: 'En Atención' },
@@ -56,8 +60,8 @@ export class ListaIncidencias implements OnInit {
   formularioFiltro: FormGroup;
 
   mostrarModalDetalle = false;
+  mostrarModalEstado = false;
   incidenciaSeleccionada: IncidenciaResponse | null = null;
-  evidenciasSeleccionadas: string[] = [];
 
   paginaActual = 0;
   tamanoPagina = 9;
@@ -174,49 +178,19 @@ export class ListaIncidencias implements OnInit {
     }
   }
 
-  cerrarModalFondo(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
-      this.cerrarModal();
-      this.cerrarModalEstado();
-    }
-  }
-
   verDetalles(id: number): void {
     this.incidenciaSeleccionada = this.listaIncidencias.find(i => i.id === id) || null;
-    this.evidenciasSeleccionadas = [];
-    if (this.incidenciaSeleccionada) {
-      this.incidenciasService.obtenerEvidencias(id).subscribe({
-        next: (evs: string[]) => {
-          this.evidenciasSeleccionadas = evs;
-        }
-      });
-    }
     this.mostrarModalDetalle = true;
   }
 
   cerrarModal(): void {
     this.mostrarModalDetalle = false;
     this.incidenciaSeleccionada = null;
-    this.evidenciasSeleccionadas = [];
-  }
-
-  abrirImagen(url: string): void {
-    window.open(url, '_blank');
-  }
-
-  mostrarModalEstado = false;
-  responsableModal = '';
-
-  esDanioProvocado(): boolean {
-    if (!this.incidenciaSeleccionada) return false;
-    return this.incidenciaSeleccionada.causa === 'MAL_USO' || this.incidenciaSeleccionada.causa === 'VANDALISMO';
   }
 
   abrirModalEstado(id: number): void {
     this.incidenciaSeleccionada = this.listaIncidencias.find(i => i.id === id) || null;
     if (this.incidenciaSeleccionada) {
-      const responsable = this.incidenciaSeleccionada.responsableAtencion;
-      this.responsableModal = (responsable && responsable !== 'Sin asignar') ? responsable : '';
       this.mostrarModalEstado = true;
     }
   }
@@ -224,26 +198,11 @@ export class ListaIncidencias implements OnInit {
   cerrarModalEstado(): void {
     this.mostrarModalEstado = false;
     this.incidenciaSeleccionada = null;
-    this.responsableModal = '';
   }
 
-  confirmarCambioEstado(nuevoEstado: string): void {
-    if (!this.esAdministrador || !this.incidenciaSeleccionada) return;
-    
-    this.incidenciasService.actualizarEstado(this.incidenciaSeleccionada.id, { 
-      incidenciaId: this.incidenciaSeleccionada.id,
-      estado: nuevoEstado,
-      responsableAtencion: this.responsableModal
-    }).subscribe({
-      next: (res: IncidenciaResponse) => {
-        this.toastService.mostrarExito('Estado actualizado correctamente');
-        this.cerrarModalEstado();
-        this.obtenerDatos();
-      },
-      error: (err: HttpErrorResponse) => {
-        this.toastService.mostrarError('Error al actualizar estado');
-      }
-    });
+  alActualizarEstado(): void {
+    this.cerrarModalEstado();
+    this.obtenerDatos();
   }
 
   formatearEstado(estado: string): string {

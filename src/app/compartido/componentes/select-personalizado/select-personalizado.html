@@ -6,7 +6,7 @@
   </div>
 
   <div class="opciones-lista" *ngIf="desplegableAbierto">
-    <div class="opcion" (click)="seleccionarOpcion('', $event)">
+    <div class="opcion" *ngIf="!tieneOpcionVaciaEnLista" (click)="seleccionarOpcion('', $event)">
       {{ placeholder }}
     </div>
     <div class="opcion" *ngFor="let opcion of opciones" (click)="seleccionarOpcion(opcion[propId], $event)">

@@ -6,14 +6,14 @@ import { CondominioService } from '../../../condominio/services/condominio.servi
 import { UnidadService } from '../../../unidades/services/unidad';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { UsuarioPerfilResponse } from '../../../../nucleo/modelos/usuario-perfil-response.interface';
-import { SelectPersonalizadoComponent } from '../../../../compartido/componentes/select-personalizado/select-personalizado';
+import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
 import { CondominioResponse } from '../../../condominio/modelos/condominio-response.interface';
 import { UnidadResponse } from '../../../unidades/modelos/unidad-response.interface';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SelectPersonalizadoComponent],
+  imports: [CommonModule, ReactiveFormsModule, MensajeErrorComponent],
   templateUrl: './perfil.html',
   styleUrls: ['./perfil.scss']
 })

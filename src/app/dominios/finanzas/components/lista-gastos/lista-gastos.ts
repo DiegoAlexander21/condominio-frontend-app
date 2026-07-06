@@ -1,10 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FinanzasService } from '../../services/finanzas.service';
 import { GastoResponse, DistribucionGastoForm } from '../../modelos/finanzas.model';
-import { UnidadService } from '../../../unidades/services/unidad';
-import { UnidadResponse } from '../../../unidades/modelos/unidad-response.interface';
-import { IncidenciasService } from '../../../incidencias/services/incidencias.service';
 import { Router, RouterModule } from '@angular/router';
 import { MenuContextualComponent } from '../../../../compartido/componentes/menu-contextual/menu-contextual';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
@@ -13,6 +10,8 @@ import { InputBusquedaComponent } from '../../../../compartido/componentes/input
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ModalConfirmacionComponent } from '../../../../compartido/componentes/modal-confirmacion/modal-confirmacion';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
+import { ModalDetalleGastoComponent } from '../modal-detalle-gasto/modal-detalle-gasto';
+import { ModalDistribuirGastoComponent } from '../modal-distribuir-gasto/modal-distribuir-gasto';
 
 @Component({
   selector: 'app-lista-gastos',
@@ -25,10 +24,12 @@ import { ToastService } from '../../../../compartido/componentes/toast/toast.ser
     PaginacionComponent, 
     SelectPersonalizadoComponent,
     InputBusquedaComponent,
-    ModalConfirmacionComponent
+    ModalConfirmacionComponent,
+    ModalDetalleGastoComponent,
+    ModalDistribuirGastoComponent
   ],
   templateUrl: './lista-gastos.html',
-  styleUrls: ['./lista-gastos.scss', './tarjeta-gastos.scss', './modal-gastos.scss']
+  styleUrls: ['./lista-gastos.scss', './tarjeta-gastos.scss']
 })
 export class ListaGastosComponent implements OnInit {
   gastos: GastoResponse[] = [];
@@ -42,7 +43,7 @@ export class ListaGastosComponent implements OnInit {
   paginaActual: number = 0;
   totalPaginas: number = 0;
   
-  mostrarModal: boolean = false;
+  mostrarModalDetalleVisible: boolean = false;
   gastoSeleccionado: GastoResponse | null = null;
 
   opcionesTipo = [
@@ -63,22 +64,13 @@ export class ListaGastosComponent implements OnInit {
   accionPendiente: { tipo: 'ELIMINAR' | 'DISTRIBUIR', id: number } | null = null;
 
   modalDistribucionVisible = false;
-  unidadSeleccionadaId: number | null = null;
-  listaUnidades: any[] = [];
-  cargandoUnidades = false;
-
-  detalleIncidencia: string | null = null;
-  cargandoDetalleIncidencia = false;
-
+  gastoParaDistribuir: GastoResponse | null = null;
 
   constructor(
     private finanzasService: FinanzasService,
     private router: Router,
     private fb: FormBuilder,
-    private toastService: ToastService,
-    private unidadService: UnidadService,
-    private incidenciasService: IncidenciasService,
-    private cdr: ChangeDetectorRef
+    private toastService: ToastService
   ) {
     this.formularioFiltro = this.fb.group({
       termino: [''],
@@ -189,33 +181,8 @@ export class ListaGastosComponent implements OnInit {
     this.accionPendiente = { tipo: 'DISTRIBUIR', id };
 
     if (gasto.metodoDistribucion === 'COBRO_DIRECTO') {
+      this.gastoParaDistribuir = gasto;
       this.modalDistribucionVisible = true;
-      this.cargandoUnidades = true;
-      this.unidadSeleccionadaId = null;
-      this.listaUnidades = [];
-
-      this.unidadService.obtenerListaUnidades(0, 10000).subscribe({
-        next: (resp) => {
-          this.listaUnidades = resp.contenido
-            .filter(u => u.condominioId === gasto.condominioId)
-            .filter(u => !gasto.torre || u.torre === gasto.torre)
-            .map(u => {
-              const prefijoTorre = u.torre 
-                ? (u.torre.toLowerCase().includes('torre') ? u.torre : `Torre ${u.torre}`) + ' - ' 
-                : '';
-              return {
-                id: u.id,
-                nombre: `${prefijoTorre}Depto. ${u.numeroUnidad}`
-              };
-            });
-          this.cargandoUnidades = false;
-        },
-        error: () => {
-          this.toastService.mostrarError('Error al cargar unidades');
-          this.cargandoUnidades = false;
-          this.cerrarModalDistribucion();
-        }
-      });
     } else {
       this.modalConfirmacionTitulo = 'Distribuir Gasto';
       this.modalConfirmacionMensaje = '¿Está seguro de distribuir este gasto? Las cuotas se asignarán permanentemente.';
@@ -223,35 +190,15 @@ export class ListaGastosComponent implements OnInit {
     }
   }
 
-  confirmarDistribucionDirecta(): void {
-    if (!this.accionPendiente || !this.unidadSeleccionadaId) {
-      this.toastService.mostrarError('Debe seleccionar una unidad');
-      return;
-    }
-
-    const form: DistribucionGastoForm = { 
-      gastoId: this.accionPendiente.id,
-      unidadId: this.unidadSeleccionadaId
-    };
-
-    this.finanzasService.distribuirGasto(form).subscribe({
-      next: () => {
-        this.toastService.mostrarExito('Gasto distribuido exitosamente');
-        this.cargarGastos();
-        this.cerrarModalDistribucion();
-      },
-      error: (err) => {
-        this.toastService.mostrarError(err.error?.error || 'Error al distribuir gasto');
-        this.cerrarModalDistribucion();
-      }
-    });
-  }
-
   cerrarModalDistribucion(): void {
     this.modalDistribucionVisible = false;
+    this.gastoParaDistribuir = null;
     this.accionPendiente = null;
-    this.unidadSeleccionadaId = null;
-    this.listaUnidades = [];
+  }
+
+  confirmarDistribucionModal(): void {
+    this.cerrarModalDistribucion();
+    this.cargarGastos();
   }
 
   confirmarAccion(): void {
@@ -297,39 +244,12 @@ export class ListaGastosComponent implements OnInit {
   abrirModalDetalle(id: number): void {
     this.gastoSeleccionado = this.gastos.find(g => g.id === id) || null;
     if (this.gastoSeleccionado) {
-      this.mostrarModal = true;
-      this.detalleIncidencia = null;
-      this.cargandoDetalleIncidencia = false;
-
-
-      if (this.gastoSeleccionado.tipoGasto === 'EXTRAORDINARIO' && this.gastoSeleccionado.incidenciaId) {
-        this.cargandoDetalleIncidencia = true;
-        this.incidenciasService.obtenerIncidencia(this.gastoSeleccionado.incidenciaId).subscribe({
-          next: (inc) => {
-            this.detalleIncidencia = inc.descripcion;
-            this.cargandoDetalleIncidencia = false;
-            this.cdr.detectChanges();
-          },
-          error: (err) => {
-            console.error('Error fetching incidencia:', err);
-            this.cargandoDetalleIncidencia = false;
-            this.cdr.detectChanges();
-          }
-        });
-      }
-
-
+      this.mostrarModalDetalleVisible = true;
     }
   }
 
   cerrarModalDetalle(): void {
-    this.mostrarModal = false;
+    this.mostrarModalDetalleVisible = false;
     this.gastoSeleccionado = null;
-  }
-
-  cerrarModalFondo(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('fondo-modal')) {
-      this.cerrarModalDetalle();
-    }
   }
 }

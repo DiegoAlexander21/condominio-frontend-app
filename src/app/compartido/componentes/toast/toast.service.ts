@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 
 export interface MensajeToast {
   texto: string;
-  tipo: 'exito' | 'error' | 'info';
+  tipo: 'exito' | 'error' | 'info' | 'advertencia';
 }
 
 @Injectable({
@@ -19,5 +19,9 @@ export class ToastService {
 
   mostrarError(mensaje: string): void {
     this.toastSubject.next({ texto: mensaje, tipo: 'error' });
+  }
+
+  mostrarAdvertencia(mensaje: string): void {
+    this.toastSubject.next({ texto: mensaje, tipo: 'advertencia' });
   }
 }

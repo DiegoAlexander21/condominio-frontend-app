@@ -10,6 +10,7 @@
           <option [ngValue]="null">Seleccione un condominio</option>
           <option *ngFor="let cond of listaCondominios" [value]="cond.id">{{cond.nombre}}</option>
         </select>
+        <app-mensaje-error [control]="formularioIncidencia.get('condominioId')" nombreCampo="El condominio"></app-mensaje-error>
       </div>
 
       <div class="grupo-control">
@@ -18,6 +19,7 @@
           <option value="AREA">Área Común</option>
           <option value="UNIDAD">Unidad / Departamento</option>
         </select>
+        <app-mensaje-error [control]="formularioIncidencia.get('tipoIncidencia')" nombreCampo="El tipo de lugar"></app-mensaje-error>
       </div>
     </div>
 
@@ -28,6 +30,7 @@
           <option [ngValue]="null">Seleccione un área común</option>
           <option *ngFor="let area of listaAreasComunes" [value]="area.id">{{area.nombre}}</option>
         </select>
+        <app-mensaje-error [control]="formularioIncidencia.get('areaComunId')" nombreCampo="El área común"></app-mensaje-error>
       </div>
 
       <div class="grupo-control" *ngIf="tipoIncidencia === 'UNIDAD' && esAdministrador">
@@ -36,6 +39,7 @@
           <option [ngValue]="null">Seleccione una unidad</option>
           <option *ngFor="let unidad of listaUnidades" [value]="unidad.id">{{unidad.torre}} - {{unidad.numeroUnidad}}</option>
         </select>
+        <app-mensaje-error [control]="formularioIncidencia.get('unidadId')" nombreCampo="La unidad"></app-mensaje-error>
       </div>
     </div>
 
@@ -46,6 +50,7 @@
           <option [ngValue]="null">Seleccione nivel</option>
           <option *ngFor="let grav of gravedades" [value]="grav">{{formatearTexto(grav)}}</option>
         </select>
+        <app-mensaje-error [control]="formularioIncidencia.get('gravedad')" nombreCampo="La gravedad"></app-mensaje-error>
       </div>
 
       <div class="grupo-control">
@@ -54,12 +59,14 @@
           <option [ngValue]="null">Seleccione causa</option>
           <option *ngFor="let cau of causas" [value]="cau">{{formatearTexto(cau)}}</option>
         </select>
+        <app-mensaje-error [control]="formularioIncidencia.get('causa')" nombreCampo="La causa"></app-mensaje-error>
       </div>
     </div>
 
     <div class="grupo-control">
       <label for="descripcion">Descripción detallada</label>
       <textarea id="descripcion" formControlName="descripcion" rows="4" class="textarea-estilizado" placeholder="Describa el problema encontrado (min 10 caracteres)"></textarea>
+      <app-mensaje-error [control]="formularioIncidencia.get('descripcion')" nombreCampo="La descripción"></app-mensaje-error>
     </div>
 
     <div class="grupo-control">

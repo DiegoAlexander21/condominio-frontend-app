@@ -12,7 +12,7 @@ import { ReservaAreaComunResponse } from '../modelos/reserva-area-comun-response
 })
 export class AreasComunesService {
   private urlAPI = 'http://localhost:8080/api/areas-comunes';
-  private urlReservas = 'http://localhost:8080/api/reservas-areas';
+  private urlReservas = 'http://localhost:8080/api/areas-comunes/reservas';
 
   constructor(private clienteHttp: HttpClient) {}
 

@@ -55,22 +55,21 @@
         <form [formGroup]="formularioVinculacion" (ngSubmit)="vincularMe()" class="formulario-minimalista">
           <div class="contenedor-campos">
             <div class="grupo-control">
-              <label>Condominio</label>
-              <app-select-personalizado 
-                formControlName="condominioId"
-                [opciones]="listaCondominios"
-                placeholder="Seleccione su Condominio">
-              </app-select-personalizado>
+              <label for="condominioId">Condominio</label>
+              <select id="condominioId" formControlName="condominioId">
+                <option [ngValue]="null">Seleccione su Condominio</option>
+                <option *ngFor="let cond of listaCondominios" [value]="cond.id">{{cond.nombre}}</option>
+              </select>
+              <app-mensaje-error [control]="formularioVinculacion.get('condominioId')" nombreCampo="El condominio"></app-mensaje-error>
             </div>
 
             <div class="grupo-control">
-              <label>Unidad (Departamento)</label>
-              <app-select-personalizado 
-                formControlName="unidadId"
-                [opciones]="listaUnidades"
-                propNombre="nombreMostrar"
-                placeholder="Seleccione su Unidad">
-              </app-select-personalizado>
+              <label for="unidadId">Unidad (Departamento)</label>
+              <select id="unidadId" formControlName="unidadId">
+                <option [ngValue]="null">Seleccione su Unidad</option>
+                <option *ngFor="let un of listaUnidades" [value]="un.id">{{un.nombreMostrar}}</option>
+              </select>
+              <app-mensaje-error [control]="formularioVinculacion.get('unidadId')" nombreCampo="La unidad"></app-mensaje-error>
             </div>
           </div>
 

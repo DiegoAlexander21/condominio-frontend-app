@@ -12,6 +12,12 @@
         </a>
       </li>
       <li *ngIf="esAdmin">
+        <a routerLink="/dashboard" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">dashboard</span>
+          <span class="texto">Dashboard</span>
+        </a>
+      </li>
+      <li *ngIf="esAdmin">
         <a routerLink="/unidades" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">home</span>
           <span class="texto">Unidades</span>
@@ -30,13 +36,13 @@
           <span class="texto">Áreas Comunes</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="esAdmin || esResidente">
         <a routerLink="/areas-comunes/reservas" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">event_available</span>
           <span class="texto">Reservas</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="esAdmin || esResidente">
         <a routerLink="/incidencias" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">report_problem</span>
           <span class="texto">Incidencias</span>
@@ -64,6 +70,24 @@
         <a routerLink="/finanzas/mi-estado-cuenta" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">account_balance_wallet</span>
           <span class="texto">Mi Estado Cuenta</span>
+        </a>
+      </li>
+      <li *ngIf="esAdmin">
+        <a routerLink="/visitas/admin" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">how_to_reg</span>
+          <span class="texto">Control de Visitas</span>
+        </a>
+      </li>
+      <li *ngIf="esConserje">
+        <a routerLink="/visitas/conserje" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">sensor_door</span>
+          <span class="texto">Ingresos/Salidas</span>
+        </a>
+      </li>
+      <li *ngIf="esResidente">
+        <a routerLink="/visitas/residente" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">recent_patient</span>
+          <span class="texto">Mis Visitas</span>
         </a>
       </li>
       <li>

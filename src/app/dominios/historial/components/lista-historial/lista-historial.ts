@@ -6,6 +6,7 @@ import { CalendarioPersonalizadoComponent } from '../../../../compartido/compone
 import { HistorialService } from '../../services/historial';
 import { HistorialTitularidadResponse } from '../../modelos/historial-response';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
+import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 
 @Component({
   selector: 'app-lista-historial',
@@ -17,6 +18,7 @@ import { PaginacionComponent } from '../../../../compartido/componentes/paginaci
 export class ListaHistorialComponent implements OnInit {
   private historialServicio = inject(HistorialService);
   private constructorFormulario = inject(FormBuilder);
+  private toastService = inject(ToastService);
 
   listaHistorial: HistorialTitularidadResponse[] = [];
   listaHistorialGlobal: HistorialTitularidadResponse[] = [];
@@ -46,7 +48,7 @@ export class ListaHistorialComponent implements OnInit {
         this.aplicarFiltrosLocales();
       },
       error: (error) => {
-        console.error(error);
+        this.toastService.mostrarError('Error al cargar la información del historial.');
         this.cargando = false;
         this.listaHistorialGlobal = [];
         this.aplicarFiltrosLocales();

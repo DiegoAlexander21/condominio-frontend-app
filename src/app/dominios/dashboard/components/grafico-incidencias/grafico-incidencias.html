@@ -1,0 +1,14 @@
+<div class="contenedor-grafico">
+  <h3 class="subtitulo-grafico">Incidencias por Estado</h3>
+  <div class="lienzo-grafico">
+    <canvas baseChart
+      *ngIf="datos.length > 0; else sinDatos"
+      [data]="datosGrafico"
+      [options]="opcionesGrafico"
+      [type]="tipoGrafico">
+    </canvas>
+    <ng-template #sinDatos>
+      <div class="mensaje-vacio">No hay datos de incidencias disponibles.</div>
+    </ng-template>
+  </div>
+</div>

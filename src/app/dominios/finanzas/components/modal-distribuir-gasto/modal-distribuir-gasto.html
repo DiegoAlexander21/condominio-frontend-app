@@ -1,0 +1,27 @@
+<div class="fondo-modal" *ngIf="visible && gasto" (click)="cerrarModalFondo($event)">
+  <div class="tarjeta-modal">
+    <div class="encabezado-modal">
+      <h3>Seleccionar Unidad</h3>
+      <button class="boton-cerrar" (click)="cerrarModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="cuerpo-modal-distribucion">
+      <p class="texto-instruccion">Seleccione la unidad a la cual se le realizará el cobro directo de este gasto:</p>
+      
+      <div *ngIf="cargandoUnidades" class="texto-cargando">Cargando unidades...</div>
+      
+      <div class="grupo-control" *ngIf="!cargandoUnidades">
+        <label>Unidad Destino</label>
+        <select (change)="unidadSeleccionadaId = +$any($event.target).value" class="w-100" [disabled]="procesando">
+          <option [value]="null">Seleccione una unidad...</option>
+          <option *ngFor="let u of listaUnidades" [value]="u.id">{{ u.nombre }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="pie-modal">
+      <button class="boton-secundario" (click)="cerrarModal()" [disabled]="procesando">Cancelar</button>
+      <button class="boton-primario" (click)="confirmarDistribucionDirecta()" [disabled]="!unidadSeleccionadaId || cargandoUnidades || procesando">Confirmar</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="contenedor-principal">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Mis Visitas Programadas</h2>
+    <div class="acciones-cabecera">
+      <a routerLink="nueva" class="boton-primario">
+        Nueva Visita
+      </a>
+    </div>
+  </div>
+
+<form [formGroup]="formularioFiltro" (ngSubmit)="buscarVisitas()" class="panel-filtros">
+  <div class="grupo-filtro">
+    <label>Buscar Visitante o Documento</label>
+    <app-input-busqueda 
+      formControlName="termino" 
+      placeholder="Ej: Juan, 7123...">
+    </app-input-busqueda>
+  </div>
+  <div class="grupo-filtro">
+    <label>Mes de Visita</label>
+    <app-calendario-personalizado 
+      formControlName="periodo"
+      soloMesYAnio="true"
+      placeholder="Cualquier mes">
+    </app-calendario-personalizado>
+  </div>
+  <div class="grupo-filtro">
+    <label>Estado</label>
+    <app-select-personalizado 
+      formControlName="estado" 
+      [opciones]="opcionesEstado" 
+      propNombre="nombre" 
+      propId="id"
+      placeholder="Cualquier estado">
+    </app-select-personalizado>
+  </div>
+  <div class="grupo-filtro-boton">
+    <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar filtros">
+      <span class="material-symbols-outlined">filter_alt_off</span>
+    </button>
+    <button type="submit" class="boton-primario boton-buscar">
+      <span class="material-symbols-outlined">search</span> Buscar
+    </button>
+  </div>
+</form>
+
+  <p *ngIf="cargando" class="texto-cargando">Cargando visitas...</p>
+
+  <div class="contenedor-grilla" *ngIf="!cargando">
+    <div class="grilla-tarjetas" *ngIf="visitas.length > 0; else estadoVacio">
+      <div class="tarjeta" *ngFor="let visita of visitasPaginadas">
+        <div class="tarjeta-encabezado">
+          <h3 class="titulo-principal">
+            <span>{{ visita.nombreVisitante }}</span>
+          </h3>
+        </div>
+        <div class="tarjeta-detalle">
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">badge</span>
+            <span>Documento: <strong>{{ visita.documentoVisitante }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">info</span>
+            <span>Estado: <strong>{{ formatearEstado(visita.estado) }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">schedule</span>
+            <span>Fecha Programada: <strong>{{ visita.fechaVisitaProgramada | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+          </div>
+          <div class="detalle-fila" *ngIf="visita.fechaIngreso">
+            <span class="material-symbols-outlined icono-inline">login</span>
+            <span>Ingreso: <strong>{{ visita.fechaIngreso | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #estadoVacio>
+      <div class="estado-vacio">
+        <p class="texto-cargando" *ngIf="visitasGlobal.length === 0">Aún no tienes visitas programadas.</p>
+        <p class="texto-cargando" *ngIf="visitasGlobal.length > 0">No se encontraron visitas que coincidan con los filtros.</p>
+      </div>
+    </ng-template>
+
+    <app-paginacion 
+      *ngIf="totalPaginas > 1"
+      [paginaActual]="paginaActual" 
+      [totalPaginas]="totalPaginas" 
+      (cambioPagina)="cambiarPagina($event)">
+    </app-paginacion>
+  </div>
+</div>
