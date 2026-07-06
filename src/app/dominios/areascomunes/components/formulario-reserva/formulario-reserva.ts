@@ -13,12 +13,12 @@ import { CondominioService } from '../../../condominio/services/condominio.servi
 import { AreaComunResponse } from '../../modelos/area-comun-response';
 import { TooltipInformativoComponent } from '../../../../compartido/componentes/tooltip-informativo/tooltip-informativo';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-formulario-reserva',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TooltipInformativoComponent],
+  imports: [CommonModule, ReactiveFormsModule, TooltipInformativoComponent, RouterModule],
   templateUrl: './formulario-reserva.html',
   styleUrls: ['./formulario-reserva.scss']
 })

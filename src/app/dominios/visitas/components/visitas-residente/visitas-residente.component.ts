@@ -57,7 +57,7 @@ export class VisitasResidenteComponent implements OnInit {
     if (this.unidadId) {
       this.cargarVisitas();
     } else {
-      this.toastService.mostrarError('No se detectó una unidad asociada al usuario.');
+      this.cargando = false;
     }
   }
 

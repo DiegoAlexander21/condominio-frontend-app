@@ -1,6 +1,9 @@
 <div class="contenedor-formulario">
   <h2 class="titulo-principal">Programar Nueva Visita</h2>
   
+  <div class="alerta-error alerta-vinculacion" *ngIf="!unidadId">
+    <strong>Atención:</strong> Aún no tienes una unidad vinculada a tu cuenta. <a routerLink="/perfil">Ve a Mi Perfil</a> para solucionar esto antes de intentar programar una visita.
+  </div>
   <form [formGroup]="formularioVisita" (ngSubmit)="preRegistrar()" class="formulario-flex">
     <div class="fila-controles">
       <div class="grupo-control">
@@ -30,7 +33,7 @@
 
     <div class="acciones-formulario">
       <button type="button" class="boton-secundario" (click)="cancelar()">Cancelar</button>
-      <button type="submit" class="boton-primario" [disabled]="formularioVisita.invalid || enviando">
+      <button type="submit" class="boton-primario" [disabled]="formularioVisita.invalid || enviando || !unidadId">
         {{ enviando ? 'Registrando...' : 'Registrar Visita' }}
       </button>
     </div>

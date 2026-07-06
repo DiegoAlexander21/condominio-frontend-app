@@ -1,6 +1,10 @@
 <div class="contenedor-formulario">
   <h2 class="titulo-principal">Reportar Nueva Incidencia</h2>
 
+  <div class="alerta-error alerta-vinculacion" *ngIf="!esAdministrador && !unidadIdUsuario">
+    <strong>Atención:</strong> Aún no tienes una unidad vinculada a tu cuenta. <a routerLink="/perfil">Ve a Mi Perfil</a> para solucionar esto antes de intentar hacer un reporte.
+  </div>
+
   <form [formGroup]="formularioIncidencia" (ngSubmit)="guardarIncidencia()" class="formulario-flex">
     
     <div class="fila-controles">
@@ -95,7 +99,7 @@
 
     <div class="acciones-formulario">
       <a routerLink="/incidencias" class="boton-secundario enlace-cancelar">Cancelar</a>
-      <button type="submit" class="boton-primario" [disabled]="formularioIncidencia.invalid || enviando">
+      <button type="submit" class="boton-primario" [disabled]="formularioIncidencia.invalid || enviando || (!esAdministrador && !unidadIdUsuario)">
         {{ enviando ? 'Subiendo evidencias...' : 'Enviar Reporte' }}
       </button>
     </div>

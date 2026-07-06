@@ -86,7 +86,13 @@ export class ListaIncidencias implements OnInit {
     let unidadIdConsulta: number | undefined;
     if (!this.esAdministrador) {
       const miUnidad = this.authService.obtenerUnidadId();
-      unidadIdConsulta = miUnidad ? miUnidad : undefined;
+      if (!miUnidad) {
+        this.listaIncidenciasGlobal = [];
+        this.cargando = false;
+        this.aplicarFiltrosLocales();
+        return;
+      }
+      unidadIdConsulta = miUnidad;
     }
 
     this.incidenciasService.obtenerListaPorEstado(undefined, unidadIdConsulta, 0, 10000).subscribe({

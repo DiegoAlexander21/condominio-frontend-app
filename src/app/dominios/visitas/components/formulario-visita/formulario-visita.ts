@@ -5,12 +5,12 @@ import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion
 import { VisitaService } from '../../services/visita.service';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-formulario-visita',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MensajeErrorComponent],
+  imports: [CommonModule, ReactiveFormsModule, MensajeErrorComponent, RouterModule],
   templateUrl: './formulario-visita.html'
 })
 export class FormularioVisitaComponent implements OnInit {
@@ -26,11 +26,6 @@ export class FormularioVisitaComponent implements OnInit {
 
   ngOnInit(): void {
     this.unidadId = this.authService.obtenerUnidadId();
-    if (!this.unidadId) {
-      this.toastService.mostrarError('No se detectó una unidad asociada al usuario.');
-      this.cancelar();
-      return;
-    }
     this.inicializarFormulario();
   }
 
