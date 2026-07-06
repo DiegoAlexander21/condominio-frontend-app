@@ -36,13 +36,13 @@
           <span class="texto">Áreas Comunes</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="esAdmin || esResidente">
         <a routerLink="/areas-comunes/reservas" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">event_available</span>
           <span class="texto">Reservas</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="esAdmin || esResidente">
         <a routerLink="/incidencias" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">report_problem</span>
           <span class="texto">Incidencias</span>
