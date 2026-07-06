@@ -1,0 +1,80 @@
+<div class="contenedor-principal">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Control de Visitas</h2>
+  </div>
+
+  <form [formGroup]="formularioFiltros" class="panel-filtros" (ngSubmit)="buscar()">
+    
+    <div class="grupo-filtro">
+      <label>Buscar</label>
+      <app-input-busqueda 
+        formControlName="terminoBusqueda" 
+        placeholder="Nombre o documento...">
+      </app-input-busqueda>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Estado</label>
+      <app-select-personalizado 
+        formControlName="estado"
+        [opciones]="opcionesEstado"
+        propId="valor"
+        propNombre="etiqueta"
+        placeholder="Todos">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+    
+  </form>
+
+  <ng-container *ngIf="mostrarResultados">
+    <div class="contenedor-grilla">
+      <div class="grilla-tarjetas" *ngIf="visitasPaginadas.length > 0; else sinResultados">
+        <div class="tarjeta" *ngFor="let visita of visitasPaginadas">
+          
+          <div class="cabecera-tarjeta">
+            <h3>{{ visita.nombreVisitante }}</h3>
+            <span class="badge" 
+                  [class.pre-registrada]="visita.estado === 'PRE_REGISTRADA'"
+                  [class.ingreso]="visita.estado === 'INGRESO_REGISTRADO'"
+                  [class.salida]="visita.estado === 'SALIDA_REGISTRADA'"
+                  [class.cancelada]="visita.estado === 'CANCELADA'">
+              {{ visita.estado | titlecase }}
+            </span>
+          </div>
+
+          <div class="cuerpo-tarjeta">
+            <p><strong>Documento:</strong> {{ visita.documentoVisitante }}</p>
+            <p><strong>Unidad Destino ID:</strong> {{ visita.unidadId }}</p>
+            <p><strong>Programada:</strong> {{ visita.fechaVisitaProgramada | date:'medium' }}</p>
+            <p *ngIf="visita.fechaIngreso"><strong>Ingresó:</strong> {{ visita.fechaIngreso | date:'medium' }}</p>
+            <p *ngIf="visita.fechaSalida"><strong>Salió:</strong> {{ visita.fechaSalida | date:'medium' }}</p>
+          </div>
+
+        </div>
+      </div>
+
+      <ng-template #sinResultados>
+        <div class="estado-vacio">
+          <p class="texto-cargando">No se encontraron visitas que coincidan con los filtros de búsqueda.</p>
+        </div>
+      </ng-template>
+
+      <app-paginacion 
+        *ngIf="visitasFiltradas.length > 0"
+        [paginaActual]="paginaActual" 
+        [totalPaginas]="totalPaginas" 
+        (cambioPagina)="cambiarPagina($event)">
+      </app-paginacion>
+    </div>
+  </ng-container>
+</div>
