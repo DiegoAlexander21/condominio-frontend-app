@@ -12,7 +12,11 @@
       <div class="grupo-control">
         <label for="documentoVisitante">Documento de Identidad</label>
         <input type="text" id="documentoVisitante" formControlName="documentoVisitante" placeholder="DNI, Pasaporte, etc." autocomplete="off">
-        <app-mensaje-error [control]="formularioVisita.get('documentoVisitante')" nombreCampo="El documento"></app-mensaje-error>
+        <app-mensaje-error 
+          [control]="formularioVisita.get('documentoVisitante')" 
+          nombreCampo="El documento"
+          [mensajesPersonalizados]="{'pattern': 'Solo se permiten letras y números (sin espacios ni guiones).'}">
+        </app-mensaje-error>
       </div>
     </div>
 

@@ -37,7 +37,12 @@ export class FormularioVisitaComponent implements OnInit {
   private inicializarFormulario(): void {
     this.formularioVisita = this.formBuilder.group({
       nombreVisitante: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(150)]],
-      documentoVisitante: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+      documentoVisitante: ['', [
+        Validators.required, 
+        Validators.minLength(8), 
+        Validators.maxLength(15), 
+        Validators.pattern('^[a-zA-Z0-9]+$')
+      ]],
       fechaVisitaProgramada: ['', [Validators.required]]
     });
   }
