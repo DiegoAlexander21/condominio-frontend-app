@@ -46,6 +46,7 @@ export class ListaIncidencias implements OnInit {
   listaIncidenciasGlobal: IncidenciaResponse[] = [];
   listaIncidenciasFiltradas: IncidenciaResponse[] = [];
 
+  unidadIdUsuario: number | null = null;
   cargando = false;
   esAdministrador = false;
   estados = Object.values(EstadoIncidencia);
@@ -78,6 +79,7 @@ export class ListaIncidencias implements OnInit {
 
   ngOnInit(): void {
     this.esAdministrador = this.authService.obtenerRoles().includes('ROLE_ADMINISTRADOR') || this.authService.obtenerRoles().includes('ADMINISTRADOR');
+    this.unidadIdUsuario = this.authService.obtenerUnidadId();
     this.obtenerDatos();
   }
 
