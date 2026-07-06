@@ -9,6 +9,7 @@ import { PaginacionComponent } from '../../../../compartido/componentes/paginaci
 import { InputBusquedaComponent } from '../../../../compartido/componentes/input-busqueda/input-busqueda';
 import { SelectPersonalizadoComponent } from '../../../../compartido/componentes/select-personalizado/select-personalizado';
 import { CalendarioPersonalizadoComponent } from '../../../../compartido/componentes/calendario-personalizado/calendario-personalizado';
+import { MenuContextualComponent } from '../../../../compartido/componentes/menu-contextual/menu-contextual';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -21,6 +22,7 @@ import { RouterLink } from '@angular/router';
     InputBusquedaComponent,
     SelectPersonalizadoComponent,
     CalendarioPersonalizadoComponent,
+    MenuContextualComponent,
     RouterLink
   ],
   templateUrl: './visitas-residente.component.html',
@@ -142,5 +144,10 @@ export class VisitasResidenteComponent implements OnInit {
   cambiarPagina(nuevaPagina: number): void {
     this.paginaActual = nuevaPagina;
     this.actualizarPaginacion();
+  }
+
+  formatearEstado(estadoId: string): string {
+    const opcion = this.opcionesEstado.find(op => op.id === estadoId);
+    return opcion ? opcion.nombre : estadoId;
   }
 }
