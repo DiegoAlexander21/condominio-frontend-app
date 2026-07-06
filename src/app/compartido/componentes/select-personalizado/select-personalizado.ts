@@ -94,4 +94,8 @@ export class SelectPersonalizadoComponent implements ControlValueAccessor {
     const opcion = this.opciones.find(o => o[this.propId] === this.valorActual);
     this.textoSeleccionado = opcion ? opcion[this.propNombre] : this.placeholder;
   }
+
+  get tieneOpcionVaciaEnLista(): boolean {
+    return this.opciones.some(o => o[this.propId] === '' || o[this.propId] === null);
+  }
 }
