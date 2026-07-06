@@ -76,7 +76,7 @@
 </app-paginacion>
 
 <ng-template #sinResultadosPagos>
-  <div class="estado-vacio">
+  <div class="estado-vacio" *ngIf="busquedaRealizada">
     <p class="texto-cargando">No se encontraron pagos con los filtros aplicados.</p>
   </div>
 </ng-template>

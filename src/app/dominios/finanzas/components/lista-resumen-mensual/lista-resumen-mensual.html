@@ -74,7 +74,7 @@
 </app-paginacion>
 
 <ng-template #sinResultadosEstados>
-  <div class="estado-vacio">
+  <div class="estado-vacio" *ngIf="busquedaRealizada">
     <p class="texto-cargando">No se encontraron estados de cuenta con los filtros aplicados.</p>
   </div>
 </ng-template>

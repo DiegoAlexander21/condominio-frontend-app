@@ -59,16 +59,29 @@ export class ListaResumenMensualComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.aplicarFiltrosEstados();
+    this.aplicarFiltrosIniciales();
+  }
+
+  aplicarFiltrosIniciales(): void {
+    this.estadosFiltrados = [...this.estadosOriginales];
+    this.totalPaginasEstados = Math.ceil(this.estadosFiltrados.length / this.elementosPorPagina) || 1;
+    this.cambiarPaginaEstados(1);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['estadosOriginales']) {
-      this.aplicarFiltrosEstados();
+      if (this.busquedaRealizada) {
+        this.aplicarFiltrosEstados();
+      } else {
+        this.aplicarFiltrosIniciales();
+      }
     }
   }
 
+  busquedaRealizada = false;
+
   aplicarFiltrosEstados(): void {
+    this.busquedaRealizada = true;
     const estado = this.filtroEstados.get('estado')?.value;
     const periodo = this.filtroEstados.get('periodo')?.value;
 
@@ -93,8 +106,9 @@ export class ListaResumenMensualComponent implements OnInit, OnChanges {
   }
 
   limpiarFiltrosEstados(): void {
+    this.busquedaRealizada = false;
     this.filtroEstados.reset({ estado: '', periodo: '' });
-    this.aplicarFiltrosEstados();
+    this.aplicarFiltrosIniciales();
   }
 
   cambiarPaginaEstados(pagina: number): void {

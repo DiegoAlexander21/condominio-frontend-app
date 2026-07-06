@@ -52,16 +52,29 @@ export class ListaHistorialPagosComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.aplicarFiltrosPagos();
+    this.aplicarFiltrosIniciales();
+  }
+
+  aplicarFiltrosIniciales(): void {
+    this.pagosFiltrados = [...this.pagosOriginales];
+    this.totalPaginasPagos = Math.ceil(this.pagosFiltrados.length / this.elementosPorPagina) || 1;
+    this.cambiarPaginaPagos(1);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['pagosOriginales']) {
-      this.aplicarFiltrosPagos();
+      if (this.busquedaRealizada) {
+        this.aplicarFiltrosPagos();
+      } else {
+        this.aplicarFiltrosIniciales();
+      }
     }
   }
 
+  busquedaRealizada = false;
+
   aplicarFiltrosPagos(): void {
+    this.busquedaRealizada = true;
     const estado = this.filtroPagos.get('estado')?.value;
     const periodo = this.filtroPagos.get('periodo')?.value;
 
@@ -85,8 +98,9 @@ export class ListaHistorialPagosComponent implements OnInit, OnChanges {
   }
 
   limpiarFiltrosPagos(): void {
+    this.busquedaRealizada = false;
     this.filtroPagos.reset({ estado: '', periodo: '' });
-    this.aplicarFiltrosPagos();
+    this.aplicarFiltrosIniciales();
   }
 
   cambiarPaginaPagos(pagina: number): void {
