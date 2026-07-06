@@ -17,21 +17,6 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  .cabecera-lista {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-
-    .titulo-principal {
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: var(--primario, #2c3e50);
-      margin: 0;
-    }
-  }
 
   .pestanas {
     display: flex;

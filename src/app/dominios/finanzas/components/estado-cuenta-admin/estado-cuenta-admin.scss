@@ -13,35 +13,6 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  .cabecera-lista {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-
-    .titulo-principal {
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: var(--primario, #2c3e50);
-      margin: 0;
-    }
-
-    .acciones-cabecera {
-      display: flex;
-      align-items: center;
-    }
-
-    @media (max-width: 635px) {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-
-      .acciones-cabecera, .boton-primario {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-  }
 
 
   .tarjeta-encabezado {
