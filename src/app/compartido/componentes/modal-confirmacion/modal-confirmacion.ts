@@ -13,6 +13,7 @@ export class ModalConfirmacionComponent {
   @Input() titulo: string = 'Confirmar Acción';
   @Input() mensaje: string = '¿Estás seguro de realizar esta acción?';
   @Input() textoConfirmar: string = 'Confirmar';
+  @Input() esPeligro: boolean = true;
   
   @Output() alCancelar = new EventEmitter<void>();
   @Output() alConfirmar = new EventEmitter<void>();

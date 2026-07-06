@@ -9,6 +9,6 @@
   </div>
   <div class="pie-modal">
     <button class="boton-secundario" (click)="cancelar()">Cancelar</button>
-    <button class="boton-peligro" (click)="confirmar()">{{ textoConfirmar }}</button>
+    <button [ngClass]="esPeligro ? 'boton-peligro' : 'boton-primario'" (click)="confirmar()">{{ textoConfirmar }}</button>
   </div>
 </div>
