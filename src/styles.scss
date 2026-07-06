@@ -269,6 +269,23 @@ input:not([type="checkbox"]):not([type="radio"]), select {
   }
 }
 
+.contenedor-formulario {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: transparent;
+
+  .titulo-principal {
+    font-family: var(--fuente-principal);
+    font-size: 2rem;
+    font-weight: bold;
+    border-bottom: 1px solid var(--secundario);
+    color: var(--primario);
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+  }
+}
+
 @media (max-width: 600px) {
   .formulario-flex {
     .fila-controles {
