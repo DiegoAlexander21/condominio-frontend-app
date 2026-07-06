@@ -15,6 +15,8 @@ export interface VisitaResponse {
   fechaSalida: string | null;
   estado: EstadoVisita;
   fechaRegistro: string;
+  torre?: string;
+  numeroUnidad?: string;
 }
 
 export interface VisitaForm {

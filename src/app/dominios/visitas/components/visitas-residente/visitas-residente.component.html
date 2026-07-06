@@ -65,11 +65,11 @@
           </div>
           <div class="detalle-fila">
             <span class="material-symbols-outlined icono-inline">schedule</span>
-            <span>Fecha Programada: <strong>{{ visita.fechaVisitaProgramada | date:'dd/MM/yyyy, HH:mm' }}</strong></span>
+            <span>Fecha Programada: <strong>{{ visita.fechaVisitaProgramada | date:'dd/MM/yyyy HH:mm' }}</strong></span>
           </div>
           <div class="detalle-fila" *ngIf="visita.fechaIngreso">
             <span class="material-symbols-outlined icono-inline">login</span>
-            <span>Ingreso: <strong>{{ visita.fechaIngreso | date:'dd/MM/yyyy, HH:mm' }}</strong></span>
+            <span>Ingreso: <strong>{{ visita.fechaIngreso | date:'dd/MM/yyyy HH:mm' }}</strong></span>
           </div>
         </div>
       </div>

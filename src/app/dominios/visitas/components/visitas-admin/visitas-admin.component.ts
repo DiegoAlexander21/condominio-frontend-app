@@ -2,21 +2,25 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { VisitaService } from '../../services/visita.service';
+import { CondominioService } from '../../../condominio/services/condominio.service';
+import { UnidadService } from '../../../unidades/services/unidad';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { VisitaResponse, EstadoVisita } from '../../models/visita.model';
 import { SelectPersonalizadoComponent } from '../../../../compartido/componentes/select-personalizado/select-personalizado';
-import { InputBusquedaComponent } from '../../../../compartido/componentes/input-busqueda/input-busqueda';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
+import { CalendarioPersonalizadoComponent } from '../../../../compartido/componentes/calendario-personalizado/calendario-personalizado';
 
 @Component({
   selector: 'app-visitas-admin',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SelectPersonalizadoComponent, PaginacionComponent, InputBusquedaComponent],
+  imports: [CommonModule, ReactiveFormsModule, SelectPersonalizadoComponent, PaginacionComponent, CalendarioPersonalizadoComponent],
   templateUrl: './visitas-admin.component.html',
   styleUrls: ['./visitas-admin.component.scss']
 })
 export class VisitasAdminComponent implements OnInit {
   private visitaService = inject(VisitaService);
+  private condominioService = inject(CondominioService);
+  private unidadService = inject(UnidadService);
   private toastService = inject(ToastService);
   private formBuilder = inject(FormBuilder);
 
@@ -31,6 +35,10 @@ export class VisitasAdminComponent implements OnInit {
   visitasPaginadas: VisitaResponse[] = [];
   totalPaginas: number = 0;
 
+  listaCondominios: any[] = [];
+  listaUnidades: any[] = [];
+  todasLasUnidades: any[] = [];
+
   opcionesEstado: any[] = [
     { valor: '', etiqueta: 'Todos los estados' },
     { valor: EstadoVisita.PRE_REGISTRADA, etiqueta: 'Pre Registrada' },
@@ -41,13 +49,41 @@ export class VisitasAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.inicializarFiltros();
+    this.cargarCondominiosYUnidades();
     this.cargarUniversoVisitas();
   }
 
   private inicializarFiltros(): void {
     this.formularioFiltros = this.formBuilder.group({
-      terminoBusqueda: [''],
-      estado: ['']
+      condominioId: [''],
+      unidadId: [''],
+      fechaFiltro: ['']
+    });
+
+    this.formularioFiltros.get('condominioId')?.valueChanges.subscribe(condominioId => {
+      this.formularioFiltros.patchValue({ unidadId: '' });
+      if (condominioId) {
+        const condId = Number(condominioId);
+        this.listaUnidades = this.todasLasUnidades
+          .filter(u => u.condominioId === condId)
+          .map(u => ({ valor: u.id, etiqueta: `Torre ${u.torre} - Depto ${u.numeroUnidad}` }));
+      } else {
+        this.listaUnidades = [];
+      }
+    });
+  }
+
+  private cargarCondominiosYUnidades(): void {
+    this.condominioService.obtenerListaCondominios(0, 100).subscribe({
+      next: (res) => {
+        this.listaCondominios = res.contenido.map(c => ({ valor: c.id, etiqueta: c.nombre }));
+      }
+    });
+
+    this.unidadService.obtenerListaUnidades(0, 1000).subscribe({
+      next: (res) => {
+        this.todasLasUnidades = res.contenido;
+      }
     });
   }
 
@@ -61,30 +97,46 @@ export class VisitasAdminComponent implements OnInit {
   }
 
   buscar(): void {
+    if (!this.formularioFiltros.get('condominioId')?.value) {
+      this.toastService.mostrarAdvertencia('Debe seleccionar al menos un Condominio para buscar');
+      return;
+    }
+    if (!this.formularioFiltros.get('unidadId')?.value) {
+      this.toastService.mostrarAdvertencia('Debe seleccionar una unidad');
+      return;
+    }
     this.paginaActual = 0;
     this.aplicarFiltros();
     this.mostrarResultados = true;
   }
 
   aplicarFiltros(): void {
-    const term = (this.formularioFiltros.get('terminoBusqueda')?.value || '').toLowerCase().trim();
-    const estado = this.formularioFiltros.get('estado')?.value;
+    const condominioId = this.formularioFiltros.get('condominioId')?.value;
+    const unidadId = this.formularioFiltros.get('unidadId')?.value;
+    const fechaFiltro = this.formularioFiltros.get('fechaFiltro')?.value;
 
     this.visitasFiltradas = this.todasLasVisitas.filter(v => {
-      const coincideTermino = term === '' || 
-        v.nombreVisitante.toLowerCase().includes(term) || 
-        v.documentoVisitante.toLowerCase().includes(term);
+      let coincideUnidadOCondominio = true;
+      if (unidadId) {
+        coincideUnidadOCondominio = v.unidadId === Number(unidadId);
+      } else if (condominioId) {
+        coincideUnidadOCondominio = this.listaUnidades.some(u => u.valor === v.unidadId);
+      }
       
-      const coincideEstado = estado === '' || v.estado === estado;
+      let coincideFecha = true;
+      if (fechaFiltro) {
+        const fechaVisita = v.fechaVisitaProgramada.split('T')[0];
+        coincideFecha = fechaVisita === fechaFiltro;
+      }
 
-      return coincideTermino && coincideEstado;
+      return coincideUnidadOCondominio && coincideFecha;
     });
 
     this.actualizarPaginacion();
   }
 
   limpiarFiltros(): void {
-    this.formularioFiltros.reset({ terminoBusqueda: '', estado: '' });
+    this.formularioFiltros.reset({ condominioId: '', unidadId: '', fechaFiltro: '' });
     this.mostrarResultados = false;
     this.visitasFiltradas = [];
     this.visitasPaginadas = [];
@@ -105,5 +157,10 @@ export class VisitasAdminComponent implements OnInit {
   cambiarPagina(nuevaPagina: number): void {
     this.paginaActual = nuevaPagina;
     this.actualizarPaginacion();
+  }
+
+  formatearEstado(estadoId: string): string {
+    const opcion = this.opcionesEstado.find(op => op.valor === estadoId);
+    return opcion ? opcion.etiqueta : estadoId;
   }
 }

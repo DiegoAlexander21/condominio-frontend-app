@@ -6,22 +6,32 @@
   <form [formGroup]="formularioFiltros" class="panel-filtros" (ngSubmit)="buscar()">
     
     <div class="grupo-filtro">
-      <label>Buscar</label>
-      <app-input-busqueda 
-        formControlName="terminoBusqueda" 
-        placeholder="Nombre o documento...">
-      </app-input-busqueda>
+      <label>Condominio</label>
+      <app-select-personalizado 
+        formControlName="condominioId"
+        [opciones]="listaCondominios"
+        propId="valor"
+        propNombre="etiqueta"
+        placeholder="Seleccione Condominio">
+      </app-select-personalizado>
     </div>
 
     <div class="grupo-filtro">
-      <label>Estado</label>
+      <label>Unidad</label>
       <app-select-personalizado 
-        formControlName="estado"
-        [opciones]="opcionesEstado"
+        formControlName="unidadId"
+        [opciones]="listaUnidades"
         propId="valor"
         propNombre="etiqueta"
-        placeholder="Todos">
+        placeholder="Cualquier unidad">
       </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Fecha Programada</label>
+      <app-calendario-personalizado 
+        formControlName="fechaFiltro">
+      </app-calendario-personalizado>
     </div>
 
     <div class="grupo-filtro-boton">
@@ -41,23 +51,37 @@
       <div class="grilla-tarjetas" *ngIf="visitasPaginadas.length > 0; else sinResultados">
         <div class="tarjeta" *ngFor="let visita of visitasPaginadas">
           
-          <div class="cabecera-tarjeta">
-            <h3>{{ visita.nombreVisitante }}</h3>
-            <span class="badge" 
-                  [class.pre-registrada]="visita.estado === 'PRE_REGISTRADA'"
-                  [class.ingreso]="visita.estado === 'INGRESO_REGISTRADO'"
-                  [class.salida]="visita.estado === 'SALIDA_REGISTRADA'"
-                  [class.cancelada]="visita.estado === 'CANCELADA'">
-              {{ visita.estado | titlecase }}
-            </span>
+          <div class="tarjeta-encabezado">
+            <h3 class="titulo-principal">
+              <span>{{ visita.nombreVisitante }}</span>
+            </h3>
           </div>
 
-          <div class="cuerpo-tarjeta">
-            <p><strong>Documento:</strong> {{ visita.documentoVisitante }}</p>
-            <p><strong>Unidad Destino ID:</strong> {{ visita.unidadId }}</p>
-            <p><strong>Programada:</strong> {{ visita.fechaVisitaProgramada | date:'medium' }}</p>
-            <p *ngIf="visita.fechaIngreso"><strong>Ingresó:</strong> {{ visita.fechaIngreso | date:'medium' }}</p>
-            <p *ngIf="visita.fechaSalida"><strong>Salió:</strong> {{ visita.fechaSalida | date:'medium' }}</p>
+          <div class="tarjeta-detalle">
+            <div class="detalle-fila">
+              <span class="material-symbols-outlined icono-inline">badge</span>
+              <span>Documento: <strong>{{ visita.documentoVisitante }}</strong></span>
+            </div>
+            <div class="detalle-fila">
+              <span class="material-symbols-outlined icono-inline">info</span>
+              <span>Estado: <strong>{{ formatearEstado(visita.estado) }}</strong></span>
+            </div>
+            <div class="detalle-fila">
+              <span class="material-symbols-outlined icono-inline">apartment</span>
+              <span>Unidad Destino: <strong>Torre {{ visita.torre }} - Depto {{ visita.numeroUnidad }}</strong></span>
+            </div>
+            <div class="detalle-fila">
+              <span class="material-symbols-outlined icono-inline">schedule</span>
+              <span>Programada: <strong>{{ visita.fechaVisitaProgramada | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+            </div>
+            <div class="detalle-fila" *ngIf="visita.fechaIngreso">
+              <span class="material-symbols-outlined icono-inline">login</span>
+              <span>Ingresó: <strong>{{ visita.fechaIngreso | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+            </div>
+            <div class="detalle-fila" *ngIf="visita.fechaSalida">
+              <span class="material-symbols-outlined icono-inline">logout</span>
+              <span>Salió: <strong>{{ visita.fechaSalida | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+            </div>
           </div>
 
         </div>
@@ -70,7 +94,7 @@
       </ng-template>
 
       <app-paginacion 
-        *ngIf="visitasFiltradas.length > 0"
+        *ngIf="totalPaginas > 1"
         [paginaActual]="paginaActual" 
         [totalPaginas]="totalPaginas" 
         (cambioPagina)="cambiarPagina($event)">
