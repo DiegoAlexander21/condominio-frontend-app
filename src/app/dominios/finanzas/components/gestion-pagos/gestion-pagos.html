@@ -114,7 +114,7 @@
     (alCancelar)="cancelarProceso()">
   </app-modal-confirmacion>
 
-  <div class="modal-overlay" *ngIf="mostrarModalRecibo && pagoSeleccionado">
+  <div class="modal-overlay" *ngIf="mostrarModalRecibo && pagoSeleccionado" (click)="cerrarModalFondo($event)">
     <div class="modal-contenido modal-evidencia">
       <div class="modal-cabecera">
         <h3>Evidencia del Pago</h3>
