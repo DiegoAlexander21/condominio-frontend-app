@@ -31,6 +31,7 @@ export class PerfilComponent implements OnInit {
   listaCondominios: CondominioResponse[] = [];
   listaUnidades: UnidadResponse[] = [];
   vinculando = false;
+  mostrarModal = false;
 
   constructor() {
     this.formularioVinculacion = this.formBuilder.group({
@@ -101,6 +102,7 @@ export class PerfilComponent implements OnInit {
       next: () => {
         this.toastServicio.mostrarExito('¡Te has vinculado exitosamente a tu unidad!');
         this.vinculando = false;
+        this.cerrarModalVincular();
         this.cargarPerfil(); 
       },
       error: (err) => {
@@ -109,5 +111,14 @@ export class PerfilComponent implements OnInit {
         this.vinculando = false;
       }
     });
+  }
+
+  abrirModalVincular(): void {
+    this.mostrarModal = true;
+  }
+
+  cerrarModalVincular(): void {
+    this.mostrarModal = false;
+    this.formularioVinculacion.reset();
   }
 }
