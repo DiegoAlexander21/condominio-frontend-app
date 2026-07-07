@@ -57,7 +57,11 @@
     Cargando reservas...
   </div>
 
-  <ng-container *ngIf="!cargando && mostrarResultados">
+  <div class="estado-vacio" *ngIf="!cargando && !esAdmin && !unidadIdUsuario">
+    <p class="texto-cargando">Aún no estás vinculado a ninguna unidad. Por favor, asocia tu unidad en Mi Perfil para ver tus reservas.</p>
+  </div>
+
+  <ng-container *ngIf="!cargando && (esAdmin || unidadIdUsuario) && mostrarResultados">
     <div class="grilla-tarjetas" *ngIf="listaReservas.length > 0; else sinResultados">
       
       <div class="tarjeta" *ngFor="let r of listaReservas">

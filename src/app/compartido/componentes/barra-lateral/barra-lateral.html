@@ -90,6 +90,18 @@
           <span class="texto">Mis Visitas</span>
         </a>
       </li>
+      <li *ngIf="esConserje">
+        <a routerLink="/paqueteria/conserje" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">local_shipping</span>
+          <span class="texto">Paquetería</span>
+        </a>
+      </li>
+      <li *ngIf="esResidente">
+        <a routerLink="/paqueteria/residente" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">inventory_2</span>
+          <span class="texto">Mis Paquetes</span>
+        </a>
+      </li>
       <li>
         <a routerLink="/perfil" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">person</span>

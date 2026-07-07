@@ -101,6 +101,12 @@ export const routes: Routes = [
         loadChildren: () => import('./dominios/visitas/visitas.routes').then(m => m.visitasRoutes)
       },
       {
+        path: 'paqueteria',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'CONSERJERIA', 'CONSERJERIA_MANTENIMIENTO', 'RESIDENTE', 'PROPIETARIO'] },
+        loadChildren: () => import('./dominios/paqueteria/paqueteria.routes').then(m => m.RUTAS_PAQUETERIA)
+      },
+      {
         path: '',
         redirectTo: 'condominios',
         pathMatch: 'full'

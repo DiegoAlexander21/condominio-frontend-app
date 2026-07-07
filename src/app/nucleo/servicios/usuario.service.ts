@@ -17,4 +17,8 @@ export class UsuarioService {
   vincularUnidad(unidadId: number): Observable<void> {
     return this.clienteHttp.put<void>(`${this.urlBase}/me/vincular?unidadId=${unidadId}`, {});
   }
+
+  vincularConserje(condominioId: number): Observable<void> {
+    return this.clienteHttp.put<void>(`${this.urlBase}/me/vincular-conserje?condominioId=${condominioId}`, {});
+  }
 }

@@ -1,0 +1,5 @@
+export enum EstadoPaquete {
+  RECIBIDO = 'RECIBIDO',
+  NOTIFICADO = 'NOTIFICADO',
+  ENTREGADO = 'ENTREGADO'
+}

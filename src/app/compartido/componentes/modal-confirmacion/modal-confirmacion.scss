@@ -61,5 +61,11 @@
     display: flex;
     justify-content: flex-end;
     gap: 0.8rem;
+
+    button {
+      padding: 0.6rem 1.5rem;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
   }
 }

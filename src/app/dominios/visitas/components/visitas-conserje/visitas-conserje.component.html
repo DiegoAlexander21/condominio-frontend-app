@@ -1,4 +1,6 @@
 <div class="panel-conserje">
+
+
   <div class="tabs">
     <button class="tab-btn" 
             [class.activo]="pestanaActiva === 'ESPERADAS'"
@@ -49,10 +51,18 @@
     </div>
 
     <ng-template #sinResultados>
-      <div class="estado-vacio">
+      <div class="estado-vacio" *ngIf="!cargando && condominioVinculado">
         <p class="texto-cargando">
           No hay visitas {{ pestanaActiva === 'ESPERADAS' ? 'esperadas' : 'en edificio' }}.
         </p>
+      </div>
+      <div class="estado-vacio" *ngIf="!cargando && !condominioVinculado">
+        <p class="texto-cargando">
+          Aún no estás vinculado a ningún condominio. Por favor, asocia tu perfil en Mi Perfil para ver las visitas.
+        </p>
+      </div>
+      <div class="estado-vacio" *ngIf="cargando">
+        <p class="texto-cargando">Cargando visitas...</p>
       </div>
     </ng-template>
 

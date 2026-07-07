@@ -28,6 +28,11 @@
   </div>
 </form>
 
+<div class="estado-vacio" *ngIf="unidad && unidad.id === 0">
+  <p class="texto-cargando">Aún no estás vinculado a ninguna unidad. Por favor, asocia tu unidad en Mi Perfil para ver tu estado de cuenta.</p>
+</div>
+
+<ng-container *ngIf="unidad && unidad.id !== 0">
 <div class="grilla-tarjetas" *ngIf="estadosPaginados.length > 0; else sinResultadosEstados">
   <div class="tarjeta-minimalista" *ngFor="let estado of estadosPaginados">
     <div class="encabezado-minimalista">
@@ -78,6 +83,7 @@
     <p class="texto-cargando">No se encontraron estados de cuenta con los filtros aplicados.</p>
   </div>
 </ng-template>
+</ng-container>
 
 <div class="modal-overlay" *ngIf="mostrarModalPago && unidad">
   <div class="modal-contenido">

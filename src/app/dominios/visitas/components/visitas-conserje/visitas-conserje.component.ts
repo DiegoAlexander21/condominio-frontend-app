@@ -1,22 +1,26 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VisitaService } from '../../services/visita.service';
+import { UsuarioService } from '../../../../nucleo/servicios/usuario.service';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { VisitaResponse, EstadoVisita, RegistroIngresoVisitaForm, RegistroSalidaVisitaForm } from '../../models/visita.model';
 import { MenuContextualComponent } from '../../../../compartido/componentes/menu-contextual/menu-contextual';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
 import { ModalConfirmacionComponent } from '../../../../compartido/componentes/modal-confirmacion/modal-confirmacion';
 
+import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-visitas-conserje',
   standalone: true,
-  imports: [CommonModule, MenuContextualComponent, PaginacionComponent, ModalConfirmacionComponent],
+  imports: [CommonModule, MenuContextualComponent, PaginacionComponent, ModalConfirmacionComponent, RouterModule],
   templateUrl: './visitas-conserje.component.html',
   styleUrls: ['./visitas-conserje.component.scss']
 })
 export class VisitasConserjeComponent implements OnInit {
   private visitaService = inject(VisitaService);
   private toastService = inject(ToastService);
+  private usuarioServicio = inject(UsuarioService);
 
   pestanaActiva: 'ESPERADAS' | 'EN_EDIFICIO' = 'ESPERADAS';
   visitas: VisitaResponse[] = [];
@@ -24,13 +28,30 @@ export class VisitasConserjeComponent implements OnInit {
   tamanoPagina: number = 10;
   visitasPaginadas: VisitaResponse[] = [];
   totalPaginas: number = 0;
+  condominioVinculado = true;
+  cargando = false;
   mostrarModalConfirmacion = false;
   tituloModal = '';
   mensajeModal = '';
   accionPendiente: () => void = () => {};
 
   ngOnInit(): void {
-    this.cargarVisitas();
+    this.cargando = true;
+    this.usuarioServicio.obtenerMiPerfil().subscribe({
+      next: (perfil) => {
+        if (!perfil.unidadId) {
+          this.condominioVinculado = false;
+          this.cargando = false;
+        } else {
+          this.condominioVinculado = true;
+          this.cargarVisitas();
+        }
+      },
+      error: () => {
+        this.condominioVinculado = false;
+        this.cargando = false;
+      }
+    });
   }
 
   cambiarPestana(pestana: 'ESPERADAS' | 'EN_EDIFICIO'): void {
@@ -40,14 +61,19 @@ export class VisitasConserjeComponent implements OnInit {
   }
 
   cargarVisitas(): void {
+    if (!this.condominioVinculado) return;
     const estadoABuscar = this.pestanaActiva === 'ESPERADAS' ? EstadoVisita.PRE_REGISTRADA : EstadoVisita.INGRESO_REGISTRADO;
-    
+    this.cargando = true;
     this.visitaService.listarVisitas(estadoABuscar).subscribe({
       next: (data) => {
         this.visitas = data.sort((a, b) => new Date(b.fechaVisitaProgramada).getTime() - new Date(a.fechaVisitaProgramada).getTime());
         this.actualizarPaginacion();
+        this.cargando = false;
       },
-      error: () => this.toastService.mostrarError('Error al cargar la lista de visitas')
+      error: () => {
+        this.toastService.mostrarError('Error al cargar la lista de visitas');
+        this.cargando = false;
+      }
     });
   }
 

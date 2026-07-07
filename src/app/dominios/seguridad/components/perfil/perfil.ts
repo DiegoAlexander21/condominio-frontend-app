@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UsuarioService } from '../../../../nucleo/servicios/usuario.service';
 import { CondominioService } from '../../../condominio/services/condominio.service';
@@ -59,7 +60,11 @@ export class PerfilComponent implements OnInit {
         this.perfil = res;
         this.cargando = false;
         
-        if (this.perfil.rol === 'RESIDENTE' && !this.perfil.unidadId) {
+        if (this.esResidente() && !this.perfil.unidadId) {
+          this.cargarCondominios();
+        } else if (this.esConserje() && !this.perfil.unidadId) {
+          this.formularioVinculacion.get('unidadId')?.clearValidators();
+          this.formularioVinculacion.get('unidadId')?.updateValueAndValidity();
           this.cargarCondominios();
         }
       },
@@ -95,22 +100,51 @@ export class PerfilComponent implements OnInit {
       return;
     }
 
-    const unidadId = this.formularioVinculacion.get('unidadId')?.value;
     this.vinculando = true;
+    const condominioId = this.formularioVinculacion.get('condominioId')?.value;
+    const unidadId = this.formularioVinculacion.get('unidadId')?.value;
 
-    this.usuarioServicio.vincularUnidad(unidadId).subscribe({
-      next: () => {
-        this.toastServicio.mostrarExito('¡Te has vinculado exitosamente a tu unidad!');
-        this.vinculando = false;
-        this.cerrarModalVincular();
-        this.cargarPerfil(); 
-      },
-      error: (err) => {
-        const mensaje = err.error?.message || 'Error al intentar vincularte a la unidad';
-        this.toastServicio.mostrarError(mensaje);
-        this.vinculando = false;
-      }
-    });
+    if (this.esConserje()) {
+      this.usuarioServicio.vincularConserje(condominioId).subscribe({
+        next: () => {
+          this.toastServicio.mostrarExito('¡Te has vinculado exitosamente al condominio!');
+          this.finalizarVinculacion();
+        },
+        error: (err) => {
+          this.manejarErrorVinculacion(err, 'Error al intentar vincularte al condominio');
+        }
+      });
+    } else {
+      this.usuarioServicio.vincularUnidad(unidadId).subscribe({
+        next: () => {
+          this.toastServicio.mostrarExito('¡Te has vinculado exitosamente a tu unidad!');
+          this.finalizarVinculacion();
+        },
+        error: (err) => {
+          this.manejarErrorVinculacion(err, 'Error al intentar vincularte a la unidad');
+        }
+      });
+    }
+  }
+
+  private finalizarVinculacion(): void {
+    this.vinculando = false;
+    this.cerrarModalVincular();
+    this.cargarPerfil();
+  }
+
+  private manejarErrorVinculacion(err: HttpErrorResponse, mensajePorDefecto: string): void {
+    const mensaje = err.error?.error || err.error?.message || mensajePorDefecto;
+    this.toastServicio.mostrarError(mensaje);
+    this.vinculando = false;
+  }
+
+  esResidente(): boolean {
+    return this.perfil?.rol === 'RESIDENTE';
+  }
+
+  esConserje(): boolean {
+    return this.perfil?.rol === 'CONSERJERIA' || this.perfil?.rol === 'CONSERJERIA_MANTENIMIENTO';
   }
 
   abrirModalVincular(): void {
