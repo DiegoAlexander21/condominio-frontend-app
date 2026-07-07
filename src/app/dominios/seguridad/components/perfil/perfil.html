@@ -33,55 +33,73 @@
       </div>
     </div>
 
-    <div class="seccion-vinculacion-minimalista" *ngIf="perfil.rol === 'RESIDENTE'">
+    <div class="seccion-vinculacion-minimalista" *ngIf="esResidente() || esConserje()">
       
       <div class="estado-vinculado" *ngIf="perfil.unidadId">
         <span class="material-symbols-outlined icono-exito">check_circle</span>
         <div class="texto-estado">
-          <strong>Vinculado a una Unidad</strong>
-          <p>Tu cuenta está correctamente asociada a <b>{{ perfil.nombreCondominio }}</b>. Torre: <b>{{ perfil.torre }}</b>, Piso: <b>{{ perfil.piso }}</b>, Depto: <b>{{ perfil.numeroUnidad }}</b>. Tienes acceso completo para realizar reservas.</p>
+          <strong>Vinculado a un Condominio</strong>
+          <p *ngIf="esResidente()">Tu cuenta está correctamente asociada a <b>{{ perfil.nombreCondominio }}</b>. Torre: <b>{{ perfil.torre }}</b>, Piso: <b>{{ perfil.piso }}</b>, Depto: <b>{{ perfil.numeroUnidad }}</b>. Tienes acceso completo para realizar reservas.</p>
+          <p *ngIf="esConserje()">Tu cuenta está correctamente asociada al condominio <b>{{ perfil.nombreCondominio }}</b>. Tienes acceso para gestionar el registro de visitas y paquetería de forma segura.</p>
         </div>
       </div>
 
-      <div class="estado-formulario" *ngIf="!perfil.unidadId">
-        <div class="cabecera-form-vincular">
-          <span class="material-symbols-outlined icono-vincular">link</span>
-          <div class="texto-estado">
-            <strong>Autovinculación de Vivienda</strong>
-            <p>Selecciona tu condominio y tu unidad para vincular tu cuenta y habilitar tus reservas.</p>
+      <div class="alerta-vincular-minimalista" *ngIf="!perfil.unidadId">
+        <div class="texto">
+          <strong>Cuenta no vinculada</strong>
+          <p *ngIf="esResidente()">Vincule su cuenta a un departamento para habilitar reservas, incidencias y visitas.</p>
+          <p *ngIf="esConserje()">Vincule su cuenta a un condominio para poder gestionar visitas y paquetes.</p>
+        </div>
+        <button type="button" class="boton-primario" (click)="abrirModalVincular()">
+          <span *ngIf="esResidente()">Vincular Vivienda</span>
+          <span *ngIf="esConserje()">Vincular Condominio</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="fondo-modal" *ngIf="mostrarModal">
+  <div class="contenedor-modal">
+    <div class="cabecera-modal">
+      <h3 class="titulo-principal">
+        <span *ngIf="esResidente()">Autovinculación de Vivienda</span>
+        <span *ngIf="esConserje()">Vincular a Condominio</span>
+      </h3>
+      <button type="button" class="boton-cerrar" (click)="cerrarModalVincular()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    
+    <div class="cuerpo-modal">
+      <form [formGroup]="formularioVinculacion" (ngSubmit)="vincularMe()" class="formulario-minimalista">
+        <div class="contenedor-campos">
+          <div class="grupo-control">
+            <select id="condominioId" formControlName="condominioId">
+              <option [ngValue]="null">Seleccione su Condominio</option>
+              <option *ngFor="let cond of listaCondominios" [value]="cond.id">{{cond.nombre}}</option>
+            </select>
+            <app-mensaje-error [control]="formularioVinculacion.get('condominioId')" nombreCampo="El condominio"></app-mensaje-error>
+          </div>
+
+          <div class="grupo-control" *ngIf="esResidente()">
+            <select id="unidadId" formControlName="unidadId">
+              <option [ngValue]="null">Seleccione su Unidad</option>
+              <option *ngFor="let un of listaUnidades" [value]="un.id">{{un.nombreMostrar}}</option>
+            </select>
+            <app-mensaje-error [control]="formularioVinculacion.get('unidadId')" nombreCampo="La unidad"></app-mensaje-error>
           </div>
         </div>
 
-        <form [formGroup]="formularioVinculacion" (ngSubmit)="vincularMe()" class="formulario-minimalista">
-          <div class="contenedor-campos">
-            <div class="grupo-control">
-              <label for="condominioId">Condominio</label>
-              <select id="condominioId" formControlName="condominioId">
-                <option [ngValue]="null">Seleccione su Condominio</option>
-                <option *ngFor="let cond of listaCondominios" [value]="cond.id">{{cond.nombre}}</option>
-              </select>
-              <app-mensaje-error [control]="formularioVinculacion.get('condominioId')" nombreCampo="El condominio"></app-mensaje-error>
-            </div>
-
-            <div class="grupo-control">
-              <label for="unidadId">Unidad (Departamento)</label>
-              <select id="unidadId" formControlName="unidadId">
-                <option [ngValue]="null">Seleccione su Unidad</option>
-                <option *ngFor="let un of listaUnidades" [value]="un.id">{{un.nombreMostrar}}</option>
-              </select>
-              <app-mensaje-error [control]="formularioVinculacion.get('unidadId')" nombreCampo="La unidad"></app-mensaje-error>
-            </div>
-          </div>
-
-          <div class="acciones-formulario">
-            <button type="submit" class="boton-primario" [disabled]="formularioVinculacion.invalid || vinculando">
-              <span class="material-symbols-outlined" *ngIf="!vinculando">add_link</span>
-              {{ vinculando ? 'Vinculando...' : 'Vincularme a esta Unidad' }}
-            </button>
-          </div>
-        </form>
-
-      </div>
+        <div class="acciones-formulario">
+          <button type="button" class="boton-secundario" (click)="cerrarModalVincular()">Cancelar</button>
+          <button type="submit" class="boton-primario" [disabled]="formularioVinculacion.invalid || vinculando">
+            <span class="material-symbols-outlined" *ngIf="!vinculando">link</span>
+            {{ vinculando ? 'Vinculando...' : 'Confirmar' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -24,6 +24,7 @@ import { MenuContextualComponent } from '../../../../compartido/componentes/menu
 })
 export class ListaHistorialPagosComponent implements OnInit, OnChanges {
   @Input() pagosOriginales: PagoResponse[] = [];
+  @Input() unidadId: number = 0;
 
   pagosFiltrados: PagoResponse[] = [];
   pagosPaginados: PagoResponse[] = [];

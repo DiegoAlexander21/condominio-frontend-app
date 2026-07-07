@@ -1,0 +1,81 @@
+<div class="contenedor-unidades">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Mis Paquetes</h2>
+  </div>
+
+  <form [formGroup]="formularioFiltros" class="panel-filtros" (ngSubmit)="buscar()">
+    <div class="grupo-filtro filtro-estado-residente">
+      <label>Filtrar por Estado</label>
+      <app-select-personalizado 
+        formControlName="estado" 
+        [opciones]="opcionesEstado" 
+        placeholder="Todos los estados">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div class="estado-vacio" *ngIf="cargando">
+    <p class="texto-cargando">Cargando tus paquetes...</p>
+  </div>
+
+  <div class="estado-vacio" *ngIf="!cargando && !unidadId">
+    <p class="texto-cargando">Aún no estás vinculado a ninguna unidad. Por favor, asocia tu unidad en Mi Perfil para ver tus paquetes.</p>
+  </div>
+
+  <div class="estado-vacio" *ngIf="unidadId && !cargando && paquetes.length === 0">
+    <p class="texto-cargando">No hay paquetes registrados para tu unidad.</p>
+  </div>
+
+  <div class="estado-vacio" *ngIf="unidadId && !cargando && paquetes.length > 0 && paquetesFiltrados.length === 0">
+    <p class="texto-cargando">No se encontraron paquetes con los filtros aplicados.</p>
+  </div>
+
+  <div class="grilla-tarjetas" *ngIf="!cargando && paquetesFiltrados.length > 0">
+    <div class="tarjeta" *ngFor="let paquete of paquetesPaginados">
+      <div class="tarjeta-encabezado">
+        <h3 class="titulo-principal">{{ paquete.remitente }}</h3>
+      </div>
+      
+      <div class="tarjeta-detalle">
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">person</span>
+          <span>Dirigido a: <strong>{{ paquete.destinatario }}</strong></span>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">calendar_today</span>
+          <span>Recibido en Conserjería: <strong>{{ paquete.fechaRecepcion | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+        </div>
+        <div class="detalle-fila" *ngIf="paquete.fechaEntrega">
+          <span class="material-symbols-outlined icono-inline">event_available</span>
+          <span>Entregado el: <strong>{{ paquete.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">info</span>
+          <span>Estado: <strong [ngClass]="obtenerClaseEstado(paquete.estado)">{{ paquete.estado | titlecase }}</strong></span>
+        </div>
+        <div class="detalle-fila" *ngIf="paquete.observacion">
+          <span class="material-symbols-outlined icono-inline">notes</span>
+          <span>Nota: <strong>{{ paquete.observacion }}</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-paginacion 
+    *ngIf="totalPaginas > 1"
+    [paginaActual]="paginaActual" 
+    [totalPaginas]="totalPaginas"
+    (cambioPagina)="cambiarPagina($event)">
+  </app-paginacion>
+
+</div>

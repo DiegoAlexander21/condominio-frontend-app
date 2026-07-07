@@ -1,8 +1,8 @@
 <div class="contenedor-formulario">
   <h2 class="titulo-principal">Registrar Reserva</h2>
 
-  <div class="alerta-error" *ngIf="!esAdmin && !unidadIdUsuario" style="margin-bottom: 2rem; background: rgba(222, 75, 75, 0.1); padding: 1rem; border-left: 4px solid var(--error); border-radius: 4px;">
-    <strong>Atención:</strong> Aún no tienes una unidad vinculada a tu cuenta. <a routerLink="/perfil" style="color: var(--primario); font-weight: bold; text-decoration: underline;">Ve a Mi Perfil</a> para solucionar esto antes de intentar hacer una reserva.
+  <div class="alerta-error alerta-vinculacion" *ngIf="!esAdmin && !unidadIdUsuario">
+    <strong>Atención:</strong> Aún no tienes una unidad vinculada a tu cuenta. <a routerLink="/perfil">Ve a Mi Perfil</a> para solucionar esto antes de intentar hacer una reserva.
   </div>
 
   <form [formGroup]="formularioReserva" (ngSubmit)="guardarReserva()" class="formulario-flex">

@@ -61,6 +61,7 @@ export class ListaGastosComponent implements OnInit {
   modalConfirmacionVisible = false;
   modalConfirmacionTitulo = '';
   modalConfirmacionMensaje = '';
+  modalConfirmacionEsPeligro = true;
   accionPendiente: { tipo: 'ELIMINAR' | 'DISTRIBUIR', id: number } | null = null;
 
   modalDistribucionVisible = false;
@@ -171,6 +172,7 @@ export class ListaGastosComponent implements OnInit {
     this.accionPendiente = { tipo: 'ELIMINAR', id };
     this.modalConfirmacionTitulo = 'Eliminar Gasto';
     this.modalConfirmacionMensaje = '¿Está seguro de eliminar este gasto? Esta acción no se puede deshacer.';
+    this.modalConfirmacionEsPeligro = true;
     this.modalConfirmacionVisible = true;
   }
 
@@ -186,6 +188,7 @@ export class ListaGastosComponent implements OnInit {
     } else {
       this.modalConfirmacionTitulo = 'Distribuir Gasto';
       this.modalConfirmacionMensaje = '¿Está seguro de distribuir este gasto? Las cuotas se asignarán permanentemente.';
+      this.modalConfirmacionEsPeligro = false;
       this.modalConfirmacionVisible = true;
     }
   }

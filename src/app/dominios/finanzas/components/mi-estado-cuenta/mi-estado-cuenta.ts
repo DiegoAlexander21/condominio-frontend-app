@@ -50,7 +50,20 @@ export class MiEstadoCuentaComponent implements OnInit {
         this.cargando = false;
       },
       error: (err) => {
-        this.toastService.mostrarError('Error al cargar la información financiera.');
+        if (err.status === 404) {
+          this.unidad = {
+            id: 0,
+            numeroUnidad: '-',
+            torre: '-',
+            piso: '-',
+            condominioId: 0,
+            condominio: { id: 0, nombre: '-' }
+          } as any;
+          this.estadosOriginales = [];
+          this.pagosOriginales = [];
+        } else {
+          this.toastService.mostrarError('Error al cargar la información financiera.');
+        }
         this.cargando = false;
       }
     });

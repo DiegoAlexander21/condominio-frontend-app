@@ -28,6 +28,11 @@
   </div>
 </form>
 
+<div class="estado-vacio" *ngIf="unidadId === 0">
+  <p class="texto-cargando">Aún no estás vinculado a ninguna unidad. Por favor, asocia tu unidad en Mi Perfil para ver tus pagos.</p>
+</div>
+
+<ng-container *ngIf="unidadId !== 0">
 <div class="grilla-tarjetas" *ngIf="pagosPaginados.length > 0; else sinResultadosPagos">
   <div class="tarjeta-minimalista" *ngFor="let pago of pagosPaginados">
     <div class="encabezado-minimalista">
@@ -80,6 +85,7 @@
     <p class="texto-cargando">No se encontraron pagos con los filtros aplicados.</p>
   </div>
 </ng-template>
+</ng-container>
 
 <div class="modal-overlay" *ngIf="mostrarModalRecibo && pagoSeleccionado">
   <div class="modal-contenido modal-evidencia">

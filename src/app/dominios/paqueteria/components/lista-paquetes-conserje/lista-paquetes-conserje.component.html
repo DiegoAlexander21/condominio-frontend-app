@@ -1,0 +1,121 @@
+<div class="contenedor-unidades">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Gestión de Paquetería</h2>
+    <div class="acciones-cabecera">
+      <button class="boton-primario" routerLink="/paqueteria/conserje/nuevo">
+        Nuevo Paquete
+      </button>
+    </div>
+  </div>
+
+
+
+  <form [formGroup]="formularioFiltros" class="panel-filtros" (ngSubmit)="buscar()">
+    <div class="grupo-filtro">
+      <label>Buscar destinatario, remitente o unidad</label>
+      <app-input-busqueda 
+        formControlName="busqueda" 
+        placeholder="Ej. Juan Perez, 101, Torre A...">
+      </app-input-busqueda>
+    </div>
+    
+    <div class="grupo-filtro">
+      <label>Filtrar por Estado</label>
+      <app-select-personalizado 
+        formControlName="estado" 
+        [opciones]="opcionesEstado" 
+        placeholder="Todos los estados">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div class="estado-vacio" *ngIf="cargando">
+    <p class="texto-cargando">Cargando paquetes...</p>
+  </div>
+
+  <div class="estado-vacio" *ngIf="!condominioVinculado && !cargando">
+    <p class="texto-cargando">Aún no estás vinculado a ningún condominio. Por favor, asocia tu perfil en Mi Perfil para ver la paquetería.</p>
+  </div>
+
+  <div class="estado-vacio" *ngIf="condominioVinculado && !cargando && paquetes.length === 0">
+    <p class="texto-cargando">No hay paquetes registrados aún.</p>
+  </div>
+
+  <div class="estado-vacio" *ngIf="condominioVinculado && !cargando && paquetes.length > 0 && paquetesFiltrados.length === 0">
+    <p class="texto-cargando">No se encontraron paquetes con los filtros aplicados.</p>
+  </div>
+
+  <div class="grilla-tarjetas" *ngIf="!cargando && paquetesFiltrados.length > 0">
+    <div class="tarjeta" *ngFor="let paquete of paquetesPaginados">
+      <div class="tarjeta-encabezado">
+        <h3 class="titulo-secundario">Torre {{ paquete.unidadTorre }} - Unidad {{ paquete.unidadNumero }}</h3>
+        <button *ngIf="paquete.estado !== 'ENTREGADO'" class="boton-secundario boton-pequeno" (click)="abrirModalEntrega(paquete)">
+          <span class="material-symbols-outlined icono-pequeno">check_circle</span>
+          Entregar
+        </button>
+      </div>
+      
+      <div class="tarjeta-detalle">
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">person</span>
+          <span>Destinatario: <strong>{{ paquete.destinatario }}</strong></span>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">local_shipping</span>
+          <span>Remitente: <strong>{{ paquete.remitente }}</strong></span>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">calendar_today</span>
+          <span>Recepción: <strong>{{ paquete.fechaRecepcion | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+        </div>
+        <div class="detalle-fila" *ngIf="paquete.fechaEntrega">
+          <span class="material-symbols-outlined icono-inline">event_available</span>
+          <span>Entrega: <strong>{{ paquete.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">info</span>
+          <span>Estado: <strong [ngClass]="obtenerClaseEstado(paquete.estado)">{{ paquete.estado | titlecase }}</strong></span>
+        </div>
+        <div class="detalle-fila" *ngIf="paquete.observacion">
+          <span class="material-symbols-outlined icono-inline">notes</span>
+          <span>Nota: <strong>{{ paquete.observacion }}</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-paginacion 
+    *ngIf="totalPaginas > 1"
+    [paginaActual]="paginaActual" 
+    [totalPaginas]="totalPaginas"
+    (cambioPagina)="cambiarPagina($event)">
+  </app-paginacion>
+
+</div>
+
+<app-modal-confirmacion
+  *ngIf="mostrarModalConfirmacion"
+  [visible]="true"
+  [esPeligro]="false"
+  titulo="Registrar Entrega de Paquete"
+  mensaje="¿Confirmas la entrega de este paquete a la Torre {{ paqueteSeleccionadoParaEntrega?.unidadTorre }}, Unidad {{ paqueteSeleccionadoParaEntrega?.unidadNumero }}?"
+  textoConfirmar="Registrar Entrega"
+  (alConfirmar)="confirmarEntrega()"
+  (alCancelar)="cancelarEntrega()">
+  <div class="contenido-extra-modal">
+    <div class="grupo-control">
+      <label for="observacionEntrega">Observación (Opcional)</label>
+      <input type="text" id="observacionEntrega" [value]="observacionEntrega" (input)="actualizarObservacion($event)" placeholder="Ej. Recibido por familiar, etc.">
+    </div>
+  </div>
+</app-modal-confirmacion>

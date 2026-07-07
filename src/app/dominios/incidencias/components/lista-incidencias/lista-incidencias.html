@@ -45,8 +45,13 @@
 
   <p *ngIf="cargando" class="texto-cargando">Cargando incidencias...</p>
 
-  <div *ngIf="!cargando && listaIncidencias.length === 0" class="mensaje-vacio">
-    No se encontraron incidencias que coincidan con los filtros.
+  <div *ngIf="!cargando && !esAdministrador && !unidadIdUsuario" class="estado-vacio">
+    <p class="texto-cargando">Aún no estás vinculado a ninguna unidad. Por favor, asocia tu unidad en Mi Perfil para ver tus incidencias.</p>
+  </div>
+
+  <div *ngIf="!cargando && (esAdministrador || unidadIdUsuario) && listaIncidencias.length === 0" class="estado-vacio">
+    <p class="texto-cargando" *ngIf="listaIncidenciasGlobal.length === 0">Aún no hay incidencias registradas.</p>
+    <p class="texto-cargando" *ngIf="listaIncidenciasGlobal.length > 0">No se encontraron incidencias que coincidan con los filtros.</p>
   </div>
 
   <div class="grilla-tarjetas" *ngIf="!cargando && listaIncidencias.length > 0">

@@ -1,0 +1,85 @@
+<div class="panel-conserje">
+
+
+  <div class="tabs">
+    <button class="tab-btn" 
+            [class.activo]="pestanaActiva === 'ESPERADAS'"
+            (click)="cambiarPestana('ESPERADAS')">
+      Visitas Esperadas
+    </button>
+    <button class="tab-btn" 
+            [class.activo]="pestanaActiva === 'EN_EDIFICIO'"
+            (click)="cambiarPestana('EN_EDIFICIO')">
+      En Edificio
+    </button>
+  </div>
+
+  <div class="contenedor-grilla">
+    <div class="grilla-tarjetas" *ngIf="visitasPaginadas.length > 0; else sinResultados">
+      <div class="tarjeta" *ngFor="let visita of visitasPaginadas">
+        <div class="tarjeta-encabezado">
+          <h3 class="titulo-principal">
+            <span>{{ visita.nombreVisitante }}</span>
+          </h3>
+          <app-menu-contextual 
+            [identificador]="visita.id"
+            [mostrarEditar]="false"
+            [mostrarEliminar]="false"
+            [mostrarActualizarEstado]="true"
+            (alActualizarEstado)="prepararCambioEstado(visita.id)">
+          </app-menu-contextual>
+        </div>
+        <div class="tarjeta-detalle">
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">badge</span>
+            <span>Documento: <strong>{{ visita.documentoVisitante }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">apartment</span>
+            <span>Unidad Destino: <strong>Torre {{ visita.torre }} - Depto {{ visita.numeroUnidad }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">schedule</span>
+            <span>Programada: <strong>{{ visita.fechaVisitaProgramada | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+          </div>
+          <div class="detalle-fila" *ngIf="pestanaActiva === 'EN_EDIFICIO'">
+            <span class="material-symbols-outlined icono-inline">login</span>
+            <span>Ingresó: <strong>{{ visita.fechaIngreso | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #sinResultados>
+      <div class="estado-vacio" *ngIf="!cargando && condominioVinculado">
+        <p class="texto-cargando">
+          No hay visitas {{ pestanaActiva === 'ESPERADAS' ? 'esperadas' : 'en edificio' }}.
+        </p>
+      </div>
+      <div class="estado-vacio" *ngIf="!cargando && !condominioVinculado">
+        <p class="texto-cargando">
+          Aún no estás vinculado a ningún condominio. Por favor, asocia tu perfil en Mi Perfil para ver las visitas.
+        </p>
+      </div>
+      <div class="estado-vacio" *ngIf="cargando">
+        <p class="texto-cargando">Cargando visitas...</p>
+      </div>
+    </ng-template>
+
+    <app-paginacion 
+      *ngIf="totalPaginas > 1"
+      [paginaActual]="paginaActual" 
+      [totalPaginas]="totalPaginas" 
+      (cambioPagina)="cambiarPagina($event)">
+    </app-paginacion>
+  </div>
+</div>
+
+<app-modal-confirmacion
+  [visible]="mostrarModalConfirmacion"
+  [titulo]="tituloModal"
+  [mensaje]="mensajeModal"
+  [esPeligro]="false"
+  (alConfirmar)="ejecutarAccionConfirmada()"
+  (alCancelar)="cancelarAccion()">
+</app-modal-confirmacion>

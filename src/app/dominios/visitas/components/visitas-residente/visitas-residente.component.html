@@ -8,6 +8,8 @@
     </div>
   </div>
 
+
+
 <form [formGroup]="formularioFiltro" (ngSubmit)="buscarVisitas()" class="panel-filtros">
   <div class="grupo-filtro">
     <label>Buscar Visitante o Documento</label>
@@ -77,8 +79,9 @@
 
     <ng-template #estadoVacio>
       <div class="estado-vacio">
-        <p class="texto-cargando" *ngIf="visitasGlobal.length === 0">Aún no tienes visitas programadas.</p>
-        <p class="texto-cargando" *ngIf="visitasGlobal.length > 0">No se encontraron visitas que coincidan con los filtros.</p>
+        <p class="texto-cargando" *ngIf="!unidadId">Aún no estás vinculado a ninguna unidad. Por favor, asocia tu unidad en Mi Perfil para ver tus visitas.</p>
+        <p class="texto-cargando" *ngIf="unidadId && visitasGlobal.length === 0">Aún no tienes visitas programadas.</p>
+        <p class="texto-cargando" *ngIf="unidadId && visitasGlobal.length > 0">No se encontraron visitas que coincidan con los filtros.</p>
       </div>
     </ng-template>
 

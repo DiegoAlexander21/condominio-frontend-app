@@ -1,0 +1,20 @@
+.contenedor-unidades {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.estado-recibido {
+  color: var(--terciario);
+}
+.estado-notificado {
+  color: var(--secundario);
+}
+.estado-entregado {
+  color: var(--exito);
+}
+
+.filtro-estado-residente {
+  flex: 1;
+  max-width: 300px;
+}

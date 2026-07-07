@@ -46,6 +46,7 @@ export class ListaIncidencias implements OnInit {
   listaIncidenciasGlobal: IncidenciaResponse[] = [];
   listaIncidenciasFiltradas: IncidenciaResponse[] = [];
 
+  unidadIdUsuario: number | null = null;
   cargando = false;
   esAdministrador = false;
   estados = Object.values(EstadoIncidencia);
@@ -78,6 +79,7 @@ export class ListaIncidencias implements OnInit {
 
   ngOnInit(): void {
     this.esAdministrador = this.authService.obtenerRoles().includes('ROLE_ADMINISTRADOR') || this.authService.obtenerRoles().includes('ADMINISTRADOR');
+    this.unidadIdUsuario = this.authService.obtenerUnidadId();
     this.obtenerDatos();
   }
 
@@ -86,7 +88,13 @@ export class ListaIncidencias implements OnInit {
     let unidadIdConsulta: number | undefined;
     if (!this.esAdministrador) {
       const miUnidad = this.authService.obtenerUnidadId();
-      unidadIdConsulta = miUnidad ? miUnidad : undefined;
+      if (!miUnidad) {
+        this.listaIncidenciasGlobal = [];
+        this.cargando = false;
+        this.aplicarFiltrosLocales();
+        return;
+      }
+      unidadIdConsulta = miUnidad;
     }
 
     this.incidenciasService.obtenerListaPorEstado(undefined, unidadIdConsulta, 0, 10000).subscribe({

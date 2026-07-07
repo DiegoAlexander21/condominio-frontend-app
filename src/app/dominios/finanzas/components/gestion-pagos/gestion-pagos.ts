@@ -176,6 +176,12 @@ export class GestionPagosComponent implements OnInit {
     this.pagoSeleccionado = null;
   }
 
+  cerrarModalFondo(event: MouseEvent): void {
+    if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
+      this.cerrarModalRecibo();
+    }
+  }
+
   procesarPago(): void {
     if (this.pagoIdSeleccionado !== null && this.accionActual !== null) {
       const aprobar = this.accionActual;

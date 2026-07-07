@@ -1,0 +1,53 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">Registrar Recepción de Paquete</h2>
+
+  <div class="alerta-error alerta-vinculacion" *ngIf="!condominioVinculado">
+    <strong>Atención:</strong> Aún no tienes un condominio vinculado a tu cuenta. <a routerLink="/perfil">Ve a Mi Perfil</a> para solucionar esto antes de registrar un paquete.
+  </div>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+    
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="unidadId">Unidad Destino</label>
+        <select id="unidadId" formControlName="unidadId">
+          <option value="" disabled selected>{{ cargandoUnidades ? 'Cargando unidades...' : 'Seleccione la unidad...' }}</option>
+          <option *ngFor="let u of unidades" [value]="u.id">
+            Torre {{ u.torre || 'N/A' }} - Piso {{ u.piso }} - N° {{ u.numeroUnidad }}
+          </option>
+        </select>
+        <app-mensaje-error [control]="formulario.get('unidadId')" nombreCampo="La unidad"></app-mensaje-error>
+      </div>
+      
+      <div class="grupo-control">
+        <label for="destinatario">Destinatario</label>
+        <input type="text" id="destinatario" formControlName="destinatario" placeholder="Nombre de quien recibe">
+        <app-mensaje-error [control]="formulario.get('destinatario')" nombreCampo="El destinatario"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control ancho-completo">
+        <label for="remitente">Remitente (Empresa/Persona)</label>
+        <input type="text" id="remitente" formControlName="remitente" placeholder="Ej. Amazon, Olva Courier...">
+        <app-mensaje-error [control]="formulario.get('remitente')" nombreCampo="El remitente"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control ancho-completo">
+        <label for="observacion">Observaciones Adicionales</label>
+        <input type="text" id="observacion" formControlName="observacion" placeholder="Ej. Caja frágil, Sobre manila...">
+        <app-mensaje-error [control]="formulario.get('observacion')" nombreCampo="La observación"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="acciones-formulario">
+      <button type="button" class="boton-secundario" (click)="cancelar()" [disabled]="guardando">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="guardando || formulario.invalid || !condominioVinculado">
+        {{ guardando ? 'Guardando...' : 'Registrar Paquete' }}
+      </button>
+    </div>
+
+  </form>
+</div>
