@@ -29,6 +29,14 @@ export class ComunicacionService {
     return this.http.get<AsambleaResponse[]>(`${this.urlAsambleas}?condominioId=${condominioId}`);
   }
 
+  obtenerAsambleaPorId(id: number): Observable<AsambleaResponse> {
+    return this.http.get<AsambleaResponse>(`${this.urlAsambleas}/${id}`);
+  }
+
+  terminarAsamblea(id: number): Observable<any> {
+    return this.http.put(`${this.urlAsambleas}/${id}/terminar`, {});
+  }
+
   registrarAsamblea(formulario: AsambleaForm): Observable<any> {
     return this.http.post(this.urlAsambleas, formulario);
   }
@@ -39,5 +47,9 @@ export class ComunicacionService {
 
   obtenerResultadosVotacion(asambleaId: number): Observable<ResultadoAsambleaResponse> {
     return this.http.get<ResultadoAsambleaResponse>(`${this.urlAsambleas}/resultados?asambleaId=${asambleaId}`);
+  }
+
+  verificarVoto(asambleaId: number, unidadId: number): Observable<{votoRegistrado: boolean}> {
+    return this.http.get<{votoRegistrado: boolean}>(`${this.urlAsambleas}/${asambleaId}/voto?unidadId=${unidadId}`);
   }
 }

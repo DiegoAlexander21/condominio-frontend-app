@@ -1,0 +1,39 @@
+.tarjeta-activa {
+  border-color: var(--primario);
+  box-shadow: 0 4px 12px rgba(49, 56, 82, 0.1);
+}
+
+.tarjeta-encabezado {
+  gap: 1rem;
+}
+
+.acciones-lista {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.descripcion-asamblea {
+  margin-bottom: 0.5rem;
+  span {
+    font-size: 0.95rem;
+  }
+}
+
+.contenedor-boton-asamblea {
+  margin-top: 1rem;
+}
+
+.boton-bloque {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contenedor-principal {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}

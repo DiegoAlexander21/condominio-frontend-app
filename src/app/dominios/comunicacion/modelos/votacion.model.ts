@@ -12,6 +12,7 @@ export interface OpcionResultadoResponse {
 export interface ResultadoAsambleaResponse {
   asambleaId: number;
   totalVotos: number;
+  estado: string;
   resultados: OpcionResultadoResponse[];
 }
 

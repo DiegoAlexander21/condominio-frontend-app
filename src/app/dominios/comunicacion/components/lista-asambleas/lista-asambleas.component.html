@@ -1,0 +1,99 @@
+<div class="contenedor-principal">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Asambleas {{ esAdministrador() ? '(Administrador)' : '(Residente)' }}</h2>
+    <div class="acciones-cabecera" *ngIf="esAdministrador()">
+      <button class="boton-primario" routerLink="nueva">
+        <span></span> Nueva Asamblea
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="formularioFiltros" class="panel-filtros" (ngSubmit)="buscar()" *ngIf="esAdministrador()">
+    <div class="grupo-filtro" *ngIf="esAdministrador()">
+      <label>Condominio</label>
+      <app-select-personalizado 
+        formControlName="condominioId"
+        [opciones]="opcionesCondominios"
+        placeholder="Seleccione un condominio">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro" *ngIf="formularioFiltros.get('condominioId')?.value">
+      <label>Torre</label>
+      <app-select-personalizado 
+        formControlName="torre"
+        [opciones]="opcionesTorres"
+        placeholder="Todas las torres">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro" *ngIf="formularioFiltros.get('torre')?.value">
+      <label>Vivienda</label>
+      <app-select-personalizado 
+        formControlName="unidadId"
+        [opciones]="opcionesUnidades"
+        placeholder="Todas las viviendas">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div class="estado-vacio" *ngIf="cargando">
+    <p class="texto-cargando">Cargando asambleas...</p>
+  </div>
+
+  <ng-container *ngIf="!cargando && mostrarResultados">
+    <div class="estado-vacio" *ngIf="state.asambleasFiltradas.length === 0">
+      <p class="texto-cargando">No hay asambleas registradas con los filtros aplicados.</p>
+    </div>
+
+    <div class="grilla-tarjetas" *ngIf="state.asambleasFiltradas.length > 0">
+      <div class="tarjeta" *ngFor="let asm of state.asambleasPaginadas" [ngClass]="{'tarjeta-activa': asm.estado === 'ABIERTA'}">
+        <div class="tarjeta-encabezado">
+          <h3 class="titulo-principal">{{ asm.titulo }}</h3>
+          <span class="badge-estado" [ngClass]="'badge-' + asm.estado.toLowerCase()">
+            {{ asm.estado === 'ABIERTA' ? 'EN CURSO' : asm.estado }}
+          </span>
+        </div>
+        
+        <div class="tarjeta-detalle">
+          <div class="detalle-fila descripcion-asamblea">
+            <span>{{ asm.descripcion }}</span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">calendar_today</span>
+            <span>Inicio: <strong>{{ state.formatearFecha(asm.fechaInicio) }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">event_available</span>
+            <span>Fin: <strong>{{ state.formatearFecha(asm.fechaFin) }}</strong></span>
+          </div>
+        </div>
+
+        <div class="contenedor-boton-asamblea">
+          <button class="boton-primario boton-bloque" [routerLink]="['/comunicacion/asambleas', asm.id]">
+            <span class="material-symbols-outlined">{{ asm.estado === 'ABIERTA' ? 'how_to_vote' : 'visibility' }}</span>
+            {{ asm.estado === 'ABIERTA' ? 'Ingresar a la Sala' : 'Ver Resultados' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <app-paginacion 
+      *ngIf="state.obtenerTotalPaginas() > 1"
+      [paginaActual]="state.paginaActual"
+      [totalPaginas]="state.obtenerTotalPaginas()"
+      (cambioPagina)="state.actualizarPaginacion($event)">
+    </app-paginacion>
+  </ng-container>
+
+</div>
