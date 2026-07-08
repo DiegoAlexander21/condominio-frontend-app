@@ -1,0 +1,78 @@
+<div class="estado-vacio" *ngIf="cargando">
+  <p class="texto-cargando">Cargando sala de asamblea...</p>
+</div>
+
+<div class="sala-contenedor" *ngIf="!cargando && asamblea">
+  <div class="cabecera-sala">
+    <div class="info-principal">
+      <h2 class="titulo-asamblea">{{ asamblea.titulo }}</h2>
+      <span class="badge-estado" [ngClass]="'badge-' + asamblea.estado.toLowerCase()">
+        {{ asamblea.estado === EstadoAsamblea.ABIERTA ? 'EN CURSO (Votación Activa)' : asamblea.estado }}
+      </span>
+    </div>
+    <div class="acciones-cabecera">
+      <button class="boton-secundario" (click)="volver()">Volver</button>
+      <button class="boton-primario" (click)="terminarAsamblea()" *ngIf="esAdministrador() && asamblea.estado === EstadoAsamblea.ABIERTA" [disabled]="votando">
+        Terminar Votación
+      </button>
+    </div>
+  </div>
+
+  <div class="panel-descripcion">
+    <h3>Temario / Descripción</h3>
+    <p>{{ asamblea.descripcion }}</p>
+  </div>
+
+  <div class="area-votacion">
+    <div class="seccion-emitir-voto" *ngIf="esResidenteHabilitado() && asamblea.estado === EstadoAsamblea.ABIERTA && !yaVoto">
+      <h3 class="titulo-seccion">Emitir Voto</h3>
+      <p class="instruccion">Selecciona cuidadosamente tu opción. El voto es irreversible.</p>
+      
+      <div class="grilla-opciones">
+        <button class="tarjeta-opcion" *ngFor="let op of asamblea.opciones" (click)="votar(op.id)" [disabled]="votando">
+          <span class="texto-opcion">{{ op.texto }}</span>
+          <span class="material-symbols-outlined icono-votar">how_to_vote</span>
+        </button>
+      </div>
+    </div>
+    <div class="seccion-resultados" *ngIf="!esResidenteHabilitado() || asamblea.estado !== EstadoAsamblea.ABIERTA || yaVoto">
+      <div class="cabecera-resultados">
+        <h3 class="titulo-seccion">Resultados en Tiempo Real</h3>
+        <span class="total-votos">Total de Votos: {{ resultados?.totalVotos || 0 }}</span>
+      </div>
+
+      <div class="lista-resultados">
+        <div class="resultado-item" *ngFor="let op of asamblea.opciones">
+          <div class="info-resultado">
+            <span class="texto-opcion">{{ op.texto }}</span>
+            <span class="cantidad-votos">{{ obtenerVotosOpcion(op.id) }} votos ({{ obtenerPorcentaje(obtenerVotosOpcion(op.id)) | number:'1.0-1' }}%)</span>
+          </div>
+          <div class="barra-fondo">
+            <div class="barra-progreso" [style.width.%]="obtenerPorcentaje(obtenerVotosOpcion(op.id))"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mensaje-exito-voto" *ngIf="yaVoto">
+        <div class="mensaje-texto">
+          <span class="material-symbols-outlined">check_circle</span>
+          ¡Gracias por participar! Tu voto ha sido contabilizado.
+        </div>
+        <button class="boton-secundario boton-cambiar-voto" (click)="cambiarVoto()" *ngIf="esResidenteHabilitado() && asamblea.estado === EstadoAsamblea.ABIERTA">
+          Cambiar mi voto
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<app-modal-confirmacion
+  [visible]="mostrarModalTerminar"
+  titulo="Terminar Votación"
+  mensaje="¿Estás seguro de que deseas terminar esta votación? Esta acción es irreversible y no se podrán recibir más votos."
+  [esPeligro]="false"
+  textoConfirmar="Terminar Votación"
+  (alConfirmar)="confirmarTerminarAsamblea()"
+  (alCancelar)="mostrarModalTerminar = false">
+</app-modal-confirmacion>

@@ -1,9 +1,14 @@
 import { EstadoAsamblea } from './estado-asamblea.enum';
+import { AlcanceComunicado } from './alcance-comunicado.enum';
 import { OpcionVotacionResponse } from './votacion.model';
+import { ComunicadoTorreDto } from './comunicado.model';
 
 export interface AsambleaResponse {
   id: number;
-  condominioId: number;
+  condominioIds: number[];
+  alcance: AlcanceComunicado;
+  torres: ComunicadoTorreDto[];
+  unidadIds: number[];
   titulo: string;
   descripcion: string;
   fechaInicio: string;
@@ -13,7 +18,10 @@ export interface AsambleaResponse {
 }
 
 export interface AsambleaForm {
-  condominioId: number;
+  condominioIds: number[];
+  alcance: AlcanceComunicado;
+  torres?: ComunicadoTorreDto[];
+  unidadIds?: number[];
   titulo: string;
   descripcion: string;
   fechaInicio: string;

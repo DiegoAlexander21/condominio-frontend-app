@@ -1,0 +1,159 @@
+<div class="contenedor-formulario">
+  <h2 class="titulo-principal">Nueva Asamblea</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+    
+    <div class="fila-controles fila-vertical">
+      <div class="grupo-control">
+        <div class="cabecera-seccion">
+          <div class="titulo-con-tooltip">
+            <label>1. Seleccione Condominios</label>
+            <app-tooltip-informativo titulo="Selección de Condominios">
+              <p>Elige los condominios destino de la asamblea.</p>
+            </app-tooltip-informativo>
+          </div>
+          <div class="acciones-chips" *ngIf="state.condominios.length > 0">
+            <button type="button" class="boton-texto" (click)="state.seleccionarTodosCondominios()" *ngIf="state.condominios.length !== formulario.get('condominioIds')?.value?.length">Seleccionar Todos</button>
+            <button type="button" class="boton-texto" (click)="state.deseleccionarTodosCondominios()" *ngIf="state.condominios.length === formulario.get('condominioIds')?.value?.length">Deseleccionar Todos</button>
+          </div>
+        </div>
+        <div class="contenedor-chips">
+          <label class="chip-opcion" *ngFor="let c of state.condominios">
+            <input type="checkbox" [value]="c.id" (change)="state.alternarCondominio(c.id)" [checked]="state.esCondominioSeleccionado(c.id)">
+            <span>C{{ c.id }} - {{ c.nombre }}</span>
+          </label>
+        </div>
+        <app-mensaje-error [control]="formulario.get('condominioIds')" nombreCampo="Los condominios"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <div class="cabecera-seccion">
+          <div class="titulo-con-tooltip">
+            <label>2. ¿Quiénes participarán en la asamblea?</label>
+            <app-tooltip-informativo titulo="Alcance de la Asamblea">
+              <p>Define a quiénes va dirigido: todos los residentes, torres o viviendas específicas.</p>
+            </app-tooltip-informativo>
+          </div>
+        </div>
+        <div class="contenedor-chips">
+          <label class="chip-opcion">
+            <input type="radio" formControlName="alcance" value="GLOBAL" (change)="state.alCambiarAlcance()">
+            <span>A todos los residentes</span>
+          </label>
+          <label class="chip-opcion">
+            <input type="radio" formControlName="alcance" value="TORRE" (change)="state.alCambiarAlcance()">
+            <span>A torres específicas</span>
+          </label>
+          <label class="chip-opcion">
+            <input type="radio" formControlName="alcance" value="UNIDAD" (change)="state.alCambiarAlcance()">
+            <span>A viviendas específicas</span>
+          </label>
+        </div>
+        <app-mensaje-error [control]="formulario.get('alcance')" nombreCampo="El alcance"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles fila-vertical" *ngIf="alcanceSeleccionado === 'TORRE' || alcanceSeleccionado === 'UNIDAD'">
+      <div class="grupo-control">
+        <div class="cabecera-seccion">
+          <div class="titulo-con-tooltip">
+            <label>3. Seleccione las Torres</label>
+            <app-tooltip-informativo titulo="Selección de Torres">
+              <p>Selecciona las torres que participarán en la asamblea.</p>
+            </app-tooltip-informativo>
+          </div>
+          <div class="acciones-chips" *ngIf="state.torresDisponibles.length > 0">
+            <button type="button" class="boton-texto" (click)="state.seleccionarTodasTorres()" *ngIf="state.torresDisponibles.length !== formulario.get('torres')?.value?.length">Seleccionar Todas</button>
+            <button type="button" class="boton-texto" (click)="state.deseleccionarTodasTorres()" *ngIf="state.torresDisponibles.length === formulario.get('torres')?.value?.length">Deseleccionar Todas</button>
+          </div>
+        </div>
+        <div class="contenedor-chips" *ngIf="state.torresDisponibles.length > 0">
+          <label class="chip-opcion" *ngFor="let t of state.torresDisponibles">
+            <input type="checkbox" [value]="t.condominioId + '_' + t.torre" (change)="state.alternarTorre(t)" [checked]="state.esTorreSeleccionada(t)">
+            <span>Torre {{ t.torre }} (C{{ t.condominioId }})</span>
+          </label>
+        </div>
+        <p *ngIf="state.torresDisponibles.length === 0" class="texto-ayuda">Seleccione condominios primero para cargar sus torres.</p>
+        <app-mensaje-error [control]="formulario.get('torres')" nombreCampo="Las torres"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control" *ngIf="alcanceSeleccionado === 'UNIDAD'">
+        <div class="cabecera-seccion">
+          <div class="titulo-con-tooltip">
+            <label>4. Seleccione las Viviendas</label>
+            <app-tooltip-informativo titulo="Selección de Viviendas">
+              <p>Selecciona las viviendas que participarán.</p>
+            </app-tooltip-informativo>
+          </div>
+          <div class="acciones-chips" *ngIf="state.unidadesDisponibles.length > 0">
+            <button type="button" class="boton-texto" (click)="state.seleccionarTodasViviendas()" *ngIf="state.unidadesDisponibles.length !== formulario.get('unidadIds')?.value?.length">Seleccionar Todas</button>
+            <button type="button" class="boton-texto" (click)="state.deseleccionarTodasViviendas()" *ngIf="state.unidadesDisponibles.length === formulario.get('unidadIds')?.value?.length">Deseleccionar Todas</button>
+          </div>
+        </div>
+        <div class="contenedor-chips" *ngIf="state.unidadesDisponibles.length > 0">
+          <label class="chip-opcion" *ngFor="let u of state.unidadesDisponibles">
+            <input type="checkbox" [value]="u.id" (change)="state.alternarVivienda(u.id)" [checked]="state.esViviendaSeleccionada(u.id)">
+            <span>Vivienda {{ u.numeroUnidad }} (T{{ u.torre }}, C{{ u.condominioId }})</span>
+          </label>
+        </div>
+        <p *ngIf="state.unidadesDisponibles.length === 0" class="texto-ayuda">Seleccione torres primero para cargar sus viviendas.</p>
+        <app-mensaje-error [control]="formulario.get('unidadIds')" nombreCampo="Las viviendas"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles fila-vertical">
+      <div class="grupo-control">
+        <label for="titulo">Título de Asamblea</label>
+        <input id="titulo" type="text" formControlName="titulo" placeholder="Ej. Aprobación de Presupuesto Anual">
+        <app-mensaje-error [control]="formulario.get('titulo')" nombreCampo="El título"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" formControlName="descripcion" rows="4" placeholder="Describe los puntos a tratar..."></textarea>
+        <app-mensaje-error [control]="formulario.get('descripcion')" nombreCampo="La descripción"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="fila-controles">
+      <div class="grupo-control">
+        <label for="fechaInicio">Fecha y Hora de Inicio</label>
+        <input id="fechaInicio" type="datetime-local" formControlName="fechaInicio">
+        <app-mensaje-error [control]="formulario.get('fechaInicio')" nombreCampo="La fecha de inicio"></app-mensaje-error>
+      </div>
+
+      <div class="grupo-control">
+        <label for="fechaFin">Fecha y Hora de Fin</label>
+        <input id="fechaFin" type="datetime-local" formControlName="fechaFin">
+        <app-mensaje-error [control]="formulario.get('fechaFin')" nombreCampo="La fecha de fin"></app-mensaje-error>
+      </div>
+    </div>
+
+    <div class="seccion-opciones" formArrayName="opciones">
+      <h3>Opciones de Votación</h3>
+      <p class="texto-ayuda">Registra las opciones entre las que podrán elegir los residentes (Mínimo 2).</p>
+      
+      <div class="lista-opciones">
+        <div class="item-opcion" *ngFor="let opcion of opcionesArray.controls; let i = index">
+          <input type="text" [formControlName]="i" placeholder="Opción {{ i + 1 }}">
+          <button type="button" class="btn-icon peligro" (click)="eliminarOpcion(i)" *ngIf="opcionesArray.length > 2" title="Eliminar Opción">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+        </div>
+      </div>
+      
+      <button type="button" class="boton-secundario btn-agregar" (click)="agregarOpcion()" *ngIf="opcionesArray.length < 10">
+        <span class="material-symbols-outlined">add_circle</span> Agregar Opción
+      </button>
+    </div>
+
+    <div class="acciones-formulario">
+      <button type="button" class="boton-secundario" (click)="cancelar()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="guardando">
+        <span class="material-symbols-outlined" *ngIf="!guardando">event</span>
+        <span class="material-symbols-outlined animacion-giro" *ngIf="guardando">sync</span>
+        {{ guardando ? 'Programando...' : 'Programar Asamblea' }}
+      </button>
+    </div>
+  </form>
+</div>

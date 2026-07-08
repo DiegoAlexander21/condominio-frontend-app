@@ -1,0 +1,172 @@
+.area-votacion {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.titulo-seccion {
+  margin: 0 0 1.5rem 0;
+  color: var(--primario);
+  font-size: 1.25rem;
+  border-bottom: 2px solid var(--secundario);
+  padding-bottom: 0.5rem;
+}
+
+.seccion-emitir-voto {
+  background-color: var(--blanco);
+  border: 1px solid var(--secundario);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(49, 56, 82, 0.08);
+
+  .instruccion {
+    color: var(--terciario);
+    margin-bottom: 1.5rem;
+  }
+
+  .grilla-opciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+
+    .tarjeta-opcion {
+      background-color: var(--fondo);
+      border: 1px solid var(--secundario);
+      border-radius: 8px;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--primario);
+
+      &:hover:not(:disabled) {
+        border-color: var(--primario);
+        background-color: rgba(49, 56, 82, 0.05);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .texto-opcion {
+        font-family: var(--fuente-principal);
+        font-weight: 500;
+        font-size: 1.1rem;
+      }
+
+      .icono-votar {
+        color: var(--acento);
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+.seccion-resultados {
+  background-color: var(--blanco);
+  border: 1px solid var(--secundario);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(49, 56, 82, 0.08);
+
+  .cabecera-resultados {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid var(--secundario);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    .titulo-seccion {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .total-votos {
+      font-weight: bold;
+      color: var(--primario);
+      background-color: var(--secundario);
+      padding: 0.3rem 0.8rem;
+      border-radius: 16px;
+      font-size: 0.9rem;
+    }
+  }
+
+  .lista-resultados {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .resultado-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .info-resultado {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1rem;
+        color: var(--primario);
+
+        .texto-opcion {
+          font-weight: 500;
+        }
+
+        .cantidad-votos {
+          color: var(--terciario);
+        }
+      }
+
+      .barra-fondo {
+        width: 100%;
+        height: 12px;
+        background-color: var(--secundario);
+        border-radius: 6px;
+        overflow: hidden;
+
+        .barra-progreso {
+          height: 100%;
+          background: linear-gradient(90deg, var(--acento) 0%, var(--primario) 100%);
+          border-radius: 6px;
+          transition: width 0.5s ease-out;
+        }
+      }
+    }
+  }
+
+  .mensaje-exito-voto {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: rgba(39, 174, 96, 0.1);
+    color: var(--exito);
+    border: 1px solid rgba(39, 174, 96, 0.3);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .mensaje-texto {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .boton-cambiar-voto {
+      padding: 0.4rem 1rem;
+      font-size: 0.9rem;
+      background-color: var(--blanco);
+      border-color: var(--exito);
+      color: var(--exito);
+
+      &:hover {
+        background-color: var(--exito);
+        color: var(--blanco);
+      }
+    }
+  }
+}

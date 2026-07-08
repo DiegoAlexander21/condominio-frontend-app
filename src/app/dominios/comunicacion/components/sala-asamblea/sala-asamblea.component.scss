@@ -1,0 +1,71 @@
+@use 'sala-asamblea-votacion';
+.sala-contenedor {
+  padding: 3rem 2rem 2rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cabecera-sala {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--secundario);
+
+  .info-principal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    .titulo-asamblea {
+      color: var(--primario);
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    .badge-estado {
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: var(--blanco);
+      
+      &.badge-borrador { background-color: var(--secundario); }
+      &.badge-abierta { background-color: var(--primario); }
+      &.badge-cerrada { background-color: var(--error); }
+    }
+  }
+
+  .acciones-cabecera {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+
+.panel-descripcion {
+  background-color: var(--blanco);
+  border: 1px solid var(--secundario);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(49, 56, 82, 0.05);
+
+  h3 {
+    margin: 0 0 1rem 0;
+    color: var(--primario);
+    font-size: 1.1rem;
+  }
+
+  p {
+    margin: 0;
+    color: var(--texto-general);
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+}
+
+

@@ -11,7 +11,6 @@ export const RUTAS_COMUNICACION: Routes = [
     loadComponent: () => import('./components/formulario-comunicado/formulario-comunicado.component')
       .then(m => m.FormularioComunicadoComponent)
   },
-/*
   {
     path: 'asambleas',
     loadComponent: () => import('./components/lista-asambleas/lista-asambleas.component')
@@ -27,7 +26,6 @@ export const RUTAS_COMUNICACION: Routes = [
     loadComponent: () => import('./components/sala-asamblea/sala-asamblea.component')
       .then(m => m.SalaAsambleaComponent)
   },
-*/
   {
     path: '',
     redirectTo: 'comunicados',
