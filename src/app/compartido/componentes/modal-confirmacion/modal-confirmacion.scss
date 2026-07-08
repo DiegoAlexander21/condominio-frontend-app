@@ -32,12 +32,32 @@
 
   .cabecera-modal {
     padding: 1.5rem 1.5rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     h3 {
       margin: 0;
       color: var(--primario);
       font-family: var(--fuente-principal);
       font-size: 1.25rem;
       font-weight: 600;
+    }
+
+    .boton-cerrar-modal {
+      background: none;
+      border: none;
+      color: var(--secundario);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: color 0.2s;
+      
+      &:hover {
+        color: var(--primario);
+      }
     }
   }
 

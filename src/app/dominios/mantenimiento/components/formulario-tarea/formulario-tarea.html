@@ -1,0 +1,96 @@
+<div class="contenedor-principal">
+  <div class="contenedor-formulario">
+    <h2 class="titulo-principal">Registrar Tarea de Mantenimiento (Con Insumos)</h2>
+
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+      
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label>Condominio</label>
+          <select formControlName="condominioId">
+            <option value="">Seleccione un condominio</option>
+            <option *ngFor="let condominio of condominios" [value]="condominio.id">
+              {{ condominio.nombre }}
+            </option>
+          </select>
+          <app-mensaje-error [control]="formulario.get('condominioId')" nombreCampo="El condominio"></app-mensaje-error>
+        </div>
+        <div class="grupo-control">
+          <label>Área Común</label>
+          <select formControlName="areaComunId">
+            <option value="">Seleccione un área</option>
+            <option *ngFor="let area of areasComunes" [value]="area.id">
+              {{ area.nombre }}
+            </option>
+          </select>
+          <app-mensaje-error [control]="formulario.get('areaComunId')" nombreCampo="El área"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label>Fecha Programada</label>
+          <input type="datetime-local" formControlName="fechaProgramada">
+          <app-mensaje-error [control]="formulario.get('fechaProgramada')" nombreCampo="La fecha"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="fila-controles">
+        <div class="grupo-control grupo-completo">
+          <label>Descripción de Tareas Realizadas</label>
+          <textarea formControlName="descripcion" rows="3" placeholder="Ej. Cambio de focos, limpieza de la piscina..."></textarea>
+          <app-mensaje-error [control]="formulario.get('descripcion')" nombreCampo="La descripción"></app-mensaje-error>
+        </div>
+      </div>
+
+      <hr class="separador-formulario">
+
+      <div class="seccion-dinamica">
+        <div class="cabecera-dinamica">
+          <h3 class="subtitulo">Insumos Utilizados</h3>
+          <button type="button" class="boton-primario boton-chico" (click)="agregarUsoInsumo()">
+            <span class="material-symbols-outlined">add</span> Agregar Insumo
+          </button>
+        </div>
+
+        <div formArrayName="usosInsumos">
+          <div *ngFor="let uso of usosInsumos.controls; let i=index" [formGroupName]="i" class="fila-controles fila-insumo">
+            <div class="grupo-control">
+              <label>Seleccionar Insumo</label>
+              <select formControlName="insumoId">
+                <option value="">Seleccione...</option>
+                <option *ngFor="let insumo of insumosDisponibles" [value]="insumo.id">
+                  {{ insumo.nombre }} (Stock: {{ insumo.stockActual }} {{ insumo.unidadMedida }})
+                </option>
+              </select>
+              <app-mensaje-error [control]="uso.get('insumoId')" nombreCampo="El insumo"></app-mensaje-error>
+            </div>
+            
+            <div class="grupo-control">
+              <label>Cantidad Usada</label>
+              <div class="control-cantidad">
+                <input type="number" step="0.01" formControlName="cantidadUsada" placeholder="Ej. 2.5">
+                <button type="button" class="boton-eliminar-ico" (click)="removerUsoInsumo(i)" title="Quitar insumo">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+              <app-mensaje-error [control]="uso.get('cantidadUsada')" nombreCampo="La cantidad"></app-mensaje-error>
+            </div>
+          </div>
+        </div>
+        
+        <p class="nota" *ngIf="usosInsumos.length === 0">
+          * Si no utilizó insumos, puede guardar la tarea directamente.
+        </p>
+      </div>
+
+      <div class="acciones-formulario">
+        <button type="button" class="boton-secundario" (click)="cancelar()" [disabled]="guardando">Cancelar</button>
+        <button type="submit" class="boton-primario" [disabled]="formulario.invalid || guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar Tarea' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

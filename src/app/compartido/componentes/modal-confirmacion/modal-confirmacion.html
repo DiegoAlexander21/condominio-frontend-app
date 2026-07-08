@@ -3,13 +3,16 @@
 <div class="modal-confirmacion" [class.activo]="visible">
   <div class="cabecera-modal">
     <h3>{{ titulo }}</h3>
+    <button class="boton-cerrar-modal" (click)="cancelar()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
   </div>
   <div class="cuerpo-modal">
-    <p>{{ mensaje }}</p>
+    <p *ngIf="mensaje">{{ mensaje }}</p>
     <ng-content></ng-content>
   </div>
-  <div class="pie-modal">
-    <button class="boton-secundario" (click)="cancelar()">Cancelar</button>
-    <button [ngClass]="esPeligro ? 'boton-peligro' : 'boton-primario'" (click)="confirmar()">{{ textoConfirmar }}</button>
+  <div class="pie-modal" *ngIf="mostrarCancelar || mostrarConfirmar">
+    <button *ngIf="mostrarCancelar" class="boton-secundario" (click)="cancelar()">Cancelar</button>
+    <button *ngIf="mostrarConfirmar" [ngClass]="esPeligro ? 'boton-peligro' : 'boton-primario'" (click)="confirmar()">{{ textoConfirmar }}</button>
   </div>
 </div>

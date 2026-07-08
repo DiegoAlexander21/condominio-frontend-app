@@ -1,0 +1,18 @@
+.input-moneda {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .prefijo-moneda {
+    position: absolute;
+    left: 0;
+    padding-left: 0.5rem;
+    color: var(--terciario);
+    font-weight: bold;
+    pointer-events: none;
+  }
+
+  input {
+    padding-left: 2rem; 
+  }
+}

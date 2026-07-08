@@ -1,0 +1,96 @@
+<div class="contenedor-unidades">
+  
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Inventario y Mantenimiento Técnico</h2>
+    
+    <div class="acciones-cabecera">
+      <button class="boton-secundario" routerLink="/mantenimiento/tareas">
+        Historial de Tareas
+      </button>
+      <button class="boton-secundario" (click)="irANuevaTarea()">
+        Registrar Tarea
+      </button>
+      <button class="boton-primario" (click)="irANuevoInsumo()">
+        Registrar Insumo
+      </button>
+    </div>
+  </div>
+
+  <div class="panel-filtros">
+    <div class="grupo-filtro">
+      <app-input-busqueda
+        placeholder="Buscar insumo por nombre..."
+        [(ngModel)]="terminoBusqueda">
+      </app-input-busqueda>
+    </div>
+    <div class="grupo-filtro">
+      <app-select-personalizado
+        [opciones]="opcionesEstado"
+        placeholder="Filtrar por stock"
+        [(ngModel)]="estadoFiltro">
+      </app-select-personalizado>
+    </div>
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="button" class="boton-primario boton-buscar" (click)="aplicarFiltros()">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="estado-vacio">
+    <p class="texto-cargando">Cargando inventario...</p>
+  </div>
+
+  <div *ngIf="!cargando && insumosFiltrados.length === 0" class="estado-vacio">
+    <p class="texto-cargando">No se encontraron insumos.</p>
+  </div>
+
+  <div class="grilla-tarjetas" *ngIf="!cargando && insumosFiltrados.length > 0">
+    <div class="tarjeta" *ngFor="let insumo of insumosPaginados">
+      <div class="tarjeta-encabezado">
+        <h3 class="titulo-principal">{{ insumo.nombre }}</h3>
+      </div>
+      
+      <div class="tarjeta-detalle">
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">inventory_2</span>
+          <span>Stock Actual: <strong>{{ insumo.stockActual }} {{ insumo.unidadMedida }}</strong></span>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">warning</span>
+          <span>Stock Mínimo (Alerta): {{ insumo.stockMinimo }} {{ insumo.unidadMedida }}</span>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">payments</span>
+          <span>Precio Unitario: <strong>S/ {{ insumo.precioUnitario | number:'1.2-2' }}</strong></span>
+        </div>
+        <div class="detalle-fila">
+          <ng-container *ngIf="insumo.stockActual > insumo.stockMinimo">
+            <span class="material-symbols-outlined icono-inline estado-exito">check_circle</span>
+            <span class="estado-exito">Estado: Stock Normal</span>
+          </ng-container>
+          <ng-container *ngIf="insumo.stockActual <= insumo.stockMinimo">
+            <span class="material-symbols-outlined icono-inline estado-error">error</span>
+            <span class="estado-error">Estado: Stock Crítico</span>
+          </ng-container>
+        </div>
+        <div class="detalle-fila">
+          <span class="material-symbols-outlined icono-inline">history</span>
+          <span>Última act: {{ insumo.fechaActualizacion | date:'short' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-paginacion 
+    *ngIf="totalPaginas > 1"
+    [totalPaginas]="totalPaginas"
+    [paginaActual]="paginaActual"
+    (cambioPagina)="aplicarPaginacion($event)">
+  </app-paginacion>
+
+</div>
