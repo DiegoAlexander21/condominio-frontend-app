@@ -72,6 +72,12 @@
           <span class="texto">Mi Estado Cuenta</span>
         </a>
       </li>
+      <li *ngIf="esAdmin || esResidente">
+        <a routerLink="/comunicacion/comunicados" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">campaign</span>
+          <span class="texto">Comunicados</span>
+        </a>
+      </li>
       <li *ngIf="esAdmin">
         <a routerLink="/visitas/admin" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">how_to_reg</span>
@@ -102,6 +108,12 @@
           <span class="texto">Mis Paquetes</span>
         </a>
       </li>
+      <!-- <li *ngIf="esAdmin || esResidente">
+        <a routerLink="/comunicacion/asambleas" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">how_to_vote</span>
+          <span class="texto">Asambleas</span>
+        </a>
+      </li> -->
       <li>
         <a routerLink="/perfil" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">person</span>

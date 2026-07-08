@@ -121,6 +121,12 @@ input:not([type="checkbox"]):not([type="radio"]), select {
   background-color: transparent;
   box-shadow: none;
   border: none;
+  opacity: 0;
+  animation: fadeInEstadoVacio 0.2s ease-in-out 0.2s forwards;
+}
+
+@keyframes fadeInEstadoVacio {
+  to { opacity: 1; }
 }
 
 .texto-cargando, .mensaje-vacio {
