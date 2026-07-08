@@ -1,0 +1,37 @@
+<div class="contenedor-principal">
+  <div class="contenedor-formulario">
+    <h2 class="titulo-principal">{{ tituloFormulario }}</h2>
+
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+      
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label>Resultado de Evaluación</label>
+          <select formControlName="resultado">
+            <option value="">Seleccione el resultado</option>
+            <option *ngFor="let res of resultadosPosibles" [value]="res.valor">
+              {{ res.etiqueta }}
+            </option>
+          </select>
+          <app-mensaje-error [control]="formulario.get('resultado')" nombreCampo="El resultado"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="fila-controles">
+        <div class="grupo-control grupo-completo">
+          <label>Observaciones o Novedades</label>
+          <textarea formControlName="observacion" rows="4" placeholder="Describa el estado actual o justifique si es No Apto..."></textarea>
+          <app-mensaje-error [control]="formulario.get('observacion')" nombreCampo="La observación"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="acciones-formulario">
+        <button type="button" class="boton-secundario" (click)="volver()" [disabled]="guardando">Cancelar</button>
+        <button type="submit" class="boton-primario" [disabled]="formulario.invalid || guardando">
+          {{ guardando ? 'Registrando...' : 'Registrar Evaluación' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

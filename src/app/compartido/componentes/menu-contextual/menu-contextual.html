@@ -20,6 +20,10 @@
       <span class="material-symbols-outlined icono-opcion">edit</span>
       Editar
     </button>
+    <button class="opcion-menu" *ngIf="mostrarEvaluar" (click)="evaluar()">
+      <span class="material-symbols-outlined icono-opcion">fact_check</span>
+      Evaluar
+    </button>
     <button class="opcion-menu" *ngIf="mostrarDistribuir" (click)="distribuir()">
       <span class="material-symbols-outlined icono-opcion">account_tree</span>
       Distribuir

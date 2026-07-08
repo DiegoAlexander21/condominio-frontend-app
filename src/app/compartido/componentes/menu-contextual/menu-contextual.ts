@@ -19,8 +19,10 @@ export class MenuContextualComponent {
   @Input() mostrarAprobar: boolean = false;
   @Input() mostrarRechazar: boolean = false;
   @Input() mostrarEliminar: boolean = true;
+  @Input() mostrarEvaluar: boolean = false;
   @Output() alEditar = new EventEmitter<number>();
   @Output() alEliminar = new EventEmitter<number>();
+  @Output() alEvaluar = new EventEmitter<number>();
   @Output() alDistribuir = new EventEmitter<number>();
   @Output() alAsignarOcupantes = new EventEmitter<number>();
   @Output() alVerDetalle = new EventEmitter<number>();
@@ -43,6 +45,11 @@ export class MenuContextualComponent {
 
   eliminar(): void {
     this.alEliminar.emit(this.identificador);
+    this.menuAbierto = false;
+  }
+
+  evaluar(): void {
+    this.alEvaluar.emit(this.identificador);
     this.menuAbierto = false;
   }
 

@@ -1,0 +1,50 @@
+<div class="contenedor-principal">
+  <div class="contenedor-formulario">
+    <h2 class="titulo-principal">Registrar Mantenimiento</h2>
+
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+      
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label>Área Común</label>
+          <ng-container *ngIf="areaNombreReadOnly; else selectArea">
+            <input type="text" [value]="areaNombreReadOnly" disabled>
+          </ng-container>
+          <ng-template #selectArea>
+            <select formControlName="areaComunId">
+              <option value="">Seleccione un área</option>
+              <option *ngFor="let area of areasComunes" [value]="area.id">
+                {{ area.nombre }}
+              </option>
+            </select>
+          </ng-template>
+          <app-mensaje-error [control]="formulario.get('areaComunId')" nombreCampo="El área"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label>Responsable</label>
+          <input type="text" formControlName="responsable" placeholder="Ej. Carlos Mendoza (Técnico)">
+          <app-mensaje-error [control]="formulario.get('responsable')" nombreCampo="El responsable"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="fila-controles">
+        <div class="grupo-control grupo-completo">
+          <label>Descripción de Tareas Realizadas (Insumos, etc.)</label>
+          <textarea formControlName="descripcion" rows="4" placeholder="Ej. Desinfección con lejía, limpieza profunda de pisos..."></textarea>
+          <app-mensaje-error [control]="formulario.get('descripcion')" nombreCampo="La descripción"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="acciones-formulario">
+        <button type="button" class="boton-secundario" (click)="cancelar()" [disabled]="guardando">Cancelar</button>
+        <button type="submit" class="boton-primario" [disabled]="formulario.invalid || guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar Registro' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
