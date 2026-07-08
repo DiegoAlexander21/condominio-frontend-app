@@ -1,0 +1,100 @@
+<div class="contenedor-mantenimiento">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Historial de Tareas de Mantenimiento</h2>
+    <div class="acciones-cabecera">
+      <button class="boton-secundario" routerLink="/mantenimiento">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Volver a Inventario
+      </button>
+      <button class="boton-primario" routerLink="/mantenimiento/nueva-tarea">
+        <span class="material-symbols-outlined">build</span>
+        Nueva Tarea
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="texto-cargando">
+    Cargando historial de tareas...
+  </div>
+  
+  <ng-container *ngIf="!cargando">
+    <div class="grilla-tarjetas" *ngIf="todasLasTareas.length > 0; else sinResultados">
+      <div class="tarjeta" *ngFor="let tarea of tareasPaginadas">
+        <div class="tarjeta-encabezado">
+          <h3 class="titulo-principal">{{ tarea.nombreArea }}</h3>
+          <app-menu-contextual 
+            [identificador]="tarea.id"
+            [mostrarVerDetalle]="tarea.usosInsumos.length > 0"
+            [mostrarEditar]="false"
+            [mostrarEliminar]="false"
+            (alVerDetalle)="verInsumos($event)">
+          </app-menu-contextual>
+        </div>
+        
+        <div class="tarjeta-detalle">
+          <div class="detalle-fila" title="{{ tarea.descripcion }}">
+            <span class="material-symbols-outlined icono-inline">description</span>
+            <span class="texto-truncado">{{ tarea.descripcion }}</span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">calendar_today</span>
+            <span>Programada: <strong>{{ tarea.fechaProgramada | date:'short' }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">payments</span>
+            <span>Costo Total Insumos: <strong>S/ {{ tarea.costoTotal | number:'1.2-2' }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">category</span>
+            <span>Insumos Usados: <strong>{{ tarea.usosInsumos.length }}</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <app-paginacion 
+      *ngIf="totalPaginas > 1"
+      [paginaActual]="paginaActual" 
+      [totalPaginas]="totalPaginas" 
+      (cambioPagina)="cambiarPagina($event)">
+    </app-paginacion>
+
+    <ng-template #sinResultados>
+      <div class="estado-vacio">
+        <p class="texto-cargando">No hay tareas de mantenimiento registradas.</p>
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <app-modal-confirmacion 
+    [visible]="mostrarModalInsumos" 
+    titulo="Detalle de Insumos Utilizados"
+    textoConfirmar="Cerrar"
+    mensaje=""
+    [mostrarCancelar]="false"
+    [mostrarConfirmar]="false"
+    [esPeligro]="false"
+    (alCancelar)="cerrarModalInsumos()" 
+    (alConfirmar)="cerrarModalInsumos()">
+    <div *ngIf="tareaSeleccionada" class="modal-contenido-custom">
+      <p class="info-tarea"><strong>Área:</strong> {{ tareaSeleccionada.nombreArea }}</p>
+      <p class="info-tarea"><strong>Costo Total:</strong> S/ {{ tareaSeleccionada.costoTotal | number:'1.2-2' }}</p>
+      <div class="lista-insumos-detalle">
+        <div class="insumo-item" *ngFor="let uso of tareaSeleccionada.usosInsumos">
+          <div class="col-icono">
+            <span class="material-symbols-outlined">sanitizer</span>
+          </div>
+          <div class="col-nombre">
+            {{ uso.nombreInsumo }}
+          </div>
+          <div class="col-cantidad">
+            {{ uso.cantidadUsada }} {{ uso.unidadMedida }}
+          </div>
+          <div class="col-precio">
+            <strong>S/ {{ uso.subtotal | number:'1.2-2' }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-modal-confirmacion>
+</div>

@@ -100,6 +100,7 @@ export const routes: Routes = [
         data: { roles: ['ADMINISTRADOR', 'RESIDENTE', 'PROPIETARIO', 'CONSERJERIA', 'CONSERJERIA_MANTENIMIENTO'] },
         loadChildren: () => import('./dominios/visitas/visitas.routes').then(m => m.visitasRoutes)
       },
+
       {
         path: 'paqueteria',
         canActivate: [rolGuard],
@@ -117,6 +118,12 @@ export const routes: Routes = [
         canActivate: [rolGuard],
         data: { roles: ['ADMINISTRADOR', 'RESIDENTE', 'PROPIETARIO'] },
         loadChildren: () => import('./dominios/salud-ambiental/salud-ambiental.routes').then(m => m.SALUD_AMBIENTAL_ROUTES)
+      },
+      {
+        path: 'mantenimiento',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'CONSERJERIA_MANTENIMIENTO'] },
+        loadChildren: () => import('./dominios/mantenimiento/mantenimiento.routes').then(m => m.MANTENIMIENTO_ROUTES)
       },
       {
         path: '',

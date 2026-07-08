@@ -1,0 +1,73 @@
+.separador-formulario {
+  border: 0;
+  border-top: 1px dashed var(--secundario);
+  margin: 1.5rem 0;
+}
+
+.cabecera-dinamica {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  .subtitulo {
+    color: var(--primario);
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+.boton-chico {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.fila-insumo {
+  background-color: rgba(0, 0, 0, 0.02);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  align-items: center;
+
+  .grupo-control:first-child {
+    flex: 2.5;
+  }
+  
+  .grupo-control:last-child {
+    flex: 1;
+  }
+}
+
+.control-cantidad {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  input {
+    flex: 1;
+  }
+}
+
+.boton-eliminar-ico {
+  background: transparent;
+  border: none;
+  color: var(--error);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  
+  &:hover {
+    background-color: rgba(222, 75, 75, 0.1);
+  }
+}
+
+.nota {
+  color: var(--secundario);
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: bold;
+  margin-top: 1rem;
+}
