@@ -1,0 +1,83 @@
+.paneles-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+
+  @media (min-width: 992px) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.contenedor-unidades {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.panel-seccion {
+  flex: 1;
+  background-color: var(--blanco);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+
+  .cabecera-seccion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--secundario);
+    padding-bottom: 0.5rem;
+
+    .titulo-seccion {
+      color: var(--primario);
+      font-size: 1.25rem;
+      margin: 0;
+    }
+  }
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  &-activo {
+    background-color: rgba(49, 56, 82, 0.1);
+    color: var(--primario);
+  }
+
+  &-inactivo {
+    background-color: rgba(222, 75, 75, 0.1);
+    color: var(--error);
+  }
+}
+
+.descripcion-mant {
+  font-weight: bold;
+  color: var(--primario);
+  margin-bottom: 0.5rem;
+}
+
+.tarjeta-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .info-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    h3 {
+      margin: 0;
+    }
+
+    .badge {
+      align-self: flex-start;
+    }
+  }
+}

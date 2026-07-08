@@ -113,6 +113,12 @@ export const routes: Routes = [
         loadChildren: () => import('./dominios/comunicacion/comunicacion.routes').then(m => m.RUTAS_COMUNICACION)
       },
       {
+        path: 'salud-ambiental',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'RESIDENTE', 'PROPIETARIO'] },
+        loadChildren: () => import('./dominios/salud-ambiental/salud-ambiental.routes').then(m => m.SALUD_AMBIENTAL_ROUTES)
+      },
+      {
         path: '',
         redirectTo: 'condominios',
         pathMatch: 'full'

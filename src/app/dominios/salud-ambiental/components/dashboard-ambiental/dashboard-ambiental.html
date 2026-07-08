@@ -1,0 +1,127 @@
+<div class="contenedor-unidades">
+  
+  <div class="encabezado-modulo">
+    <div class="titulo-acciones">
+      <h1 class="titulo-modulo">Gestión Ambiental y Salud</h1>
+      <hr class="separador-modulo">
+    </div>
+  </div>
+
+  <form [formGroup]="formularioFiltros" (ngSubmit)="buscar()" class="panel-filtros">
+    <div class="grupo-filtro" *ngIf="esAdmin">
+      <label>Condominio</label>
+      <app-select-personalizado
+        [opciones]="opcionesCondominios"
+        placeholder="Seleccione un condominio"
+        formControlName="condominioId">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Seleccionar Área Común</label>
+      <app-select-personalizado
+        [opciones]="areasComunes"
+        placeholder="Elige un área"
+        formControlName="areaComunId">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar" [disabled]="cargando">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="cargando" class="estado-vacio">
+    <p class="texto-cargando">Cargando datos...</p>
+  </div>
+
+  <div *ngIf="!cargando && busquedaRealizada" class="paneles-datos">
+    
+    <div class="panel-seccion">
+      <div class="cabecera-seccion">
+        <h2 class="titulo-seccion">Checklists Sanitarios</h2>
+        <button *ngIf="esAdmin" class="boton-primario" (click)="irACrearChecklist()">
+          <span class="material-symbols-outlined">add</span> Nuevo Checklist
+        </button>
+      </div>
+
+      <div class="grilla-tarjetas" *ngIf="checklistsPaginados.length > 0; else vacioChecklists">
+        <div class="tarjeta-dato" *ngFor="let checklist of checklistsPaginados">
+          <div class="tarjeta-cabecera">
+            <div class="info-checklist">
+              <h3>{{ checklist.nombre }}</h3>
+              <span class="badge" [class.badge-activo]="checklist.activo" [class.badge-inactivo]="!checklist.activo">
+                {{ checklist.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </div>
+            <app-menu-contextual
+              *ngIf="esAdmin && checklist.activo"
+              [identificador]="checklist.id"
+              [mostrarEditar]="false"
+              [mostrarEliminar]="false"
+              [mostrarEvaluar]="true"
+              (alEvaluar)="irAEvaluar($event)">
+            </app-menu-contextual>
+          </div>
+          <div class="tarjeta-cuerpo">
+            <p><strong>Fecha Registro:</strong> {{ checklist.fechaRegistro | date:'short' }}</p>
+            <p><strong>Ítems a evaluar:</strong> {{ checklist.items.length }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <app-paginacion 
+        *ngIf="checklistsFiltrados.length > 0"
+        [totalPaginas]="totalPaginasChecklist"
+        [paginaActual]="paginaActualChecklist"
+        (cambioPagina)="actualizarPaginacionChecklist($event)">
+      </app-paginacion>
+
+      <ng-template #vacioChecklists>
+        <div class="estado-vacio">
+          <p class="texto-cargando">No hay checklists registrados para esta área.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="panel-seccion">
+      <div class="cabecera-seccion">
+        <h2 class="titulo-seccion">Huella de Mantenimiento</h2>
+        <button *ngIf="esAdmin" class="boton-primario" (click)="irARegistrarMantenimiento()">
+          <span class="material-symbols-outlined">cleaning_services</span> Registrar Tarea
+        </button>
+      </div>
+
+      <div class="grilla-tarjetas" *ngIf="mantenimientosPaginados.length > 0; else vacioMantenimientos">
+        <div class="tarjeta-dato" *ngFor="let mant of mantenimientosPaginados">
+          <div class="tarjeta-cuerpo">
+            <p class="descripcion-mant">{{ mant.descripcion }}</p>
+            <p><strong>Responsable:</strong> {{ mant.responsable }}</p>
+            <p><strong>Fecha:</strong> {{ mant.fechaRegistro | date:'short' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <app-paginacion 
+        *ngIf="mantenimientosFiltrados.length > 0"
+        [totalPaginas]="totalPaginasMantenimiento"
+        [paginaActual]="paginaActualMantenimiento"
+        (cambioPagina)="actualizarPaginacionMantenimiento($event)">
+      </app-paginacion>
+
+      <ng-template #vacioMantenimientos>
+        <div class="estado-vacio">
+          <p class="texto-cargando">No hay tareas de mantenimiento registradas.</p>
+        </div>
+      </ng-template>
+    </div>
+
+  </div>
+
+</div>
