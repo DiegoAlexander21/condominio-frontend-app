@@ -1,0 +1,101 @@
+<div class="contenedor-principal">
+  <div class="cabecera-lista">
+    <h2 class="titulo-principal">Comunicados {{ esAdministrador() ? '(Administrador)' : '(Residente)' }}</h2>
+    <div class="acciones-cabecera" *ngIf="esAdministrador()">
+      <button class="boton-primario" routerLink="nuevo">
+        <span>Nuevo Comunicado</span> 
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="formularioFiltros" class="panel-filtros" (ngSubmit)="buscar()" *ngIf="esAdministrador()">
+    <div class="grupo-filtro" *ngIf="esAdministrador()">
+      <label>Condominio</label>
+      <app-select-personalizado 
+        formControlName="condominioId"
+        [opciones]="opcionesCondominios"
+        placeholder="Seleccione un condominio">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro" *ngIf="formularioFiltros.get('condominioId')?.value">
+      <label>Torre</label>
+      <app-select-personalizado 
+        formControlName="torre"
+        [opciones]="opcionesTorres"
+        placeholder="Todas las torres">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro" *ngIf="formularioFiltros.get('torre')?.value">
+      <label>Vivienda</label>
+      <app-select-personalizado 
+        formControlName="unidadId"
+        [opciones]="opcionesUnidades"
+        placeholder="Todas las viviendas">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div class="estado-vacio" *ngIf="cargando">
+    <p class="texto-cargando">Cargando comunicados...</p>
+  </div>
+
+  <ng-container *ngIf="!cargando && mostrarResultados">
+    <div class="estado-vacio" *ngIf="state.comunicadosFiltrados.length === 0">
+      <p class="texto-cargando">No hay comunicados publicados con los filtros aplicados.</p>
+    </div>
+
+    <div class="grilla-tarjetas" *ngIf="state.comunicadosFiltrados.length > 0">
+      <div class="tarjeta" *ngFor="let com of state.comunicadosPaginados">
+        <div class="tarjeta-encabezado">
+          <h3 class="titulo-principal">{{ com.titulo }}</h3>
+          <app-menu-contextual 
+            [identificador]="com.id" 
+            [mostrarVerDetalle]="true"
+            [mostrarEditar]="false"
+            [mostrarEliminar]="false"
+            (alVerDetalle)="verDetalles($event)">
+          </app-menu-contextual>
+        </div>
+        <div class="tarjeta-detalle">
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">public</span>
+            <span>Alcance: <strong>{{ state.obtenerTextoAlcance(com) }}</strong></span>
+          </div>
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">calendar_month</span>
+            <span>Publicado: <strong>{{ state.formatearFecha(com.fechaPublicacion) }}</strong></span>
+          </div>
+          <div class="detalle-contenido-comunicado" (click)="verDetalles(com.id)">
+            <p class="texto-truncado-3">{{ com.contenido }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-paginacion 
+      *ngIf="state.obtenerTotalPaginas() > 1"
+      [paginaActual]="state.paginaActual"
+      [totalPaginas]="state.obtenerTotalPaginas()"
+      (cambioPagina)="state.actualizarPaginacion($event)">
+    </app-paginacion>
+  </ng-container>
+
+</div>
+
+  <app-modal-detalle-comunicado 
+    *ngIf="mostrarModalDetalle && comunicadoSeleccionado"
+    [comunicado]="comunicadoSeleccionado"
+    (cerrar)="cerrarModalDetalle()">
+  </app-modal-detalle-comunicado>
