@@ -1,0 +1,34 @@
+<div class="modal-overlay" (click)="cerrarModalFondo($event)">
+  <div class="modal-contenido">
+    <div class="modal-cabecera">
+      <h3>Detalles del Comunicado</h3>
+      <button class="boton-cerrar-modal" (click)="cerrar.emit()">
+        <span class="material-symbols-outlined icono-cerrar">close</span>
+      </button>
+    </div>
+    <div class="modal-cuerpo">
+      <h4 class="titulo-area">
+        <span>{{comunicado.titulo}}</span>
+      </h4>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="etiqueta">Alcance</span>
+          <span class="valor">{{ state.obtenerTextoAlcance(comunicado) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="etiqueta">Fecha de Publicación</span>
+          <span class="valor">{{ state.formatearFecha(comunicado.fechaPublicacion) }}</span>
+        </div>
+      </div>
+
+      <div class="seccion-normas">
+        <h5 class="subtitulo">Contenido</h5>
+        <div class="contenedor-texto">
+          <p>{{ comunicado.contenido }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

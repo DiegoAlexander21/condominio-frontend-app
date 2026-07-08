@@ -46,7 +46,8 @@
 
     <ng-container *ngIf="pestanaActiva === 'pagos'">
       <app-lista-historial-pagos
-        [pagosOriginales]="pagosOriginales">
+        [pagosOriginales]="pagosOriginales"
+        [unidadId]="unidad.id">
       </app-lista-historial-pagos>
     </ng-container>
 

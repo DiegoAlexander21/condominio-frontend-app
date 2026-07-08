@@ -1,0 +1,33 @@
+.acciones-lista {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.detalle-contenido-comunicado {
+  margin-top: 0.5rem;
+  
+  .texto-truncado-3 {
+    margin: 0;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    cursor: pointer;
+    transition: color 0.2s;
+    color: var(--terciario);
+
+    &:hover {
+      color: var(--primario);
+    }
+  }
+}
+
+.contenedor-principal {
+  padding: 3rem 2rem 2rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}

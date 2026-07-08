@@ -109,46 +109,7 @@
             font-size: 0.95rem;
             color: var(--terciario);
             line-height: 1.5;
-
-            &.texto-vacio {
-              color: var(--secundario);
-              font-style: italic;
-            }
-          }
-        }
-
-        .contenedor-imagen {
-          margin-top: 1rem;
-          border-radius: 8px;
-          overflow: hidden;
-          background-color: var(--fondo);
-          padding: 0.5rem;
-          display: flex;
-          justify-content: center;
-          
-          img {
-            max-width: 100%;
-            border-radius: 4px;
-            object-fit: cover;
-          }
-        }
-      }
-
-      .acciones-admin-modal {
-        margin-top: 2rem;
-        border-top: 1px solid var(--secundario);
-        padding-top: 1rem;
-
-        .contenedor-busqueda {
-          width: 100%;
-
-          .filtro-estado {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--secundario);
-            border-radius: 4px;
-            font-family: var(--fuente-principal);
-            font-size: 0.9rem;
+            white-space: pre-line;
           }
         }
       }

@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { UnidadForm } from '../modelos/unidad-form.interface';
 import { UnidadResponse } from '../modelos/unidad-response.interface';
 import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginada.interface';
-
 import { AsignarOcupantesForm } from '../modelos/asignar-ocupantes-form.interface';
+import { TorreDto } from '../modelos/torre.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +44,13 @@ export class UnidadService {
 
   asignarOcupantes(id: number, ocupantesForm: AsignarOcupantesForm): Observable<UnidadResponse> {
     return this.httpClient.put<UnidadResponse>(`${this.urlBase}/${id}/ocupantes`, ocupantesForm);
+  }
+
+  buscarTorresMultiples(condominioIds: number[]): Observable<TorreDto[]> {
+    return this.httpClient.post<TorreDto[]>(`${this.urlBase}/busqueda/torres`, condominioIds);
+  }
+
+  buscarViviendasMultiples(torresDto: TorreDto[]): Observable<UnidadResponse[]> {
+    return this.httpClient.post<UnidadResponse[]>(`${this.urlBase}/busqueda/viviendas`, torresDto);
   }
 }
