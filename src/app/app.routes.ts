@@ -107,6 +107,12 @@ export const routes: Routes = [
         loadChildren: () => import('./dominios/paqueteria/paqueteria.routes').then(m => m.RUTAS_PAQUETERIA)
       },
       {
+        path: 'comunicacion',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'RESIDENTE', 'PROPIETARIO'] },
+        loadChildren: () => import('./dominios/comunicacion/comunicacion.routes').then(m => m.RUTAS_COMUNICACION)
+      },
+      {
         path: '',
         redirectTo: 'condominios',
         pathMatch: 'full'

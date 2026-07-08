@@ -4,6 +4,7 @@ export interface UsuarioPerfilResponse {
   numeroDocumento: string;
   correo: string;
   rol: string;
+  condominioId: number | null;
   unidadId: number | null;
   nombreCondominio?: string;
   torre?: string;
