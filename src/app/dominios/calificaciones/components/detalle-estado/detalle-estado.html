@@ -1,0 +1,37 @@
+<div class="contenedor-pagina">
+  <div class="cabecera-pagina">
+    <button class="boton-volver" (click)="volver()">
+      <span class="material-symbols-outlined">arrow_back</span> Volver
+    </button>
+    <h1 class="titulo-pagina">Historial de Calificaciones</h1>
+    <p class="subtitulo-pagina" *ngIf="estadoActual">
+      {{ estadoActual.nombreArea }} (Promedio: {{ estadoActual.calificacionPromedio | number:'1.1-1' }} / 5)
+    </p>
+  </div>
+
+  <div *ngIf="calificacionesPaginadas.length === 0" class="estado-vacio">
+    <p class="texto-cargando">Aún no hay calificaciones registradas para esta área.</p>
+  </div>
+
+  <div *ngIf="calificacionesPaginadas.length > 0" class="grilla-comentarios">
+    <div class="tarjeta-comentario" *ngFor="let cal of calificacionesPaginadas">
+      <div class="comentario-cabecera">
+        <span class="unidad">Unidad {{ cal.unidadIdentificador }}</span>
+        <span class="fecha">{{ cal.fechaRegistro | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="comentario-puntaje">
+        <span class="material-symbols-outlined" *ngFor="let star of [1,2,3,4,5]" 
+              [class.activo]="star <= cal.puntaje">star</span>
+        <span class="puntaje-texto">{{ cal.puntaje }}/5</span>
+      </div>
+      <p class="comentario-texto">{{ cal.comentario || 'Sin comentarios adicionales.' }}</p>
+    </div>
+  </div>
+
+  <app-paginacion 
+    *ngIf="calificaciones.length > 0"
+    [paginaActual]="paginaActual - 1"
+    [totalPaginas]="totalPaginas"
+    (cambioPagina)="alCambiarPagina($event + 1)">
+  </app-paginacion>
+</div>

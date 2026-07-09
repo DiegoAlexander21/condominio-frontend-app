@@ -20,6 +20,7 @@ export class MenuContextualComponent {
   @Input() mostrarRechazar: boolean = false;
   @Input() mostrarEliminar: boolean = true;
   @Input() mostrarEvaluar: boolean = false;
+  @Input() mostrarCalificar: boolean = false;
   @Output() alEditar = new EventEmitter<number>();
   @Output() alEliminar = new EventEmitter<number>();
   @Output() alEvaluar = new EventEmitter<number>();
@@ -30,6 +31,7 @@ export class MenuContextualComponent {
   @Output() alRegistrarPago = new EventEmitter<number>();
   @Output() alAprobar = new EventEmitter<number>();
   @Output() alRechazar = new EventEmitter<number>();
+  @Output() alCalificar = new EventEmitter<number>();
 
   menuAbierto = false;
   private referenciaElemento = inject(ElementRef);
@@ -85,6 +87,11 @@ export class MenuContextualComponent {
 
   rechazar(): void {
     this.alRechazar.emit(this.identificador);
+    this.menuAbierto = false;
+  }
+
+  calificar(): void {
+    this.alCalificar.emit(this.identificador);
     this.menuAbierto = false;
   }
 

@@ -37,6 +37,18 @@
         </a>
       </li>
       <li *ngIf="esAdmin || esResidente">
+        <a routerLink="/comunicacion" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">campaign</span>
+          <span class="texto">Comunicación</span>
+        </a>
+      </li>
+      <li *ngIf="esAdmin || esResidente">
+        <a routerLink="/calificaciones" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
+          <span class="material-symbols-outlined icono">star_rate</span>
+          <span class="texto">Ranking Áreas</span>
+        </a>
+      </li>
+      <li *ngIf="esAdmin || esResidente">
         <a routerLink="/areas-comunes/reservas" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">event_available</span>
           <span class="texto">Reservas</span>
@@ -84,7 +96,7 @@
           <span class="texto">Salud Ambiental</span>
         </a>
       </li>
-      <li *ngIf="esAdmin || esConserje">
+      <li *ngIf="esAdmin">
         <a routerLink="/mantenimiento" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">inventory</span>
           <span class="texto">Insumos y Mantenimiento</span>

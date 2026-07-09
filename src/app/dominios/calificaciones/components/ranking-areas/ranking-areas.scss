@@ -1,0 +1,60 @@
+.contenedor-unidades {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.subtitulo-pagina {
+  margin-top: 0.5rem;
+  color: var(--terciario);
+}
+
+.dato-destacado {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(40, 181, 61, 0.1);
+  border-radius: 8px;
+  color: var(--exito);
+
+  &.riesgo {
+    background-color: rgba(222, 75, 75, 0.1);
+    color: var(--error);
+  }
+
+  span {
+    font-size: 2.5rem;
+  }
+
+  .dato-valor {
+    font-size: 1.2rem;
+    line-height: 1;
+    strong {
+      font-size: 1.8rem;
+    }
+  }
+
+  .dato-etiqueta {
+    font-size: 0.9rem;
+    color: var(--terciario);
+    margin-left: auto;
+  }
+}
+
+.dato-secundario {
+  margin-bottom: 0.5rem;
+  color: var(--terciario);
+  
+  strong {
+    color: var(--primario);
+  }
+}
+
+.riesgo-texto {
+  color: var(--error) !important;
+  strong {
+    color: var(--error) !important;
+  }
+}

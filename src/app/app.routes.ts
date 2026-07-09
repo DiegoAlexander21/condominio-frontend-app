@@ -122,8 +122,14 @@ export const routes: Routes = [
       {
         path: 'mantenimiento',
         canActivate: [rolGuard],
-        data: { roles: ['ADMINISTRADOR', 'CONSERJERIA_MANTENIMIENTO'] },
+        data: { roles: ['ADMINISTRADOR'] },
         loadChildren: () => import('./dominios/mantenimiento/mantenimiento.routes').then(m => m.MANTENIMIENTO_ROUTES)
+      },
+      {
+        path: 'calificaciones',
+        canActivate: [rolGuard],
+        data: { roles: ['ADMINISTRADOR', 'RESIDENTE', 'PROPIETARIO'] },
+        loadChildren: () => import('./dominios/calificaciones/calificaciones.routes').then(m => m.calificacionesRoutes)
       },
       {
         path: '',

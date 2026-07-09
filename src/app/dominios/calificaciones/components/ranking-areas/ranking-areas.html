@@ -1,0 +1,95 @@
+<div class="contenedor-unidades">
+  <div class="cabecera-lista">
+    <div class="info-cabecera">
+      <h2 class="titulo-principal">Ranking de Áreas</h2>
+      <p class="subtitulo-pagina">Priorice inversiones basadas en el estado sanitario y desgaste reportado por residentes.</p>
+    </div>
+  </div>
+
+  <form [formGroup]="formularioFiltro" class="panel-filtros" (ngSubmit)="buscarRanking()">
+    <div class="grupo-filtro" *ngIf="esAdmin">
+      <label>Condominio</label>
+      <app-select-personalizado
+        [opciones]="listaCondominios"
+        formControlName="condominioId"
+        propiedadValor="id"
+        propiedadEtiqueta="nombre"
+        placeholder="Seleccione un condominio">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro">
+      <label>Área Común</label>
+      <app-select-personalizado
+        [opciones]="listaAreas"
+        formControlName="areaComunId"
+        propiedadValor="id"
+        propiedadEtiqueta="nombre"
+        placeholder="Todas las áreas">
+      </app-select-personalizado>
+    </div>
+
+    <div class="grupo-filtro-boton">
+      <button type="button" class="boton-secundario boton-limpiar" (click)="limpiarFiltros()" title="Limpiar Filtros">
+        <span class="material-symbols-outlined">filter_alt_off</span>
+      </button>
+      <button type="submit" class="boton-primario boton-buscar">
+        <span class="material-symbols-outlined">search</span>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <ng-container *ngIf="mostrarResultados">
+    <div class="grilla-tarjetas" *ngIf="rankingPaginado.length > 0; else vacio">
+      <div class="tarjeta" *ngFor="let area of rankingPaginado; let i = index">
+        <div class="tarjeta-encabezado">
+          <h3 class="titulo-principal">#{{ (paginaActual - 1) * tamanoPagina + i + 1 }} - {{ area.nombreArea }}</h3>
+          
+          <app-menu-contextual *ngIf="!esAdmin"
+            [identificador]="area.areaId"
+            [mostrarEditar]="false"
+            [mostrarEliminar]="false"
+            [mostrarVerDetalle]="false"
+            [mostrarCalificar]="true"
+            (alCalificar)="calificarArea($event)">
+          </app-menu-contextual>
+        </div>
+
+        <div class="tarjeta-detalle">
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">star</span>
+            <span>Promedio: <strong>{{ area.calificacionPromedio | number:'1.1-1' }}</strong></span>
+          </div>
+          
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">report</span>
+            <span>Incidencias: <strong>{{ area.totalIncidencias }}</strong></span>
+          </div>
+
+          <div class="detalle-fila">
+            <span class="material-symbols-outlined icono-inline">fact_check</span>
+            <span>Checklists fallidos: <strong>{{ area.totalChecklistsNoAprobados }}</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-paginacion
+      *ngIf="totalPaginas > 1"
+      [paginaActual]="paginaActual"
+      [totalPaginas]="totalPaginas"
+      (cambioPagina)="alCambiarPagina($event)">
+    </app-paginacion>
+  </ng-container>
+
+  <ng-template #vacio>
+    <div class="estado-vacio">
+      <p class="texto-cargando">No se encontraron áreas en el ranking.</p>
+    </div>
+  </ng-template>
+  
+  <div class="estado-vacio" *ngIf="!mostrarResultados">
+    <p class="texto-cargando">Seleccione los filtros para visualizar el ranking.</p>
+  </div>
+</div>

@@ -47,8 +47,6 @@ export class LoginComponent {
           
           if (this.servicioAutenticacion.obtenerRoles().includes('ADMINISTRADOR')) {
             this.enrutador.navigate(['/condominios']);
-          } else if (this.servicioAutenticacion.obtenerUnidadId()) {
-            this.enrutador.navigate(['/areas-comunes/reservas']);
           } else {
             this.enrutador.navigate(['/perfil']);
           }

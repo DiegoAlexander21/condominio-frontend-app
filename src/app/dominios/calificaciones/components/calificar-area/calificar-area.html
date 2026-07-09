@@ -1,0 +1,36 @@
+<div class="contenedor-pagina">
+
+
+  <div class="contenedor-formulario">
+    <h2 class="titulo-principal">Calificar {{ areaNombre || 'Área' }}</h2>
+    
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" class="formulario-flex">
+      
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label>Su Unidad (Residente)</label>
+          <input type="text" [value]="unidadNombreMostrar" disabled>
+        </div>
+        
+        <div class="grupo-control">
+          <label>Puntaje (1 - 5)</label>
+          <input type="number" formControlName="puntaje" min="1" max="5" placeholder="5">
+          <app-mensaje-error [control]="formulario.get('puntaje')" nombreCampo="El puntaje"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="fila-controles">
+        <div class="grupo-control">
+          <label>Comentario (Opcional)</label>
+          <textarea formControlName="comentario" rows="4" placeholder="¿Qué le pareció el estado de limpieza y funcionalidad?"></textarea>
+          <app-mensaje-error [control]="formulario.get('comentario')" nombreCampo="El comentario"></app-mensaje-error>
+        </div>
+      </div>
+
+      <div class="acciones-formulario">
+        <button type="button" class="boton-secundario" (click)="volver()">Cancelar</button>
+        <button type="submit" class="boton-primario">Enviar Calificación</button>
+      </div>
+    </form>
+  </div>
+</div>
