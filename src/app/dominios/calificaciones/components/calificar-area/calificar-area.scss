@@ -1,0 +1,17 @@
+.boton-volver {
+  background: none;
+  border: none;
+  color: var(--terciario);
+  font-family: var(--fuente-principal);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  
+  &:hover {
+    color: var(--primario);
+  }
+}

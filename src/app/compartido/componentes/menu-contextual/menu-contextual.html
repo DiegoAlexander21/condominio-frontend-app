@@ -40,6 +40,10 @@
       <span class="material-symbols-outlined icono-opcion">cancel</span>
       Rechazar
     </button>
+    <button class="opcion-menu" *ngIf="mostrarCalificar" (click)="calificar()">
+      <span class="material-symbols-outlined icono-opcion">star_rate</span>
+      Calificar
+    </button>
     <button class="opcion-menu opcion-eliminar" *ngIf="mostrarEliminar" (click)="eliminar()">
       <span class="material-symbols-outlined icono-opcion">delete</span>
       Eliminar

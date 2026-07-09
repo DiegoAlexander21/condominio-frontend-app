@@ -21,7 +21,7 @@ export class RegistroComponent {
   mensajeServidor: string | null = null;
 
   tiposDocumento = Object.values(TipoDocumento);
-  nombresRoles = Object.values(NombreRol);
+  nombresRoles = Object.values(NombreRol).filter(rol => rol !== 'PROPIETARIO');
 
   formularioRegistro: FormGroup = this.constructorFormulario.group({
     nombres: ['', [Validators.required, Validators.minLength(2)]],

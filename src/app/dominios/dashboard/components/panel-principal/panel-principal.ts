@@ -8,6 +8,7 @@ import { ReporteDashboardResponse } from '../../modelos/reporte-dashboard.interf
 import { IncidenciaFrecuenteResponse } from '../../modelos/incidencia-frecuente.interface';
 import { AreaGastoResponse } from '../../modelos/area-gasto.interface';
 import { UnidadMorosaResponse } from '../../modelos/unidad-morosa.interface';
+import { EstadoAreaResponse } from '../../../calificaciones/modelos/calificacion.model';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class PanelPrincipalComponent implements OnInit {
   estadisticasIncidencias: IncidenciaFrecuenteResponse[] = [];
   estadisticasGastos: AreaGastoResponse[] = [];
   unidadesMorosas: UnidadMorosaResponse[] = [];
+  rankingAreas: EstadoAreaResponse[] = [];
   cargando = true;
 
   ngOnInit(): void {
@@ -36,6 +38,7 @@ export class PanelPrincipalComponent implements OnInit {
         this.estadisticasIncidencias = datos.incidenciasFrecuentes || [];
         this.estadisticasGastos = datos.areasConMayorGasto || [];
         this.unidadesMorosas = datos.unidadesMorosas || [];
+        this.rankingAreas = datos.rankingAreas || [];
         this.cargando = false;
       },
       error: () => {

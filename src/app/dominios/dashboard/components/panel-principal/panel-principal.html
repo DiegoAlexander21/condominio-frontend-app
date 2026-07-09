@@ -1,7 +1,6 @@
 <div class="contenedor-dashboard">
   <div class="cabecera-dashboard">
     <h2 class="titulo-principal">Dashboard y Reportes</h2>
-    <p class="subtitulo">Visión general del estado del condominio</p>
   </div>
 
   <div *ngIf="cargando" class="texto-cargando">
@@ -12,7 +11,21 @@
     <app-grafico-incidencias class="tarjeta-dashboard" [datos]="estadisticasIncidencias"></app-grafico-incidencias>
     
     <app-grafico-gastos class="tarjeta-dashboard span-2" [datos]="estadisticasGastos"></app-grafico-gastos>
-
-    <app-lista-morosas class="tarjeta-dashboard span-3" [unidades]="unidadesMorosas"></app-lista-morosas>
+    <app-lista-morosas class="tarjeta-dashboard span-2" [unidades]="unidadesMorosas"></app-lista-morosas>
+    
+    <div class="tarjeta-dashboard tarjeta-blanca span-3">
+      <div class="cabecera-tarjeta">
+        <h3>Ranking de Áreas</h3>
+      </div>
+      <div class="cuerpo-tarjeta">
+        <div class="lista-items">
+          <div class="item-ranking" *ngFor="let area of rankingAreas; let i = index">
+            <span class="posicion">#{{ i + 1 }}</span>
+            <span class="nombre">{{ area.nombreArea }} ({{ area.condominioNombre || 'Sin condominio' }})</span>
+            <span class="promedio"><span class="material-symbols-outlined icono-inline">star</span> {{ area.calificacionPromedio | number:'1.1-1' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

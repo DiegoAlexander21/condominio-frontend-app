@@ -44,6 +44,67 @@
       display: flex;
       flex-direction: column;
 
+      &.tarjeta-blanca {
+        background-color: var(--blanco);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+        .cabecera-tarjeta h3 {
+          color: var(--primario);
+          font-family: var(--fuente-principal);
+          font-size: 1.25rem;
+          margin-top: 0;
+          margin-bottom: 1rem;
+          border-bottom: 1px solid #f0f0f0;
+          padding-bottom: 0.5rem;
+        }
+      }
+
+      .cuerpo-tarjeta {
+        flex: 1;
+        position: relative;
+        min-height: 250px;
+
+        .lista-items {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          .item-ranking {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: rgba(0,0,0,0.02);
+            border-radius: 4px;
+
+            .posicion {
+              font-weight: bold;
+              color: var(--primario);
+              margin-right: 1rem;
+              font-size: 1.2rem;
+            }
+
+            .nombre {
+              flex: 1;
+              color: var(--terciario);
+            }
+
+            .promedio {
+              display: flex;
+              align-items: center;
+              gap: 0.25rem;
+              font-weight: 500;
+              color: var(--exito);
+              
+              .icono-inline {
+                font-size: 1.1rem;
+              }
+            }
+          }
+        }
+      }
+
       &.span-2 {
         @media (min-width: 992px) {
           grid-column: span 2;
