@@ -7,6 +7,7 @@ import { UnidadService } from '../../../unidades/services/unidad';
 import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion.service';
 import { AreaComunResponse } from '../../modelos/area-comun-response';
 import { CondominioResponse } from '../../../condominio/modelos/condominio-response.interface';
+import { CondominioForm } from '../../../condominio/modelos/condominio-form.interface';
 import { ReservaAreaComunResponse } from '../../modelos/reserva-area-comun-response.interface';
 import { RouterModule } from '@angular/router';
 import { ModalConfirmacionComponent } from '../../../../compartido/componentes/modal-confirmacion/modal-confirmacion';
@@ -31,7 +32,7 @@ export class GestionReservasComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private toastServicio = inject(ToastService);
 
-  listaCondominios: any[] = [];
+  listaCondominios: CondominioResponse[] = [];
   listaAreas: AreaComunResponse[] = [];
   listaReservas: ReservaAreaComunResponse[] = [];
 
@@ -85,7 +86,7 @@ export class GestionReservasComponent implements OnInit {
 
   private cargarCondominios(): void {
     this.condominioServicio.obtenerListaCondominios(0, 100).subscribe({
-      next: (res: any) => {
+      next: (res: { contenido: CondominioResponse[] }) => {
         this.listaCondominios = res.contenido;
       }
     });
@@ -93,11 +94,17 @@ export class GestionReservasComponent implements OnInit {
 
   private obtenerCondominioDeResidente(unidadId: number): void {
     this.unidadServicio.obtenerUnidad(unidadId).subscribe({
-      next: (res: any) => {
+      next: (res: { condominioId: number }) => {
         const condominioId = res.condominioId;
         this.condominioServicio.obtenerCondominio(condominioId).subscribe({
-          next: (cond: any) => {
-            this.listaCondominios = [{ id: cond.id, nombre: cond.nombre } as any];
+          next: (cond: CondominioForm) => {
+            this.listaCondominios = [{
+              id: cond.id as number,
+              nombre: cond.nombre,
+              torres: cond.torres,
+              pisosPorTorre: cond.pisosPorTorre,
+              fechaRegistro: ''
+            }];
             this.formularioFiltro.get('condominioId')?.setValue(cond.id);
             this.formularioFiltro.get('condominioId')?.disable();
           }
@@ -108,7 +115,7 @@ export class GestionReservasComponent implements OnInit {
 
   private cargarAreas(condominioId: number): void {
     this.areasComunesServicio.obtenerAreas(condominioId, 0, 100).subscribe({
-      next: (res: any) => {
+      next: (res: { contenido: AreaComunResponse[] }) => {
         this.listaAreas = res.contenido;
       }
     });
@@ -142,7 +149,7 @@ export class GestionReservasComponent implements OnInit {
       const unidadIdParaFiltro = this.esAdmin ? undefined : (this.unidadIdUsuario || undefined);
       this.areasComunesServicio.obtenerReservas(Number(areaComunId), fecha || undefined, unidadIdParaFiltro, this.paginaActualReservas)
         .subscribe({
-          next: (res: any) => {
+          next: (res: { contenido: ReservaAreaComunResponse[], totalPaginas: number }) => {
             this.listaReservas = res.contenido;
             this.totalPaginasReservas = res.totalPaginas;
             this.cargando = false;

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, ActivatedRoute } from '@angular/router';
 import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
 import { CondominioService } from '../../services/condominio.service';
+import { CondominioForm } from '../../modelos/condominio-form.interface';
 
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 
@@ -24,7 +25,7 @@ export class FormularioCondominioComponent implements OnInit {
   esEdicion = false;
   condominioId: number | null = null;
   nombreOriginal: string = '';
-  private estadoInicial: any;
+  private estadoInicial: Partial<CondominioForm> | null = null;
 
   formularioCondominio: FormGroup = this.constructorFormulario.group({
     nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
@@ -54,7 +55,7 @@ export class FormularioCondominioComponent implements OnInit {
         });
         this.estadoInicial = this.formularioCondominio.value;
       },
-      error: (err) => {
+      error: (err: unknown) => {
         this.toastServicio.mostrarError('Error al cargar datos del condominio.');
         console.error(err);
       }
@@ -78,8 +79,9 @@ export class FormularioCondominioComponent implements OnInit {
           this.toastServicio.mostrarExito(mensaje);
           this.enrutador.navigate(['/condominios']);
         },
-        error: (error) => {
-          this.toastServicio.mostrarError(error?.error?.error || 'Error al guardar el condominio');
+        error: (error: unknown) => {
+          const e = error as { error?: { error?: string } };
+          this.toastServicio.mostrarError(e?.error?.error || 'Error al guardar el condominio');
           console.error(error);
         }
       });

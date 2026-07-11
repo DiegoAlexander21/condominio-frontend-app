@@ -149,8 +149,9 @@ export class SalaAsambleaComponent implements OnInit, OnDestroy {
         this.yaVoto = true;
         this.votando = false;
       },
-      error: (err) => {
-        this.toastService.mostrarError(err.error?.error || 'Error al emitir el voto');
+      error: (err: unknown) => {
+        const error = err as { error?: { error?: string } };
+        this.toastService.mostrarError(error.error?.error || 'Error al emitir el voto');
         this.votando = false;
       }
     });
@@ -190,8 +191,9 @@ export class SalaAsambleaComponent implements OnInit, OnDestroy {
           this.asamblea.estado = EstadoAsamblea.CERRADA;
         }
       },
-      error: (err) => {
-        this.toastService.mostrarError(err.error?.error || 'Error al terminar la asamblea');
+      error: (err: unknown) => {
+        const error = err as { error?: { error?: string } };
+        this.toastService.mostrarError(error.error?.error || 'Error al terminar la asamblea');
         this.votando = false;
       }
     });

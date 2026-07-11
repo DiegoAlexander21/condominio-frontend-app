@@ -18,13 +18,16 @@
         <h3>Ranking de Áreas</h3>
       </div>
       <div class="cuerpo-tarjeta">
-        <div class="lista-items">
+        <div class="lista-items" *ngIf="rankingAreas.length > 0; else sinRanking">
           <div class="item-ranking" *ngFor="let area of rankingAreas; let i = index">
             <span class="posicion">#{{ i + 1 }}</span>
             <span class="nombre">{{ area.nombreArea }} ({{ area.condominioNombre || 'Sin condominio' }})</span>
             <span class="promedio"><span class="material-symbols-outlined icono-inline">star</span> {{ area.calificacionPromedio | number:'1.1-1' }}</span>
           </div>
         </div>
+        <ng-template #sinRanking>
+          <div class="mensaje-vacio">No hay áreas calificadas registradas.</div>
+        </ng-template>
       </div>
     </div>
   </div>

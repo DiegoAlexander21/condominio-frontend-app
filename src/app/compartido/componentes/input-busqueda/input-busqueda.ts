@@ -22,18 +22,18 @@ export class InputBusquedaComponent implements ControlValueAccessor {
   valor: string = '';
   disabled: boolean = false;
 
-  private onChange = (v: any) => {};
+  private onChange = (valor: string) => {};
   private onTouched = () => {};
 
-  writeValue(valor: any): void {
+  writeValue(valor: string): void {
     this.valor = valor || '';
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (valor: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 

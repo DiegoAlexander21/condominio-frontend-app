@@ -17,7 +17,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   mensajeActual: MensajeToast | null = null;
   visible = false;
   
-  private timeoutId: any;
+  private timeoutId: ReturnType<typeof setTimeout> | null = null;
 
   ngOnInit(): void {
     this.subscripcion = this.toastServicio.toast$.subscribe(mensaje => {

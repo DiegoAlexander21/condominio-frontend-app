@@ -87,8 +87,9 @@ export class CalificarAreaComponent implements OnInit {
           error: () => this.volver()
         });
       },
-      error: (err) => {
-        this.toastService.mostrarError(err.error?.error || 'Error al registrar calificación');
+      error: (err: unknown) => {
+        const error = err as { error?: { error?: string } };
+        this.toastService.mostrarError(error.error?.error || 'Error al registrar calificación');
       }
     });
   }

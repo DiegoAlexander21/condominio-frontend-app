@@ -16,8 +16,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
   ]
 })
-export class SelectPersonalizadoComponent implements ControlValueAccessor {
-  @Input() opciones: any[] = [];
+export class SelectPersonalizadoComponent<T> implements ControlValueAccessor {
+  @Input() opciones: T[] = [];
   @Input() placeholder: string = 'Seleccione una opción';
   @Input() propId: string = 'id';
   @Input() propNombre: string = 'nombre';
@@ -28,11 +28,11 @@ export class SelectPersonalizadoComponent implements ControlValueAccessor {
 
   private elemento = inject(ElementRef);
   
-  valorActual: any = '';
+  valorActual: string | number | null = '';
   textoSeleccionado: string = '';
   desplegableAbierto: boolean = false;
 
-  private onChange = (v: any) => {};
+  private onChange = (v: string | number | null) => {};
   private onTouched = () => {};
 
   ngOnInit() {
@@ -43,16 +43,16 @@ export class SelectPersonalizadoComponent implements ControlValueAccessor {
     this.actualizarTextoSeleccionado();
   }
 
-  writeValue(valor: any): void {
+  writeValue(valor: string | number | null): void {
     this.valorActual = valor;
     this.actualizarTextoSeleccionado();
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (valor: string | number | null) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
@@ -68,7 +68,7 @@ export class SelectPersonalizadoComponent implements ControlValueAccessor {
     }
   }
 
-  seleccionarOpcion(valor: any, event: Event): void {
+  seleccionarOpcion(valor: string | number | null, event: Event): void {
     event.stopPropagation();
     this.valorActual = valor;
     this.onChange(this.valorActual);
@@ -86,16 +86,30 @@ export class SelectPersonalizadoComponent implements ControlValueAccessor {
     }
   }
 
+  obtenerValorPropiedad(opcion: T, prop: string): string | number | null {
+    const valor = (opcion as Record<string, unknown>)[prop];
+    if (valor === null || typeof valor === 'string' || typeof valor === 'number') {
+      return valor;
+    }
+    if (valor === undefined) {
+      return null;
+    }
+    return String(valor);
+  }
+
   private actualizarTextoSeleccionado(): void {
     if (this.valorActual === '' || this.valorActual === null || this.valorActual === undefined) {
       this.textoSeleccionado = this.placeholder;
       return;
     }
-    const opcion = this.opciones.find(o => o[this.propId] === this.valorActual);
-    this.textoSeleccionado = opcion ? opcion[this.propNombre] : this.placeholder;
+    const opcion = this.opciones.find(o => this.obtenerValorPropiedad(o, this.propId) === this.valorActual);
+    this.textoSeleccionado = opcion ? String(this.obtenerValorPropiedad(opcion, this.propNombre)) : this.placeholder;
   }
 
   get tieneOpcionVaciaEnLista(): boolean {
-    return this.opciones.some(o => o[this.propId] === '' || o[this.propId] === null);
+    return this.opciones.some(o => {
+      const v = this.obtenerValorPropiedad(o, this.propId);
+      return v === '' || v === null;
+    });
   }
 }

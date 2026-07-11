@@ -50,15 +50,4 @@ export class IncidenciasService {
     return this.httpClient.put<IncidenciaResponse>(`${this.urlBase}/${id}/estado`, formulario);
   }
 
-  subirImagenCloudinary(archivo: File): Observable<{secure_url: string}> {
-    const cloudName = 'dxciesoqh';
-    const uploadPreset = 'condominio_preset';
-    const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-    const formData = new FormData();
-    formData.append('file', archivo);
-    formData.append('upload_preset', uploadPreset);
-
-    return this.httpClient.post<{secure_url: string}>(url, formData);
-  }
 }

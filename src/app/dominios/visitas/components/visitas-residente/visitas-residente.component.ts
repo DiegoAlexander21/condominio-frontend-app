@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion.service';
 import { VisitaService } from '../../services/visita.service';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
-import { VisitaResponse } from '../../models/visita.model';
+import { VisitaResponse } from '../../modelos/visita.model';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
 import { InputBusquedaComponent } from '../../../../compartido/componentes/input-busqueda/input-busqueda';
 import { SelectPersonalizadoComponent } from '../../../../compartido/componentes/select-personalizado/select-personalizado';

@@ -88,7 +88,7 @@ export class ListaGastosComponent implements OnInit {
     this.cargando = true;
     this.finanzasService.listarGastos(undefined, 0, 10000).subscribe({
       next: (data) => {
-        this.gastosGlobal = data.content;
+        this.gastosGlobal = data.contenido;
         this.cargando = false;
         this.aplicarFiltrosLocales();
       },

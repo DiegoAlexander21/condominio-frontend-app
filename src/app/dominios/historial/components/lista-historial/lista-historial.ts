@@ -43,7 +43,14 @@ export class ListaHistorialComponent implements OnInit {
     this.cargando = true;
     this.historialServicio.obtenerListaHistorial(0, 10000, '').subscribe({
       next: (data) => {
-        this.listaHistorialGlobal = data.contenido;
+        this.listaHistorialGlobal = data.contenido.map(h => {
+          if (Array.isArray(h.fechaCambio)) {
+            const [year, month, day, hour = 0, minute = 0, second = 0] = h.fechaCambio;
+            const pad = (n: number) => n.toString().padStart(2, '0');
+            h.fechaCambio = `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(minute)}:${pad(second)}`;
+          }
+          return h;
+        });
         this.cargando = false;
         this.aplicarFiltrosLocales();
       },
@@ -78,15 +85,7 @@ export class ListaHistorialComponent implements OnInit {
       const fechaBuscada = typeof filtros.fecha === 'string' ? filtros.fecha.split('T')[0] : '';
       resultados = resultados.filter(h => {
         if (!h.fechaCambio) return false;
-        let fechaHistorial = '';
-        if (Array.isArray(h.fechaCambio)) {
-          const year = h.fechaCambio[0];
-          const month = h.fechaCambio[1].toString().padStart(2, '0');
-          const day = h.fechaCambio[2].toString().padStart(2, '0');
-          fechaHistorial = `${year}-${month}-${day}`;
-        } else if (typeof h.fechaCambio === 'string') {
-          fechaHistorial = h.fechaCambio.substring(0, 10);
-        }
+        const fechaHistorial = typeof h.fechaCambio === 'string' ? h.fechaCambio.substring(0, 10) : '';
         return fechaHistorial === fechaBuscada;
       });
     }
