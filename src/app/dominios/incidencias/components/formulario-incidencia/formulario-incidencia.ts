@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { IncidenciasService } from '../../services/incidencias.service';
+import { CloudinaryService } from '../../../../compartido/servicios/cloudinary.service';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion.service';
 import { CondominioService } from '../../../condominio/services/condominio.service';
@@ -30,6 +31,7 @@ export class FormularioIncidencia implements OnInit {
 
   private formBuilder = inject(FormBuilder);
   private incidenciasService = inject(IncidenciasService);
+  private cloudinaryService = inject(CloudinaryService);
   private toastService = inject(ToastService);
   private authService = inject(AutenticacionService);
   private router = inject(Router);
@@ -213,7 +215,7 @@ export class FormularioIncidencia implements OnInit {
     this.enviando = true;
 
     const peticionCloudinary$: Observable<string[]> = this.archivosSeleccionados.length > 0
-      ? forkJoin(this.archivosSeleccionados.map(archivo => this.incidenciasService.subirImagenCloudinary(archivo)))
+      ? forkJoin(this.archivosSeleccionados.map(archivo => this.cloudinaryService.subirImagen(archivo)))
           .pipe(
             switchMap((respuestasCloudinary: any) => {
               const urls = (respuestasCloudinary as {secure_url: string}[]).map(res => res.secure_url);

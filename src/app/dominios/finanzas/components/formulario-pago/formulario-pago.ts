@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FinanzasService } from '../../services/finanzas.service';
+import { CloudinaryService } from '../../../../compartido/servicios/cloudinary.service';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
 
@@ -21,6 +22,7 @@ export class FormularioPagoComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private finanzasService = inject(FinanzasService);
+  private cloudinaryService = inject(CloudinaryService);
   private toastService = inject(ToastService);
 
   formulario!: FormGroup;
@@ -49,8 +51,10 @@ export class FormularioPagoComponent implements OnInit {
       this.archivoSeleccionado = archivo;
 
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagenPrevia = e.target.result;
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          this.imagenPrevia = e.target.result as string;
+        }
       };
       reader.readAsDataURL(archivo);
     }
@@ -81,8 +85,8 @@ export class FormularioPagoComponent implements OnInit {
 
     this.guardando = true;
 
-    this.finanzasService.subirImagenCloudinary(this.archivoSeleccionado).subscribe({
-      next: (res: any) => {
+    this.cloudinaryService.subirImagen(this.archivoSeleccionado).subscribe({
+      next: (res: { secure_url: string }) => {
         const evidenciaUrl = res.secure_url;
         this.formulario.patchValue({ evidenciaUrl });
 

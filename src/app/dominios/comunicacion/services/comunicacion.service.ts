@@ -33,16 +33,16 @@ export class ComunicacionService {
     return this.http.get<AsambleaResponse>(`${this.urlAsambleas}/${id}`);
   }
 
-  terminarAsamblea(id: number): Observable<any> {
-    return this.http.put(`${this.urlAsambleas}/${id}/terminar`, {});
+  terminarAsamblea(id: number): Observable<{ mensaje: string }> {
+    return this.http.put<{ mensaje: string }>(`${this.urlAsambleas}/${id}/terminar`, {});
   }
 
-  registrarAsamblea(formulario: AsambleaForm): Observable<any> {
-    return this.http.post(this.urlAsambleas, formulario);
+  registrarAsamblea(formulario: AsambleaForm): Observable<AsambleaResponse> {
+    return this.http.post<AsambleaResponse>(this.urlAsambleas, formulario);
   }
 
-  registrarVoto(formulario: VotoAsambleaForm): Observable<any> {
-    return this.http.post(`${this.urlAsambleas}/votos`, formulario);
+  registrarVoto(formulario: VotoAsambleaForm): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.urlAsambleas}/votos`, formulario);
   }
 
   obtenerResultadosVotacion(asambleaId: number): Observable<ResultadoAsambleaResponse> {

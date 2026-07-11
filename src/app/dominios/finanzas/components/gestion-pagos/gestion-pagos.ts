@@ -76,7 +76,7 @@ export class GestionPagosComponent implements OnInit {
     this.cargando = true;
     this.finanzasService.listarPagos(undefined, 0, 10000).subscribe({
       next: (data) => {
-        this.pagosGlobal = data.content;
+        this.pagosGlobal = data.contenido;
         this.cargando = false;
         this.aplicarFiltrosLocales();
       },

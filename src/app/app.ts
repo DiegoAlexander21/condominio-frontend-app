@@ -5,8 +5,7 @@ import { ToastComponent } from './compartido/componentes/toast/toast';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, ToastComponent],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  templateUrl: './app.html'
 })
 export class App {
   protected readonly titulo = signal('Gestión de Condominios');

@@ -5,7 +5,7 @@ import { VisitaService } from '../../services/visita.service';
 import { CondominioService } from '../../../condominio/services/condominio.service';
 import { UnidadService } from '../../../unidades/services/unidad';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
-import { VisitaResponse, EstadoVisita } from '../../models/visita.model';
+import { VisitaResponse, EstadoVisita } from '../../modelos/visita.model';
 import { SelectPersonalizadoComponent } from '../../../../compartido/componentes/select-personalizado/select-personalizado';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
 import { CalendarioPersonalizadoComponent } from '../../../../compartido/componentes/calendario-personalizado/calendario-personalizado';

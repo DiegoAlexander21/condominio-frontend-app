@@ -35,7 +35,7 @@ export class CalendarioPersonalizadoComponent implements ControlValueAccessor, O
   nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
   private elemento = inject(ElementRef);
-  private onChange = (v: any) => {};
+  private onChange = (valor: string) => {};
   private onTouched = () => {};
 
   ngOnInit() {
@@ -43,7 +43,7 @@ export class CalendarioPersonalizadoComponent implements ControlValueAccessor, O
     this.generarCalendario(this.mesActual, this.anioActual);
   }
 
-  writeValue(valor: any): void {
+  writeValue(valor: string): void {
     this.valorActual = valor || '';
     if (this.valorActual) {
       const [year, month, day] = this.valorActual.split('-');
@@ -54,11 +54,11 @@ export class CalendarioPersonalizadoComponent implements ControlValueAccessor, O
     this.actualizarTextoSeleccionado();
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (valor: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 

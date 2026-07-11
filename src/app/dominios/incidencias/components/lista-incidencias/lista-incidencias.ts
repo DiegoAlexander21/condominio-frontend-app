@@ -99,12 +99,19 @@ export class ListaIncidencias implements OnInit {
 
     this.incidenciasService.obtenerListaPorEstado(undefined, unidadIdConsulta, 0, 10000).subscribe({
       next: (res: RespuestaPaginada<IncidenciaResponse>) => {
-        this.listaIncidenciasGlobal = res.contenido.map(incidencia => ({
-          ...incidencia,
-          estadoFormateado: this.formatearEstado(incidencia.estado),
-          gravedadFormateada: this.formatearGravedad(incidencia.gravedad),
-          causaFormateada: this.formatearCausa(incidencia.causa)
-        }));
+        this.listaIncidenciasGlobal = res.contenido.map(incidencia => {
+          if (Array.isArray(incidencia.fechaReporte)) {
+            const [year, month, day, hour = 0, minute = 0, second = 0] = incidencia.fechaReporte;
+            const pad = (n: number) => n.toString().padStart(2, '0');
+            incidencia.fechaReporte = `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(minute)}:${pad(second)}`;
+          }
+          return {
+            ...incidencia,
+            estadoFormateado: this.formatearEstado(incidencia.estado),
+            gravedadFormateada: this.formatearGravedad(incidencia.gravedad),
+            causaFormateada: this.formatearCausa(incidencia.causa)
+          };
+        });
         this.cargando = false;
         this.aplicarFiltrosLocales();
       },
@@ -143,15 +150,7 @@ export class ListaIncidencias implements OnInit {
       const fechaBuscada = typeof filtros.fecha === 'string' ? filtros.fecha.split('T')[0] : '';
       resultados = resultados.filter(i => {
         if (!i.fechaReporte) return false;
-        let fechaIncidencia = '';
-        if (Array.isArray(i.fechaReporte)) {
-          const year = i.fechaReporte[0];
-          const month = i.fechaReporte[1].toString().padStart(2, '0');
-          const day = i.fechaReporte[2].toString().padStart(2, '0');
-          fechaIncidencia = `${year}-${month}-${day}`;
-        } else if (typeof i.fechaReporte === 'string') {
-          fechaIncidencia = i.fechaReporte.substring(0, 10);
-        }
+        const fechaIncidencia = typeof i.fechaReporte === 'string' ? i.fechaReporte.substring(0, 10) : '';
         return fechaIncidencia === fechaBuscada;
       });
     }

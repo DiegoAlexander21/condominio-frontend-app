@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FinanzasService } from '../../services/finanzas.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
 
 @Component({
   selector: 'app-registro-pago',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MensajeErrorComponent],
   templateUrl: './registro-pago.html',
   styleUrl: './registro-pago.scss'
 })

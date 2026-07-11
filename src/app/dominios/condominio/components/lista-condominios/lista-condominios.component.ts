@@ -167,7 +167,7 @@ export class ListaCondominiosComponent implements OnInit {
           this.idCondominioAEliminar = null;
           this.obtenerDatos();
         },
-        error: (error) => {
+        error: (error: unknown) => {
           this.toastServicio.mostrarError('Error al eliminar el condominio.');
           this.mostrarModalEliminar = false;
           this.idCondominioAEliminar = null;

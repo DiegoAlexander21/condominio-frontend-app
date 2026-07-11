@@ -8,6 +8,7 @@ import { CondominioService } from '../../../condominio/services/condominio.servi
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
 
 import { MensajeErrorComponent } from '../../../../compartido/componentes/mensaje-error/mensaje-error';
+import { CondominioResponse } from '../../../condominio/modelos/condominio-response.interface';
 
 @Component({
   selector: 'app-formulario-estado-cuenta',
@@ -28,10 +29,10 @@ export class FormularioEstadoCuentaComponent implements OnInit {
   guardando = false;
   cargandoDatos = false;
 
-  listaCondominios: any[] = [];
+  listaCondominios: CondominioResponse[] = [];
   listaTorres: string[] = [];
-  listaUnidadesGlobal: any[] = [];
-  listaUnidadesFiltradas: any[] = [];
+  listaUnidadesGlobal: { id: number; condominioId: number; torre: string | null; nombre: string }[] = [];
+  listaUnidadesFiltradas: { id: number; condominioId: number; torre: string | null; nombre: string }[] = [];
 
   constructor() {
     this.formulario = this.fb.group({

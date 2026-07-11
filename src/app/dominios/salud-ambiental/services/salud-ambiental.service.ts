@@ -22,22 +22,42 @@ export class SaludAmbientalService {
   }
 
   crearChecklist(formulario: ChecklistForm): Observable<ChecklistResponse> {
-    return this.http.post<ChecklistResponse>(`${this.urlBase}/checklists`, formulario);
+    return this.http.post<ChecklistResponse>(`${this.urlBase}/checklists`, formulario).pipe(
+      map(res => this.parsearFechasObjeto(res, 'fechaRegistro'))
+    );
   }
 
   listarChecklistsPorArea(areaId: number): Observable<ChecklistResponse[]> {
-    return this.http.get<ChecklistResponse[]>(`${this.urlBase}/checklists/area/${areaId}`);
+    return this.http.get<ChecklistResponse[]>(`${this.urlBase}/checklists/area/${areaId}`).pipe(
+      map(lista => lista.map(item => this.parsearFechasObjeto(item, 'fechaRegistro')))
+    );
   }
 
   evaluarChecklist(formulario: EvaluacionForm): Observable<EvaluacionResponse> {
-    return this.http.post<EvaluacionResponse>(`${this.urlBase}/evaluaciones`, formulario);
+    return this.http.post<EvaluacionResponse>(`${this.urlBase}/evaluaciones`, formulario).pipe(
+      map(res => this.parsearFechasObjeto(res, 'fechaEvaluacion'))
+    );
   }
 
   registrarMantenimiento(formulario: MantenimientoAmbientalForm): Observable<MantenimientoAmbientalResponse> {
-    return this.http.post<MantenimientoAmbientalResponse>(`${this.urlBase}/mantenimientos`, formulario);
+    return this.http.post<MantenimientoAmbientalResponse>(`${this.urlBase}/mantenimientos`, formulario).pipe(
+      map(res => this.parsearFechasObjeto(res, 'fechaRegistro'))
+    );
   }
 
   obtenerHistorialMantenimiento(areaId: number): Observable<MantenimientoAmbientalResponse[]> {
-    return this.http.get<MantenimientoAmbientalResponse[]>(`${this.urlBase}/mantenimientos/area/${areaId}`);
+    return this.http.get<MantenimientoAmbientalResponse[]>(`${this.urlBase}/mantenimientos/area/${areaId}`).pipe(
+      map(lista => lista.map(item => this.parsearFechasObjeto(item, 'fechaRegistro')))
+    );
+  }
+
+  private parsearFechasObjeto<T>(objeto: T, campo: keyof T): T {
+    if (objeto && Array.isArray(objeto[campo])) {
+      const arr = objeto[campo] as unknown as number[];
+      const pad = (n: number) => n?.toString().padStart(2, '0') || '00';
+      const [y, m, d, h = 0, min = 0, s = 0] = arr;
+      (objeto[campo] as unknown as string) = `${y}-${pad(m)}-${pad(d)}T${pad(h)}:${pad(min)}:${pad(s)}`;
+    }
+    return objeto;
   }
 }

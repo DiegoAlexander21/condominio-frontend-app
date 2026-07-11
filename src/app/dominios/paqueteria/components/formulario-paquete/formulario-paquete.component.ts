@@ -86,10 +86,9 @@ export class FormularioPaqueteComponent implements OnInit {
         this.guardando = false;
         this.router.navigate(['/paqueteria/conserje']);
       },
-      error: (err) => {
+      error: () => {
         this.toastService.mostrarError('Error al registrar el paquete');
         this.guardando = false;
-        console.error(err);
       }
     });
   }

@@ -8,6 +8,8 @@ import { SelectPersonalizadoComponent } from '../../../../compartido/componentes
 import { MenuContextualComponent } from '../../../../compartido/componentes/menu-contextual/menu-contextual';
 import { Router } from '@angular/router';
 import { CondominioService } from '../../../condominio/services/condominio.service';
+import { CondominioResponse } from '../../../condominio/modelos/condominio-response.interface';
+import { CondominioForm } from '../../../condominio/modelos/condominio-form.interface';
 import { AreasComunesService } from '../../../areascomunes/services/areas-comunes';
 import { UnidadService } from '../../../unidades/services/unidad';
 import { AutenticacionService } from '../../../../nucleo/servicios/autenticacion.service';
@@ -35,7 +37,7 @@ export class RankingAreasComponent implements OnInit {
   rankingFiltrado: EstadoAreaResponse[] = [];
   rankingPaginado: EstadoAreaResponse[] = [];
   
-  listaCondominios: any[] = [];
+  listaCondominios: CondominioResponse[] = [];
   listaAreas: AreaComunResponse[] = [];
 
   formularioFiltro: FormGroup;
@@ -81,7 +83,7 @@ export class RankingAreasComponent implements OnInit {
 
   private cargarCondominios(): void {
     this.condominioServicio.obtenerListaCondominios(0, 100).subscribe({
-      next: (res: any) => {
+      next: (res: { contenido: CondominioResponse[] }) => {
         this.listaCondominios = res.contenido;
       }
     });
@@ -89,11 +91,17 @@ export class RankingAreasComponent implements OnInit {
 
   private obtenerCondominioDeResidente(unidadId: number): void {
     this.unidadServicio.obtenerUnidad(unidadId).subscribe({
-      next: (res: any) => {
+      next: (res: { condominioId: number }) => {
         const condominioId = res.condominioId;
         this.condominioServicio.obtenerCondominio(condominioId).subscribe({
-          next: (cond: any) => {
-            this.listaCondominios = [{ id: cond.id, nombre: cond.nombre } as any];
+          next: (cond: CondominioForm) => {
+            this.listaCondominios = [{
+              id: cond.id as number,
+              nombre: cond.nombre,
+              torres: cond.torres,
+              pisosPorTorre: cond.pisosPorTorre,
+              fechaRegistro: ''
+            }];
             this.formularioFiltro.get('condominioId')?.setValue(cond.id);
             this.formularioFiltro.get('condominioId')?.disable();
           }
@@ -104,7 +112,7 @@ export class RankingAreasComponent implements OnInit {
 
   private cargarAreas(condominioId: number): void {
     this.areasComunesServicio.obtenerAreas(condominioId, 0, 100).subscribe({
-      next: (res: any) => {
+      next: (res: { contenido: AreaComunResponse[] }) => {
         this.listaAreas = res.contenido;
       }
     });

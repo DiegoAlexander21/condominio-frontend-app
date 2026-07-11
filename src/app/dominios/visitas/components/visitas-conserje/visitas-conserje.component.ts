@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { VisitaService } from '../../services/visita.service';
 import { UsuarioService } from '../../../../nucleo/servicios/usuario.service';
 import { ToastService } from '../../../../compartido/componentes/toast/toast.service';
-import { VisitaResponse, EstadoVisita, RegistroIngresoVisitaForm, RegistroSalidaVisitaForm } from '../../models/visita.model';
+import { VisitaResponse, EstadoVisita, RegistroIngresoVisitaForm, RegistroSalidaVisitaForm } from '../../modelos/visita.model';
 import { MenuContextualComponent } from '../../../../compartido/componentes/menu-contextual/menu-contextual';
 import { PaginacionComponent } from '../../../../compartido/componentes/paginacion/paginacion';
 import { ModalConfirmacionComponent } from '../../../../compartido/componentes/modal-confirmacion/modal-confirmacion';

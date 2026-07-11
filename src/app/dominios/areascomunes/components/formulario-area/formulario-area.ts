@@ -116,9 +116,10 @@ export class FormularioAreaComponent implements OnInit {
         }
         this.router.navigate(['/areas-comunes']);
       },
-      error: (err: any) => {
+      error: (err: unknown) => {
+        const error = err as { error?: { message?: string } };
         this.cargando = false;
-        this.errorMensaje = err.error?.message || 'Ocurrió un error al guardar el área común.';
+        this.errorMensaje = error.error?.message || 'Ocurrió un error al guardar el área común.';
         this.toastServicio.mostrarError(this.errorMensaje!);
       }
     });

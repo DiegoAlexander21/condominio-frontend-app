@@ -9,8 +9,8 @@
     <div class="opcion" *ngIf="!tieneOpcionVaciaEnLista" (click)="seleccionarOpcion('', $event)">
       {{ placeholder }}
     </div>
-    <div class="opcion" *ngFor="let opcion of opciones" (click)="seleccionarOpcion(opcion[propId], $event)">
-      {{ opcion[propNombre] }}
+    <div class="opcion" *ngFor="let opcion of opciones" (click)="seleccionarOpcion(obtenerValorPropiedad(opcion, propId), $event)">
+      {{ obtenerValorPropiedad(opcion, propNombre) }}
     </div>
   </div>
 </div>

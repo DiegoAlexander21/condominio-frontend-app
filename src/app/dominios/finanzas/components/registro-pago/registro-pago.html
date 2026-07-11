@@ -21,9 +21,7 @@
       <div class="grupo-control">
         <label>Monto a Pagar (S/)</label>
         <input type="number" step="0.01" formControlName="monto" placeholder="0.00">
-        <div class="texto-ayuda texto-error" *ngIf="formulario.get('monto')?.touched && formulario.get('monto')?.invalid">
-          Monto inválido.
-        </div>
+        <app-mensaje-error [control]="formulario.get('monto')" nombreCampo="El monto"></app-mensaje-error>
       </div>
     </div>
 

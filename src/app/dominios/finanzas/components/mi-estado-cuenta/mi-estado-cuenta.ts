@@ -55,10 +55,9 @@ export class MiEstadoCuentaComponent implements OnInit {
             id: 0,
             numeroUnidad: '-',
             torre: '-',
-            piso: '-',
-            condominioId: 0,
-            condominio: { id: 0, nombre: '-' }
-          } as any;
+            piso: 0,
+            condominio: { nombre: '-' }
+          };
           this.estadosOriginales = [];
           this.pagosOriginales = [];
         } else {

@@ -70,12 +70,10 @@
         </div>
         <div class="detalle-fila">
           <ng-container *ngIf="insumo.stockActual > insumo.stockMinimo">
-            <span class="material-symbols-outlined icono-inline estado-exito">check_circle</span>
-            <span class="estado-exito">Estado: Stock Normal</span>
+            <span class="badge badge-ok">Estado: Stock Normal</span>
           </ng-container>
           <ng-container *ngIf="insumo.stockActual <= insumo.stockMinimo">
-            <span class="material-symbols-outlined icono-inline estado-error">error</span>
-            <span class="estado-error">Estado: Stock Crítico</span>
+            <span class="badge badge-critico">Estado: Stock Crítico</span>
           </ng-container>
         </div>
         <div class="detalle-fila">
