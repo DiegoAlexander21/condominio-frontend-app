@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import { InsumoResponse, InsumoForm } from '../modelos/insumo.model';
 import { TareaMantenimientoForm, TareaMantenimientoResponse } from '../modelos/tarea-mantenimiento.model';
 import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginada.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MantenimientoService {
   private http = inject(HttpClient);
-  private urlBase = 'http://localhost:8080/api/mantenimiento';
+  private urlBase = `${environment.apiUrl}/mantenimiento`;
 
   listarInsumos(): Observable<InsumoResponse[]> {
     return this.http.get<InsumoResponse[]>(`${this.urlBase}/insumos`);

@@ -6,13 +6,14 @@ import { map } from 'rxjs/operators';
 import { Paquete } from '../modelos/paquete.model';
 import { PaqueteForm, RegistroEntregaPaqueteForm } from '../modelos/paquete-form.model';
 import { EstadoPaquete } from '../modelos/estado-paquete.enum';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PaqueteriaService {
   private http = inject(HttpClient);
-  private urlBase = 'http://localhost:8080/api/paqueteria';
+  private urlBase = `${environment.apiUrl}/paqueteria`;
 
   listarTodos(estado?: EstadoPaquete): Observable<Paquete[]> {
     let params = new HttpParams();

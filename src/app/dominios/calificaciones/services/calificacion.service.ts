@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CalificacionForm, EstadoAreaResponse, RespuestaDetalleArea } from '../modelos/calificacion.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CalificacionService {
-  private urlBase = 'http://localhost:8080/api/calificaciones';
+  private urlBase = `${environment.apiUrl}/calificaciones`;
 
   constructor(private http: HttpClient) {}
 

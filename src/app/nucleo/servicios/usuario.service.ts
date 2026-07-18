@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UsuarioPerfilResponse } from '../modelos/usuario-perfil-response.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
   private clienteHttp = inject(HttpClient);
-  private urlBase = 'http://localhost:8080/api/usuarios';
+  private urlBase = `${environment.apiUrl}/usuarios`;
 
   obtenerMiPerfil(): Observable<UsuarioPerfilResponse> {
     return this.clienteHttp.get<UsuarioPerfilResponse>(`${this.urlBase}/me`);

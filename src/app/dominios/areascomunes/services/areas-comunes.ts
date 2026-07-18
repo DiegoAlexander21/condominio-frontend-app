@@ -6,13 +6,14 @@ import { AreaComunForm } from '../modelos/area-comun-form';
 import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginada.interface';
 import { ReservaAreaComunForm } from '../modelos/reserva-area-comun-form.interface';
 import { ReservaAreaComunResponse } from '../modelos/reserva-area-comun-response.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AreasComunesService {
-  private urlAPI = 'http://localhost:8080/api/areas-comunes';
-  private urlReservas = 'http://localhost:8080/api/areas-comunes/reservas';
+  private urlAPI = `${environment.apiUrl}/areas-comunes`;
+  private urlReservas = `${environment.apiUrl}/areas-comunes/reservas`;
 
   constructor(private clienteHttp: HttpClient) {}
 

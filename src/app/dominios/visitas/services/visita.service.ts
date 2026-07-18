@@ -3,12 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { VisitaResponse, VisitaForm, RegistroIngresoVisitaForm, RegistroSalidaVisitaForm, EstadoVisita } from '../modelos/visita.model';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VisitaService {
-  private urlBase = 'http://localhost:8080/api/visitas';
+  private urlBase = `${environment.apiUrl}/visitas`;
   private clienteHttp = inject(HttpClient);
 
   listarVisitas(estado?: EstadoVisita): Observable<VisitaResponse[]> {

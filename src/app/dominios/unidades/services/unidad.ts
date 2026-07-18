@@ -6,13 +6,14 @@ import { UnidadResponse } from '../modelos/unidad-response.interface';
 import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginada.interface';
 import { AsignarOcupantesForm } from '../modelos/asignar-ocupantes-form.interface';
 import { TorreDto } from '../modelos/torre.dto';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UnidadService {
   private httpClient = inject(HttpClient);
-  private urlBase = 'http://localhost:8080/api/unidades';
+  private urlBase = `${environment.apiUrl}/unidades`;
 
   obtenerListaUnidades(pagina: number = 0, tamano: number = 10): Observable<RespuestaPaginada<UnidadResponse>> {
     const parametros = new HttpParams()
