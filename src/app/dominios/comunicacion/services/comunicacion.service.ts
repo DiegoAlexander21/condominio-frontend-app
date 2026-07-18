@@ -4,14 +4,15 @@ import { Observable } from 'rxjs';
 import { ComunicadoForm, ComunicadoIAForm, ComunicadoResponse } from '../modelos/comunicado.model';
 import { AsambleaForm, AsambleaResponse } from '../modelos/asamblea.model';
 import { ResultadoAsambleaResponse, VotoAsambleaForm } from '../modelos/votacion.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComunicacionService {
   private http = inject(HttpClient);
-  private urlComunicados = 'http://localhost:8080/api/comunicados';
-  private urlAsambleas = 'http://localhost:8080/api/asambleas';
+  private urlComunicados = `${environment.apiUrl}/comunicados`;
+  private urlAsambleas = `${environment.apiUrl}/asambleas`;
 
   obtenerComunicados(condominioId: number): Observable<ComunicadoResponse[]> {
     return this.http.get<ComunicadoResponse[]>(`${this.urlComunicados}/condominio/${condominioId}`);

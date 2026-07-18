@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { IncidenciaResponse, EstadoIncidencia } from '../modelos/incidencia-response';
 import { IncidenciaForm, ActualizacionIncidenciaForm } from '../modelos/incidencia-form';
 import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginada.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginad
 export class IncidenciasService {
 
   private httpClient = inject(HttpClient);
-  private urlBase = 'http://localhost:8080/api/incidencias';
+  private urlBase = `${environment.apiUrl}/incidencias`;
 
   obtenerListaPorEstado(estado?: EstadoIncidencia, unidadId?: number, pagina: number = 0, tamano: number = 10): Observable<RespuestaPaginada<IncidenciaResponse>> {
     let params = new HttpParams()

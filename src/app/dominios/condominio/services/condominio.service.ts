@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import { CondominioForm } from '../modelos/condominio-form.interface';
 import { CondominioResponse } from '../modelos/condominio-response.interface';
 import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginada.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CondominioService {
   private httpClient = inject(HttpClient);
-  private urlBase = 'http://localhost:8080/api/condominios';
+  private urlBase = `${environment.apiUrl}/condominios`;
 
   obtenerListaCondominios(pagina: number = 0, tamano: number = 10): Observable<RespuestaPaginada<CondominioResponse>> {
     const parametros = new HttpParams()

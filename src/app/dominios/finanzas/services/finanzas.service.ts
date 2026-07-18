@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginada.interface';
 import { 
+import { environment } from '../../../../environments/environment';
   GastoResponse, 
   GastoForm, 
   DistribucionGastoForm, 
@@ -19,7 +20,7 @@ import {
   providedIn: 'root'
 })
 export class FinanzasService {
-  private url = 'http://localhost:8080/api/finanzas';
+  private url = `${environment.apiUrl}/finanzas`;
 
   constructor(private http: HttpClient) {}
 

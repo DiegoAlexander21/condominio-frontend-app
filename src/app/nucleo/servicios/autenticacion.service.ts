@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Credenciales, RespuestaAutenticacion, RegistroUsuario } from '../modelos/credenciales.model';
+import { environment } from '../../../environments/environment';
 
 export interface TokenPayload {
   exp?: number;
@@ -15,7 +16,7 @@ export interface TokenPayload {
 })
 export class AutenticacionService {
   private clienteHttp = inject(HttpClient);
-  private urlBase = 'http://localhost:8080/api/auth';
+  private urlBase = `${environment.apiUrl}/auth`;
 
   iniciarSesion(credenciales: Credenciales): Observable<RespuestaAutenticacion> {
     return this.clienteHttp.post<RespuestaAutenticacion>(`${this.urlBase}/login`, credenciales);

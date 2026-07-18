@@ -7,14 +7,15 @@ import { MantenimientoAmbientalForm, MantenimientoAmbientalResponse } from '../m
 import { AreaComunResponse } from '../../areascomunes/modelos/area-comun-response';
 import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginada.interface';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaludAmbientalService {
   private http = inject(HttpClient);
-  private urlBase = 'http://localhost:8080/api/salud-ambiental';
-  private urlAreas = 'http://localhost:8080/api/areas-comunes';
+  private urlBase = `${environment.apiUrl}/salud-ambiental`;
+  private urlAreas = `${environment.apiUrl}/areas-comunes`;
 
   obtenerAreasComunesPorCondominio(condominioId: number): Observable<AreaComunResponse[]> {
     return this.http.get<RespuestaPaginada<AreaComunResponse>>(`${this.urlAreas}?condominioId=${condominioId}&tamano=10000`)

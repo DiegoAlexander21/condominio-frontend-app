@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HistorialTitularidadResponse } from '../modelos/historial-response';
 import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginada.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { RespuestaPaginada } from '../../../compartido/modelos/respuesta-paginad
 export class HistorialService {
 
   private clienteHttp = inject(HttpClient);
-  private urlBase = 'http://localhost:8080/api/historial';
+  private urlBase = `${environment.apiUrl}/historial`;
 
   obtenerListaHistorial(pagina: number, tamano: number, terminoBusqueda?: string): Observable<RespuestaPaginada<HistorialTitularidadResponse>> {
     let parametros = new HttpParams()
