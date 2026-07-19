@@ -26,7 +26,12 @@
 
       <div class="grupo-control">
         <label for="contrasena">Contraseña</label>
-        <input type="password" id="contrasena" formControlName="contrasena" placeholder="Tu contraseña">
+        <div class="contenedor-input-contrasena">
+          <input [type]="ocultarContrasena ? 'password' : 'text'" id="contrasena" formControlName="contrasena" placeholder="Tu contraseña">
+          <button type="button" class="boton-ojo" (click)="alternarContrasena()">
+            <span class="material-symbols-outlined">{{ ocultarContrasena ? 'visibility_off' : 'visibility' }}</span>
+          </button>
+        </div>
         <app-mensaje-error 
           [control]="formularioLogin.get('contrasena')" 
           nombreCampo="La contraseña"

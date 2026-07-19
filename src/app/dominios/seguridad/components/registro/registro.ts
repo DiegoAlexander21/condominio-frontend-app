@@ -19,6 +19,11 @@ export class RegistroComponent {
   private enrutador = inject(Router);
 
   mensajeServidor: string | null = null;
+  ocultarContrasena: boolean = true;
+
+  alternarContrasena(): void {
+    this.ocultarContrasena = !this.ocultarContrasena;
+  }
 
   tiposDocumento = Object.values(TipoDocumento);
   nombresRoles = Object.values(NombreRol).filter(rol => rol !== 'PROPIETARIO');

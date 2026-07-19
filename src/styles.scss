@@ -52,6 +52,40 @@ input:not([type="checkbox"]):not([type="radio"]), select {
   }
 }
 
+.contenedor-input-contrasena {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  input {
+    padding-right: 2.5rem;
+  }
+
+  .boton-ojo {
+    position: absolute;
+    right: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--secundario);
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--primario);
+    }
+
+    .material-symbols-outlined {
+      font-size: 1.2rem;
+    }
+  }
+}
+
 .boton-primario {
   background-color: #2b2b2b;
   color: var(--blanco);
