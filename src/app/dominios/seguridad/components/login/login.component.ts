@@ -19,6 +19,11 @@ export class LoginComponent {
 
   mensajeExito: string | null = null;
   mensajeError: string | null = null;
+  ocultarContrasena: boolean = true;
+
+  alternarContrasena(): void {
+    this.ocultarContrasena = !this.ocultarContrasena;
+  }
 
   constructor() {
     if (history.state?.mensajeExito) {
