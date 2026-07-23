@@ -120,9 +120,9 @@ export class FormularioReservaComponent implements OnInit {
   }
 
   private cargarUnidades(condominioId: number): void {
-    this.unidadServicio.obtenerListaUnidades(0, 100).subscribe({
+    this.unidadServicio.obtenerListaUnidades(0, 1000).subscribe({
       next: (res: { contenido: UnidadResponse[] }) => {
-        this.listaUnidades = res.contenido;
+        this.listaUnidades = res.contenido.filter(u => u.condominioId === condominioId);
       }
     });
   }
