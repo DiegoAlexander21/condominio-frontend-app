@@ -36,12 +36,7 @@
           <span class="texto">Áreas Comunes</span>
         </a>
       </li>
-      <li *ngIf="esAdmin || esResidente">
-        <a routerLink="/comunicacion" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
-          <span class="material-symbols-outlined icono">campaign</span>
-          <span class="texto">Comunicación</span>
-        </a>
-      </li>
+
       <li *ngIf="esAdmin || esResidente">
         <a routerLink="/calificaciones" routerLinkActive="activo" (click)="cerrarMenuMovil()" class="enlace">
           <span class="material-symbols-outlined icono">star_rate</span>

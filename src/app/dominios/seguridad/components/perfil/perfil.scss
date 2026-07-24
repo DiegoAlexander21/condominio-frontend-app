@@ -230,34 +230,6 @@
 
     .cuerpo-modal {
       padding: 1.5rem;
-
-      .formulario-minimalista {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-
-        .contenedor-campos {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-          min-height: 150px;
-
-          .grupo-control {
-            display: flex;
-            flex-direction: column;
-
-            label {
-              display: block;
-              margin-bottom: 0.5rem;
-              color: var(--secundario);
-              font-size: 0.85rem;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-              font-weight: 600;
-            }
-          }
-        }
-      }
     }
   }
 }

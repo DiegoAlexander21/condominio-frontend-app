@@ -73,8 +73,8 @@
     </div>
     
     <div class="cuerpo-modal">
-      <form [formGroup]="formularioVinculacion" (ngSubmit)="vincularMe()" class="formulario-minimalista">
-        <div class="contenedor-campos">
+      <form [formGroup]="formularioVinculacion" (ngSubmit)="vincularMe()" class="formulario-flex">
+        <div class="fila-controles">
           <div class="grupo-control">
             <select id="condominioId" formControlName="condominioId">
               <option [ngValue]="null">Seleccione su Condominio</option>
