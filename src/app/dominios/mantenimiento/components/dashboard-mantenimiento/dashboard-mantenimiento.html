@@ -20,7 +20,8 @@
     <div class="grupo-filtro">
       <app-input-busqueda
         placeholder="Buscar insumo por nombre..."
-        [(ngModel)]="terminoBusqueda">
+        [(ngModel)]="terminoBusqueda"
+        (keydown.enter)="aplicarFiltros()">
       </app-input-busqueda>
     </div>
     <div class="grupo-filtro">
