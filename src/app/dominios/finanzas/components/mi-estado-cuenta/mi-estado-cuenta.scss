@@ -62,93 +62,94 @@
   }
 
 
-  .tarjeta-minimalista {
-    background-color: var(--blanco, #ffffff);
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
-    
-    .encabezado-minimalista {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      border-bottom: 1px solid #f0f0f0;
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
+}
 
-      h3 {
-        margin: 0;
-        color: var(--primario, #2c3e50);
-        font-size: 1.15rem;
-        font-weight: 500;
-        flex: 1;
-      }
-    }
+.tarjeta-minimalista {
+  background-color: var(--blanco, #ffffff);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+  
+  .encabezado-minimalista {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
 
-    .cuerpo-minimalista {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      
-      .fila-minimalista {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--primario, #2c3e50);
-        font-size: 0.95rem;
-        
-        .icono-minimalista {
-          color: var(--secundario, #7f8c8d);
-          font-size: 1.2rem;
-        }
-
-        &.fila-sin-borde {
-          border: none;
-          padding: 0;
-          margin: 0;
-        }
-
-        &.fila-separador {
-          border-top: 1px dashed #eee;
-          padding-top: 1rem;
-          margin-top: 0.5rem;
-        }
-
-        &.saldo-destacado {
-          font-size: 1.1rem;
-          color: var(--primario);
-        }
-      }
-
-      .saldo-deudor {
-        border-top: 1px dashed #f0f0f0;
-        padding-top: 0.75rem;
-        margin-top: 0.25rem;
-      }
+    h3 {
+      margin: 0;
+      color: var(--primario, #2c3e50);
+      font-size: 1.15rem;
+      font-weight: 500;
+      flex: 1;
     }
   }
 
-  .accion-menu {
+  .cuerpo-minimalista {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    background: none;
-    border: none;
-    color: var(--primario);
-    text-decoration: none;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.2s;
+    flex-direction: column;
+    gap: 0.75rem;
     
-    &:hover {
-      background-color: rgba(49, 56, 82, 0.05);
+    .fila-minimalista {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primario, #2c3e50);
+      font-size: 0.95rem;
+      
+      .icono-minimalista {
+        color: var(--secundario, #7f8c8d);
+        font-size: 1.2rem;
+      }
+
+      &.fila-sin-borde {
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      &.fila-separador {
+        border-top: 1px dashed #eee;
+        padding-top: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      &.saldo-destacado {
+        font-size: 1.1rem;
+        color: var(--primario);
+      }
     }
-    
-    .material-symbols-outlined {
-      font-size: 1.2rem;
+
+    .saldo-deudor {
+      border-top: 1px dashed #f0f0f0;
+      padding-top: 0.75rem;
+      margin-top: 0.25rem;
     }
+  }
+}
+
+.accion-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: var(--primario);
+  text-decoration: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  
+  &:hover {
+    background-color: rgba(49, 56, 82, 0.05);
+  }
+  
+  .material-symbols-outlined {
+    font-size: 1.2rem;
   }
 }
 
