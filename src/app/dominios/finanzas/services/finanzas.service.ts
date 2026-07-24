@@ -26,8 +26,8 @@ export class FinanzasService {
 
   listarGastos(tipo?: string, page: number = 0, size: number = 10): Observable<RespuestaPaginada<GastoResponse>> {
     let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
+      .set('pagina', page.toString())
+      .set('tamano', size.toString());
     
     if (tipo) {
       params = params.set('tipo', tipo);
@@ -101,8 +101,8 @@ export class FinanzasService {
 
   listarPagos(estado?: string, page: number = 0, size: number = 10): Observable<RespuestaPaginada<PagoResponse>> {
     let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
+      .set('pagina', page.toString())
+      .set('tamano', size.toString());
     
     if (estado) {
       params = params.set('estado', estado);
