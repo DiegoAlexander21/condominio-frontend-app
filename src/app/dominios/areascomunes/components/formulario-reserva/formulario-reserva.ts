@@ -149,8 +149,8 @@ export class FormularioReservaComponent implements OnInit {
         this.volver();
       },
       error: (err: unknown) => {
-        const error = err as { error?: { message?: string } };
-        const mensaje = error.error?.message || 'Error al registrar la reserva';
+        const error = err as { error?: { message?: string, error?: string, mensaje?: string } };
+        const mensaje = error.error?.error || error.error?.mensaje || error.error?.message || 'Error al registrar la reserva';
         this.toastServicio.mostrarError(mensaje);
       }
     });
