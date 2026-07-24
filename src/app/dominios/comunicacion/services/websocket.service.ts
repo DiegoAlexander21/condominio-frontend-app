@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { Observable, Subject } from 'rxjs';
@@ -12,7 +12,7 @@ export class WebsocketService {
   private clienteStomp: Client;
   private resultadosSubject = new Subject<ResultadoAsambleaResponse>();
 
-  constructor() {
+  constructor(private ngZone: NgZone) {
     this.clienteStomp = new Client({
       webSocketFactory: () => new SockJS(`${environment.wsUrl}`),
       reconnectDelay: 5000,
@@ -44,7 +44,9 @@ export class WebsocketService {
     this.clienteStomp.subscribe(`/topic/asambleas/${asambleaId}`, (mensaje: IMessage) => {
       if (mensaje.body) {
         const resultado: ResultadoAsambleaResponse = JSON.parse(mensaje.body);
-        this.resultadosSubject.next(resultado);
+        this.ngZone.run(() => {
+          this.resultadosSubject.next(resultado);
+        });
       }
     });
   }
